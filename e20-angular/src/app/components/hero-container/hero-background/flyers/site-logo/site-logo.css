@@ -1,0 +1,9 @@
+.site-logo {
+  position: absolute;
+  top: 33%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 404px;
+  z-index: 2;
+}
+

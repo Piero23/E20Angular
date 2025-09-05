@@ -23,24 +23,21 @@
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 4px #222121;
+      transition: all 0.1s ease;
+      box-shadow: 0 2px 2px #222121;
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 2px 6px #222121;
+        box-shadow: 0 2px 4px #222121;
         background: #2a2a2a;
       }
 
       &:active {
         transform: translateY(0);
-        box-shadow: 0 2px 6px #222121;
-      }
-
-      &:focus {
-        outline: none;
+        box-shadow: 0 2px 2px #222121;
       }
     }
   }
+  z-index: 1;
 }
 
 :host-context(body) {
