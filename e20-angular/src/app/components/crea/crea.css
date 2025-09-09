@@ -2,17 +2,17 @@
   display: flex;
   align-items: stretch;
   gap: 24px;
-  flex-wrap: nowrap;
   margin-left: 30px;
   margin-top: 100px;
+  flex-wrap: nowrap;
 }
 
 .evento-box {
   border-radius: 20px;
-  aspect-ratio: 1.6 / 1;
   width: 40%;
-  min-width: 280px;
+  min-width: 220px;
   max-width: 600px;
+  height: clamp(280px, 36vh, 56vh);
   background: linear-gradient(to bottom,
   #FBBA72,
   #CA5310,
@@ -21,6 +21,7 @@
   #691E06
   );
   position: relative;
+  flex-shrink: 0;
 }
 
 .circle {
@@ -37,66 +38,52 @@
 }
 
 .icon {
-  font-size: 1.5em;
+  font-size: clamp(1em, 2.5vh, 2.5em);
   color: #ffffff;
 }
 
 .form-right {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  justify-content: space-evenly;
-  flex: 1 1 auto;
-  min-width: 220px;
-  height: 100%;
+  gap: 12px;
+  flex: 1 1 55%;
+  min-width: 200px;
+  align-self: stretch;
 }
-
 .field {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 10px;
-  flex: 1;
+  padding: 8px;
+  flex: 1 1 0;
+  justify-content: flex-start;
+  overflow: hidden;
 }
 
 .intestazione-campi {
   margin: 0;
-  font-size: 20px;
+  font-size: clamp(14px, 1.6vh, 20px);
   padding-left: 6px;
+  flex: 0 0 auto;
 }
 
 .intestazione-campi-secondari {
-  font-size: 15px !important;
+  font-size: clamp(12px, 1.4vh, 16px) !important;
+  flex: 0 0 auto;
 }
 
 .input-evento {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 36ch;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(0,0,0,0.12);
-  margin-left: 6px;
-  position: static;
-  top: auto;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: clamp(6px, 0.9vh, 10px) clamp(8px, 1vw, 12px);
+    font-size: clamp(14px, 1.6vh, 18px);
+    box-sizing: border-box;
+    width: 60%;
+    background:
+      linear-gradient(white, white) padding-box,
+      linear-gradient(to right, #FF9D47, #C74F00) border-box;
+  flex: 1 1 auto;
+  min-height: 36px;
+  max-height: 64px;
+  align-self: stretch;
 }
-
-/*
-Questo serve se dobbiamo farlo responsive allo schermo del cellulare
-@media (max-width: 800px) {
-  .container-1 {
-    flex-direction: column;
-    gap: 16px;
-  }
-  .evento-box {
-    width: 100%;
-    max-width: none;
-    min-width: auto;
-    height: 28vh;
-  }
-  .input-evento {
-    margin-left: 0;
-    max-width: 100%;
-  }
-}
-*/
