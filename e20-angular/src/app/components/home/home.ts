@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import {HeroContainer} from '../components/hero-container/hero-container';
+import {MainContent} from './main-content/main-content';
+import {EventsShowcase} from './events-showcase/events-showcase';
 
 @Component({
   selector: 'app-home',
   imports: [
-    HeroContainer
+    MainContent,
+    EventsShowcase
   ],
   templateUrl: './home.html',
   styleUrl: './home.css'

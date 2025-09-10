@@ -1,14 +1,11 @@
-import { Component } from '@angular/core';
-import {HeroBackground} from './hero-background/hero-background';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-hero-container',
   imports: [
-    HeroBackground
   ],
   templateUrl: './hero-container.html',
   styleUrl: './hero-container.css'
 })
 export class HeroContainer {
-
 }
