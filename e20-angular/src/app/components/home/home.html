@@ -1,4 +1,9 @@
 <main class="home-page">
-  <app-main-content />
+  <div class="login-btn-container">
+    <button class="top-right-btn" [routerLink]="['/evento']">
+      Login
+    </button>
+  </div>
+  <app-main-content-zone />
   <app-events-showcase />
 </main>
