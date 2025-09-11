@@ -4,3 +4,7 @@
   src: url('assets/fonts/Bungee_Inline/BungeeInline-Regular.ttf') format('truetype');
   font-display: swap;
 }
+
+html * {
+  font-family: 'MuseoModerno', sans-serif;
+}

@@ -1,0 +1,17 @@
+.top-bar {
+  background: #FEFEFE;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 32px;
+  z-index: 1;
+}
+
+.top-search-bar {
+  resize: vertical;
+}
+
+.user-icon, .e20-logo {
+  cursor: pointer;
+}
