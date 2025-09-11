@@ -1,6 +1,7 @@
 <div class="rowbar">
   <h1 class="e20">E<span class="venti">20</span></h1>
   <input class="search" placeholder="Cosa stai aspettando? Cerca un evento...">
+  <div style="position: relative; right: auto !important; bottom: auto !important; width: 9vh" class="circle"><h1 style="color: #ffffff" class="e20">U</h1></div>
 </div>
 
 <form id="eventForm" class="container-1" method="post" action="/submit-event" novalidate>
@@ -30,39 +31,44 @@
 
         <div class="datetime-item">
           <p id="label-ora" class="intestazione-campi intestazione-campi-secondari">Ora</p>
-          <div class="input-evento time-input" role="group" aria-label="Orario" aria-labelledby="label-ora">
-            <input
-              #hoursInput
-              id="hoursInput"
-              name="hours"
-              class="time-part"
-              type="number"
-              inputmode="numeric"
-              min="0"
-              max="23"
-              placeholder="hh"
-              aria-label="Ore"
-              (input)="onHoursInput()"
-              (blur)="onHoursBlur()"
-              (keydown)="onHoursKeydown($event)"
-              required
-            >
-            <span class="time-colon" aria-hidden="true">:</span>
-            <input
-              #minutesInput
-              id="minutesInput"
-              name="minutes"
-              class="time-part"
-              type="number"
-              inputmode="numeric"
-              min="0"
-              max="59"
-              placeholder="mm"
-              aria-label="Minuti"
-              (input)="onMinutesInput()"
-              (blur)="onMinutesBlur()"
-              required
-            >
+          <div class="sd-container">
+            <div class="input-evento time-input" role="group" aria-label="Orario" aria-labelledby="label-ora">
+              <input
+                #hoursInput
+                id="hoursInput"
+                name="hours"
+                class="time-part"
+                type="number"
+                inputmode="numeric"
+                min="0"
+                max="23"
+                placeholder="hh"
+                aria-label="Ore"
+                (input)="onHoursInput()"
+                (blur)="onHoursBlur()"
+                (keydown)="onHoursKeydown($event)"
+                required
+              >
+              <span class="time-colon" aria-hidden="true">:</span>
+              <input
+                #minutesInput
+                id="minutesInput"
+                name="minutes"
+                class="time-part"
+                type="number"
+                inputmode="numeric"
+                min="0"
+                max="59"
+                placeholder="mm"
+                aria-label="Minuti"
+                (input)="onMinutesInput()"
+                (blur)="onMinutesBlur()"
+                required
+              >
+            </div>
+            <button class="open-button" type="button" aria-label="Apri selettore orario">
+              <i class="fa-solid fa-clock icon" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -70,7 +76,12 @@
 
     <div class="field">
       <p id="label-location" class="intestazione-campi intestazione-campi-secondari">Location</p>
-      <input id="location" name="location" class="input-evento" type="text" placeholder="Dove si svolge" aria-labelledby="label-location" required>
+      <div class="sd-container">
+        <input style="padding-right: 40px !important" id="location" name="location" class="input-evento" type="text" placeholder="Dove si svolge" aria-labelledby="label-location" required>
+        <button style="right: 20%" class="open-button" type="button" aria-label="Apri mappa">
+          <i class="fa-solid fa-map-marker-alt icon" aria-hidden="true"></i>
+        </button>
+      </div>
     </div>
 
     <div class="field">
@@ -113,3 +124,12 @@
     </div>
   </div>
 </form>
+
+<div class="container-2" style="gap: 0 !important; margin-top: 0 !important; width: 89%">
+  <div class="field">
+    <p style="font-size: 25px">Descrizione</p>
+    <p contenteditable="true" style="font-weight: normal !important; background: linear-gradient(to right, #FF9D47, #C74F00) bottom left / 100% 2px no-repeat, linear-gradient(to bottom, #FF9D47, #C74F00) bottom left / 2px 100% no-repeat, white; padding: 8px 10px;">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec elementum, erat ut aliquam vehicula, dolor nisi elementum nulla, in sagittis odio odio non sem. Curabitur dolor dolor, faucibus eleifend enim ac, blandit condimentum elit. Donec placerat tortor quis orci vehicula rhoncus. Etiam eget ligula lobortis, tempor risus id, scelerisque enim. Cras aliquet sollicitudin est, sed vehicula leo vestibulum facilisis. Praesent turpis massa, ultrices vel orci at, congue gravida arcu.
+    </p>
+  </div>
+</div>
