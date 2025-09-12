@@ -3,20 +3,50 @@
   <div class="event-image">
     <img ngSrc="/assets/flyer5.jpg" alt="Flyer 5" height="693" width="535">
   </div>
+  <div class="ticket-container">
+    <div class="left-side-ticket-info">
+      <div class="date-time-event">
+        <p>01/01/2025 - 21:00</p>
+      </div>
+      <div class="event-title">
+        <p>Event Title</p>
+      </div>
+    </div>
+    <div class="right-side-ticket-info">
+      <div class="vertical-separator"></div>
+      <div class="ticket-action-icons">
+        <div class="icon favorite-icon" (click)="toggleFavorite()">
+          <i class="fa-regular fa-heart"></i>
+        </div>
+      </div>
+      <div class="available-tickets">
+        <p>2</p>
+        <p>Posti Disponibili</p>
+      </div>
+      <button class="buy-ticket-button">Buy Ticket</button>
+    </div>
+  </div>
   <div class="event-content">
     <div class="event-location">
       <h2>Location</h2>
       <div class="event-location-info">
-        <div class="left-side">
+        <div class="left-side-location-info">
           <p>Via di tua mamma</p>
           <p>118</p>
         </div>
-        <div class="right-side">
+        <div class="right-side-location-info">
           <p>Napoli (NA)</p>
           <p>88888</p>
         </div>
       </div>
+      <div class="event-map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3038.1234567890123!2d14.268123456789012!3d40.85123456789012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x133b086c1234567%3A0xabcdef1234567890!2sNapoli%2C%20Metropolitan%20City%20of%20Naples%2C%20Italy!5e0!3m2!1sen!2sus!4v1610000000000!5m2!1sen!2sus" width="300px" height="300px"
+          allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
     </div>
+
     <div class="event-description">
       <h2>Event Description</h2>
       <p>

@@ -18,12 +18,82 @@
   object-fit: cover;
 }
 
+.ticket-container {
+  position: absolute;
+  top: 35vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  min-width: 670px;
+  max-width: 50vw;
+  width: 50vw;
+  height: 28vh;
+  min-height: 250px;
+  max-height: 28vh;
+  background: #FEFEFE;
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2),
+              0 6px 20px rgba(0, 0, 0, 0.19);
+
+  border-radius: 16px;
+}
+
+.left-side-ticket-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 2rem;
+  gap: 3rem;
+}
+.event-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.date-time-event {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #ff9d47ff, #c74f00ff);
+  border-radius: 12px;
+  color: white;
+  height: 38px;
+}
+
+.date-time-event p {
+  margin: 0;
+  padding: 0 1rem;
+}
+
+.vertical-separator {
+  position: absolute;
+  inset: 0;
+  align-self: center;
+  left: 60%;
+  border-left: medium dashed #ccc;
+  height: 90%;
+}
+
+.right-side-ticket-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  gap: 3rem;
+}
+
 .event-content {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   gap: 5rem;
   width: 80%;
+  height: 60vh;
+  margin-top: 15vh;
 }
 
 .event-location {
@@ -36,21 +106,34 @@
 .event-location-info {
   display : grid;
   grid-template-columns: auto auto;
-  gap: 5rem;
+  gap: 4rem;
 }
 
-.left-side {
+.left-side-location-info {
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: flex-start;
 }
 
-.right-side {
+.right-side-ticket-info {
   display: flex;
   flex-direction: column;
-  align-items: end;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  width: 20%;
+  height: 20%;
+}
+
+.ticket-action-icons {
+  display: flex;
+  flex-direction: row;
+
+}
+
+.available-tickets {
+
+
 }
 
 .event-description {
@@ -58,4 +141,10 @@
   flex-direction: column;
   justify-content: flex-start;
   width: 50%;
+}
+
+.event-map {
+  object-position: left;
+  border-radius: 8px;
+  overflow: hidden;
 }

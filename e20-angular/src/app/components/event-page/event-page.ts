@@ -13,4 +13,7 @@ import {NgOptimizedImage} from '@angular/common';
 })
 export class EventPage {
 
+  toggleFavorite() {
+
+  }
 }
