@@ -5,25 +5,35 @@
   </div>
   <div class="ticket-container">
     <div class="left-side-ticket-info">
-      <div class="date-time-event">
-        <p>01/01/2025 - 21:00</p>
+      <div class="date-time-container">
+        <div class="date-time-event">
+          <p>01/01/2025 - 21:00</p>
+        </div>
       </div>
       <div class="event-title">
         <p>Event Title</p>
       </div>
     </div>
+    <div class="vertical-separator"></div>
     <div class="right-side-ticket-info">
-      <div class="vertical-separator"></div>
       <div class="ticket-action-icons">
+        <div class="icon edit-icon">
+          <i class="fa-solid fa-pencil"></i>
+        </div>
+        <div class="icon bell-icon" (click)="toggleNotification()">
+          <i class="fa-regular fa-bell"></i>
+        </div>
         <div class="icon favorite-icon" (click)="toggleFavorite()">
           <i class="fa-regular fa-heart"></i>
         </div>
       </div>
       <div class="available-tickets">
-        <p>2</p>
-        <p>Posti Disponibili</p>
+        <p class="availability">2</p>
+        <p>Posti disponibili</p>
       </div>
-      <button class="buy-ticket-button">Buy Ticket</button>
+      <div class="buy-ticket-button-container">
+        <button class="buy-ticket-button">Compra ora</button>
+      </div>
     </div>
   </div>
   <div class="event-content">
