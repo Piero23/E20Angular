@@ -1,0 +1,131 @@
+<app-rowbar-search></app-rowbar-search>
+
+<form id="eventForm" class="container-1" method="post" action="/submit-event" novalidate>
+  <div class="evento-box" aria-hidden="true">
+    <div class="circle">
+      <i class="fa-solid fa-image fa-2x icon" aria-hidden="true"></i>
+    </div>
+  </div>
+
+  <div class="form-right">
+    <div class="field">
+      <p id="label-titolo" class="intestazione-campi">Titolo</p>
+      <input id="title" name="title" class="input-evento" type="text" placeholder="Titolo evento" required>
+    </div>
+
+    <div class="field">
+      <div class="datetime-row">
+        <div class="datetime-item">
+          <p id="label-data" class="intestazione-campi intestazione-campi-secondari">Data</p>
+          <div class="sd-container">
+            <input #dateInput id="date" name="date" class="sd input-evento" type="date" aria-labelledby="label-data" required>
+            <button #openButton class="open-button" type="button" aria-label="Apri calendario">
+              <i class="fa-solid fa-calendar-days icon" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="datetime-item">
+          <p id="label-ora" class="intestazione-campi intestazione-campi-secondari">Ora</p>
+          <div class="sd-container">
+            <div class="input-evento time-input" role="group" aria-label="Orario" aria-labelledby="label-ora">
+              <input
+                #hoursInput
+                id="hoursInput"
+                name="hours"
+                class="time-part"
+                type="number"
+                inputmode="numeric"
+                min="0"
+                max="23"
+                placeholder="hh"
+                aria-label="Ore"
+                (input)="onHoursInput()"
+                (blur)="onHoursBlur()"
+                (keydown)="onHoursKeydown($event)"
+                required
+              >
+              <span class="time-colon" aria-hidden="true">:</span>
+              <input
+                #minutesInput
+                id="minutesInput"
+                name="minutes"
+                class="time-part"
+                type="number"
+                inputmode="numeric"
+                min="0"
+                max="59"
+                placeholder="mm"
+                aria-label="Minuti"
+                (input)="onMinutesInput()"
+                (blur)="onMinutesBlur()"
+                required
+              >
+            </div>
+            <button class="open-button" type="button" aria-label="Apri selettore orario">
+              <i class="fa-solid fa-clock icon" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <p id="label-location" class="intestazione-campi intestazione-campi-secondari">Location</p>
+      <div class="sd-container">
+        <input style="padding-right: 9% !important" id="location" name="location" class="input-evento" type="text" placeholder="Dove si svolge" aria-labelledby="label-location" required>
+        <button style="right: 20%" class="open-button" type="button" aria-label="Apri mappa">
+          <i class="fa-solid fa-map-marker-alt icon" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="seats-price-row">
+        <div class="seats-item">
+          <p id="label-seats" class="intestazione-campi intestazione-campi-secondari">Posti</p>
+          <input id="posti" name="posti" class="input-evento" type="number" min="0" placeholder="Numero posti" aria-labelledby="label-seats">
+        </div>
+        <div class="price-item">
+          <p id="label-prezzo" class="intestazione-campi intestazione-campi-secondari">Prezzo</p>
+          <input id="prezzo" name="prezzo" class="input-evento" type="number" min="0" placeholder="Prezzo" aria-labelledby="label-prezzo">
+        </div>
+      </div>
+    </div>
+
+    <div class="switch-group">
+      <div class="field" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
+        <label for="vietato-minori" class="switch-text">Vietato ai minori</label>
+        <label class="switch" for="vietato-minori">
+          <input type="checkbox" id="vietato-minori" name="vietato-minori">
+          <span class="slider" aria-hidden="true"></span>
+        </label>
+      </div>
+
+      <div class="field" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
+        <label for="nominativo" class="switch-text">Biglietto nominativo</label>
+        <label class="switch" for="nominativo">
+          <input type="checkbox" id="nominativo" name="nominativo">
+          <span class="slider" aria-hidden="true"></span>
+        </label>
+      </div>
+
+      <div class="field" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
+        <label for="riutilizzabile" class="switch-text">Biglietto riutilizzabile</label>
+        <label class="switch" for="riutilizzabile">
+          <input type="checkbox" id="riutilizzabile" name="riutilizzabile">
+          <span class="slider" aria-hidden="true"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="container-2" style="gap: 0 !important; margin-top: 0 !important; width: 89%">
+  <div class="field">
+    <p style="font-size: 25px">Descrizione</p>
+    <p contenteditable="true" style="font-weight: normal !important; background: linear-gradient(to right, #FF9D47, #C74F00) bottom left / 100% 2px no-repeat, linear-gradient(to bottom, #FF9D47, #C74F00) bottom left / 2px 100% no-repeat, white; padding: 8px 10px;">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec elementum, erat ut aliquam vehicula, dolor nisi elementum nulla, in sagittis odio odio non sem. Curabitur dolor dolor, faucibus eleifend enim ac, blandit condimentum elit. Donec placerat tortor quis orci vehicula rhoncus. Etiam eget ligula lobortis, tempor risus id, scelerisque enim. Cras aliquet sollicitudin est, sed vehicula leo vestibulum facilisis. Praesent turpis massa, ultrices vel orci at, congue gravida arcu.
+    </p>
+  </div>
+</div>
