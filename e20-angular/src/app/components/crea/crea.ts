@@ -1,10 +1,11 @@
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {RowbarSearch} from '../rowbar-search/rowbar-search';
 
 @Component({
   selector: 'app-crea',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RowbarSearch],
   templateUrl: './crea.html',
   styleUrls: ['./crea.css']
 })
