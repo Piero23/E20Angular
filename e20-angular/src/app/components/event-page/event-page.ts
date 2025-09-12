@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
 import {TopBar} from '../shared/top-bar/top-bar';
 import {NgOptimizedImage} from '@angular/common';
-import {RowbarSearch} from '../rowbar-search/rowbar-search';
-
 @Component({
   selector: 'app-event-page',
   imports: [
     TopBar,
     NgOptimizedImage,
-    RowbarSearch
   ],
   templateUrl: './event-page.html',
   styleUrl: './event-page.css'

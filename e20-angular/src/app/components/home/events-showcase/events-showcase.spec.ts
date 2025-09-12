@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-<<<<<<<< HEAD:e20-angular/src/app/components/home/events-showcase/events-showcase.spec.ts
 import { EventsShowcase } from './events-showcase';
 
 describe('EventsShowcase', () => {
@@ -14,21 +13,6 @@ describe('EventsShowcase', () => {
     .compileComponents();
 
     fixture = TestBed.createComponent(EventsShowcase);
-========
-import { ProfiloEOrdini } from './profilo-e-ordini';
-
-describe('ProfiloEOrdini', () => {
-  let component: ProfiloEOrdini;
-  let fixture: ComponentFixture<ProfiloEOrdini>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ProfiloEOrdini]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(ProfiloEOrdini);
->>>>>>>> andrea_mirarchi_frontend:e20-angular/src/app/components/profilo-e-ordini/profilo-e-ordini.spec.ts
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
