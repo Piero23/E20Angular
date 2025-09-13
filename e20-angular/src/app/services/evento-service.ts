@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LocationService } from './location-service';
+import {Dto, PageResponse} from './application';
 
-export interface EventoDto {
+export interface EventoDto extends Dto {
   id?: number;
   nome: string;
   descrizione: string;
@@ -12,38 +12,8 @@ export interface EventoDto {
   b_riutilizzabile: boolean;
   b_nominativo: boolean;
   age_restricted: boolean;
-  // location: LocationDto | null;
   data: string; // Date as ISO string from backend
   prezzo: number;
-}
-
-export interface PageResponse<T> {
-  content: T[];
-  pageable: {
-    sort: {
-      empty: boolean;
-      sorted: boolean;
-      unsorted: boolean;
-    };
-    offset: number;
-    pageSize: number;
-    pageNumber: number;
-    paged: boolean;
-    unpaged: boolean;
-  };
-  last: boolean;
-  totalPages: number;
-  totalElements: number;
-  size: number;
-  number: number;
-  sort: {
-    empty: boolean;
-    sorted: boolean;
-    unsorted: boolean;
-  };
-  first: boolean;
-  numberOfElements: number;
-  empty: boolean;
 }
 
 @Injectable({

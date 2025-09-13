@@ -4,20 +4,22 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
-import { EventoDto, EventoService, PageResponse } from '../../../services/evento-service';
+import { EventoDto, EventoService } from '../../../services/evento-service';
+import {UtenteDto, UtenteService} from '../../../services/utente-service';
+import {Dto, PageResponse} from '../../../services/application';
 
 @Component({
-  selector: 'app-evento-search',
-  standalone: true, // Add this for standalone component
+  selector: 'app-search-bar',
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
-    HttpClientModule // This provides HttpClient for the service
+    HttpClientModule
   ],
   templateUrl: './search-bar.html',
   styleUrls: ['./search-bar.css']
 })
-export class EventoSearch implements OnInit, OnDestroy {
+export class SearchBar implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private searchTerms = new Subject<string>();
 
@@ -33,14 +35,17 @@ export class EventoSearch implements OnInit, OnDestroy {
   totalElements = 0;
 
   // Results
-  eventi: EventoDto[] = [];
+  results: Dto[] = [];
   isSearchMode = false; // Track if we're showing search results or all events
 
-  constructor(private eventoService: EventoService) { }
+  constructor(
+    private eventoService: EventoService,
+    private utenteService: UtenteService) { }
 
   ngOnInit(): void {
     // Load initial events
     this.loadAllEvents();
+    this.loadAllUsers();
 
     // Setup search with debounce
     this.searchTerms.pipe(
@@ -53,7 +58,7 @@ export class EventoSearch implements OnInit, OnDestroy {
         } else {
           this.isSearchMode = true;
           this.isLoading = true;
-          return this.eventoService.searchEvents(term, 0, this.pageSize);
+          return (this.eventoService.searchEvents(term, 0, this.pageSize));
         }
       }),
       catchError(error => {
@@ -62,7 +67,7 @@ export class EventoSearch implements OnInit, OnDestroy {
         this.errorMessage = 'Errore durante la ricerca. Riprova più tardi.';
         this.isLoading = false;
         //@ts-ignore
-        return of({ content: [], totalPages: 0, totalElements: 0 } as PageResponse<EventoBasicDto>);
+        return of({ content: [], totalPages: 0, totalElements: 0 } as PageResponse<EventoDto>);
       }),
       takeUntil(this.destroy$)
     ).subscribe(response => {
@@ -134,7 +139,7 @@ export class EventoSearch implements OnInit, OnDestroy {
         this.hasError = true;
         this.errorMessage = 'Errore durante il caricamento. Riprova più tardi.';
         //@ts-ignore
-        return of({ content: [], totalPages: 0, totalElements: 0 } as PageResponse<EventoBasicDto>);
+        return of({ content: [], totalPages: 0, totalElements: 0 } as PageResponse<Dto>);
       }),
       takeUntil(this.destroy$)
     ).subscribe(response => {
@@ -151,7 +156,7 @@ export class EventoSearch implements OnInit, OnDestroy {
         this.hasError = true;
         this.errorMessage = 'Errore durante il caricamento degli eventi.';
         //@ts-ignore
-        return of({ content: [], totalPages: 0, totalElements: 0 } as PageResponse<EventoBasicDto>);
+        return of({ content: [], totalPages: 0, totalElements: 0 } as PageResponse<EventoDto>);
       }),
       takeUntil(this.destroy$)
     ).subscribe(response => {
@@ -160,8 +165,25 @@ export class EventoSearch implements OnInit, OnDestroy {
     });
   }
 
-  private updateResults(response: PageResponse<EventoDto>): void {
-    this.eventi = response.content || [];
+    public loadAllUsers(): void {
+    this.isLoading = true;
+    this.utenteService.getAllUsers(0, this.pageSize).pipe(
+      catchError(error => {
+        console.error('Load all users error:', error);
+        this.hasError = true;
+        this.errorMessage = 'Errore durante il caricamento degli utenti.';
+        //@ts-ignore
+        return of({ content: [], totalPages: 0, totalElements: 0 } as PageResponse<UtenteDto>);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(response => {
+      this.updateResults(response);
+      this.isLoading = false;
+    });
+  }
+
+  private updateResults(response: PageResponse<Dto>): void {
+    this.results = response.content || [];
     this.totalPages = response.totalPages || 0;
     this.totalElements = response.totalElements || 0;
     this.hasError = false;
