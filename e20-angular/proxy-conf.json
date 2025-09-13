@@ -1,0 +1,8 @@
+{
+  "/api/evento": {
+    "target": "https://localhost:8060",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

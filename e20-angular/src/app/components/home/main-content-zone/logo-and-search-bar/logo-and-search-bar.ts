@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import {SiteLogo} from './site-logo/site-logo';
-import {SearchBar} from '../../../shared/search-bar/search-bar';
+import { SiteLogo } from './site-logo/site-logo';
+import { EventoSearch } from '../../../shared/search-bar/search-bar';
 
 
 @Component({
   selector: 'app-logo-and-search-bar',
   imports: [
     SiteLogo,
-    SearchBar
+    EventoSearch
   ],
   templateUrl: './logo-and-search-bar.html',
   styleUrl: './logo-and-search-bar.css'
