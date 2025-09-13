@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
-import { EventoBasicDto, EventoService, PageResponse } from '../../../services/evento-service';
+import { EventoDto, EventoService, PageResponse } from '../../../services/evento-service';
 
 @Component({
   selector: 'app-evento-search',
@@ -33,7 +33,7 @@ export class EventoSearch implements OnInit, OnDestroy {
   totalElements = 0;
 
   // Results
-  eventi: EventoBasicDto[] = [];
+  eventi: EventoDto[] = [];
   isSearchMode = false; // Track if we're showing search results or all events
 
   constructor(private eventoService: EventoService) { }
@@ -160,7 +160,7 @@ export class EventoSearch implements OnInit, OnDestroy {
     });
   }
 
-  private updateResults(response: PageResponse<EventoBasicDto>): void {
+  private updateResults(response: PageResponse<EventoDto>): void {
     this.eventi = response.content || [];
     this.totalPages = response.totalPages || 0;
     this.totalElements = response.totalElements || 0;

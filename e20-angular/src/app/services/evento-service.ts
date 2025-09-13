@@ -1,19 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface EventoBasicDto {
-  id?: number;
-  nome: string;
-  descrizione: string;
-  organizzatore: string;
-  posti: number;
-  b_riutilizzabile: boolean;
-  b_nominativo: boolean;
-  age_restricted: boolean;
-  data: string; // Date as ISO string from backend
-  prezzo: number;
-}
+import { LocationService } from './location-service';
 
 export interface EventoDto {
   id?: number;
@@ -24,7 +12,7 @@ export interface EventoDto {
   b_riutilizzabile: boolean;
   b_nominativo: boolean;
   age_restricted: boolean;
-  //location: LocationDto | null;
+  // location: LocationDto | null;
   data: string; // Date as ISO string from backend
   prezzo: number;
 }
@@ -67,7 +55,7 @@ export class EventoService {
   constructor(private http: HttpClient) { }
 
   // GET ALL EVENTS WITH PAGINATION
-  getAllEvents(page: number = 0, size: number = 20, sort?: string): Observable<PageResponse<EventoBasicDto>> {
+  getAllEvents(page: number = 0, size: number = 20, sort?: string): Observable<PageResponse<EventoDto>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
@@ -76,11 +64,11 @@ export class EventoService {
       params = params.set('sort', sort);
     }
 
-    return this.http.get<PageResponse<EventoBasicDto>>(this.API_URL, { params });
+    return this.http.get<PageResponse<EventoDto>>(this.API_URL, { params });
   }
 
   // SEARCH EVENTS WITH PAGINATION
-  searchEvents(searchTerm: string, page: number = 0, size: number = 20, sort?: string): Observable<PageResponse<EventoBasicDto>> {
+  searchEvents(searchTerm: string, page: number = 0, size: number = 20, sort?: string): Observable<PageResponse<EventoDto>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
@@ -89,7 +77,7 @@ export class EventoService {
       params = params.set('sort', sort);
     }
 
-    return this.http.get<PageResponse<EventoBasicDto>>(`${this.API_URL}/search/${encodeURIComponent(searchTerm)}`, { params });
+    return this.http.get<PageResponse<EventoDto>>(`${this.API_URL}/search/${encodeURIComponent(searchTerm)}`, { params });
   }
 
   getEventById(id: number): Observable<EventoDto> {
@@ -99,8 +87,8 @@ export class EventoService {
   /***********************CRUD OPERATIONS***********************/
 
   // Create new event
-  createEvent(evento: EventoBasicDto): Observable<EventoBasicDto> {
-    return this.http.post<EventoBasicDto>(this.API_URL, evento);
+  createEvent(evento: EventoDto): Observable<EventoDto> {
+    return this.http.post<EventoDto>(this.API_URL, evento);
   }
 
   // Update event
