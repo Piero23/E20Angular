@@ -5,6 +5,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   overflow: hidden;
+  z-index: 0;
 }
 
 .flyer {

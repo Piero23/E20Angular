@@ -1,10 +1,10 @@
 /* Search Styles */
 .search-container {
   display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
+  align-items: center;
+  justify-content: center;
   position: relative;
+  min-height: 64px;
 }
 
 .search-box {
@@ -54,7 +54,7 @@
   font-size: 1rem;
   color: #999;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color 0.3s aaaaease;
   z-index: 2;
 }
 
@@ -77,21 +77,76 @@
   font-size: 1.1rem;
 }
 
+
+/* RESULTS DROPDOWN: absolute so it does NOT push layout */
+.search-results-dropdown {
+  position: absolute;
+  top: calc(100% + 8px); /* 8px gap below input */
+  left: 0;
+  right: 0; /* match input width */
+  width: 100%;
+  z-index: 9999; /* high to sit above other UI */
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  overflow: auto;
+  /* Max height: use dvh where available to handle mobile keyboard better; fallback to vh */
+  max-height: 55vh;    /* fallback */
+  max-height: 50dvh;   /* prefer dynamic viewport unit on supporting browsers */
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+  padding: 0.5rem 0;
+  box-sizing: border-box;
+}
+
+.search-results-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 9999;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  overflow: auto;
+  max-height: 50dvh; /* prefer dynamic viewport unit; fallback below */
+  max-height: 55vh;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.25rem 0;
+  box-sizing: border-box;
+}
+
+.search-results-dropdown .result-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.65rem 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.search-results-dropdown .result-item:hover,
+.search-results-dropdown .result-item:focus {
+  background: #fff8f0;
+  outline: none;
+}
+
 /* Results Info */
 .results-info {
-  position: relative;
-  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
   padding: 0.75rem 1rem;
-  background-color: #f8f9fa;
+  background-color: #FEFEFE;
   border-radius: 0.375rem;
   border-left: 4px solid #FF9D47;
-  z-index: 9;
+
 }
 
 /* No Results */
 .no-results {
   position: relative;
-  background-color: #f8f9fa;
+  background-color: #FEFEFE;
   border-radius: 0.5rem;
   margin: 2rem 0;
   z-index: 9;
@@ -109,10 +164,8 @@
 
 /* Event Names List */
 .event-names-list {
-  position: relative;
+  margin: 1rem auto 0;
   max-width: 800px;
-  margin: 0 auto;
-  z-index: 9;
 }
 
 .event-name-item {
