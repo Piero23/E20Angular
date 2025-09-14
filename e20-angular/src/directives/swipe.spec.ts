@@ -1,4 +1,4 @@
-import { Swipe } from './swipe';
+import {Swipe} from './swipe';
 
 describe('Swipe', () => {
   it('should create an instance', () => {

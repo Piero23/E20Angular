@@ -9,14 +9,9 @@ import {SearchBar} from '../search-bar/search-bar';
     NgOptimizedImage,
     SearchBar,
     RouterLink,
-
   ],
   templateUrl: './top-bar.html',
   styleUrl: './top-bar.css'
 })
 export class TopBar {
-  onUserIconClick() {
-    console.log('click');
-  }
-
 }

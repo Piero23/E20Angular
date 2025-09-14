@@ -23,7 +23,8 @@
   top: 35vh;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
   min-width: 670px;
   max-width: 50vw;
   width: 50vw;
@@ -33,7 +34,7 @@
   background: #FEFEFE;
 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2),
-              0 6px 20px rgba(0, 0, 0, 0.19);
+  0 6px 20px rgba(0, 0, 0, 0.19);
 
   border-radius: 16px;
 }
@@ -41,16 +42,19 @@
 .left-side-ticket-info {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-around;
   align-items: flex-start;
-  padding: 2rem;
-  gap: 3rem;
+  padding-left: 2rem;
+  gap: 2rem;
+  width: 60%;
+  height: 100%;
 }
+
 .event-title {
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: bold;
-  margin: 0;
-  padding: 0;
+  width: 100%;
+  justify-self: flex-start;
 }
 
 .date-time-event {
@@ -61,6 +65,7 @@
   border-radius: 12px;
   color: white;
   height: 38px;
+  width: fit-content;
 }
 
 .date-time-event p {
@@ -74,22 +79,80 @@
   align-self: center;
   left: 60%;
   border-left: medium dashed #ccc;
-  height: 90%;
+  height: 85%;
+  width: 0;
 }
 
 .right-side-ticket-info {
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-end;
+  width: 40%;
+  height: 100%;
+}
+
+.ticket-action-icons {
+  padding-right: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  gap: 0.5rem;
+
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.fa-regular {
+  transform: scale(1.5);
+}
+
+.available-tickets {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
-  gap: 3rem;
+  column-gap: 1rem;
+}
+
+.availability {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #6A3300;
+}
+
+.buy-ticket-button-container {
+  display: flex;
+  flex-direction: row;
+  padding-right: 2rem;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.buy-ticket-button {
+  background: linear-gradient(to right, #ff9d47ff, #c74f00ff);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0.5rem 2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2),
+  0 6px 8px rgba(0, 0, 0, 0.19);
 }
 
 .event-content {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   gap: 5rem;
   width: 80%;
   height: 60vh;
@@ -104,7 +167,7 @@
 }
 
 .event-location-info {
-  display : grid;
+  display: grid;
   grid-template-columns: auto auto;
   gap: 4rem;
 }
@@ -114,26 +177,6 @@
   flex-direction: column;
   align-items: start;
   justify-content: flex-start;
-}
-
-.right-side-ticket-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 20%;
-  height: 20%;
-}
-
-.ticket-action-icons {
-  display: flex;
-  flex-direction: row;
-
-}
-
-.available-tickets {
-
-
 }
 
 .event-description {
@@ -148,3 +191,8 @@
   border-radius: 8px;
   overflow: hidden;
 }
+
+
+
+
+

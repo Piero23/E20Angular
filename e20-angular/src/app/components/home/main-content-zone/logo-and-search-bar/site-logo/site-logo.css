@@ -12,10 +12,11 @@
   cursor: pointer;
   transition: all 0.3s ease;
   max-width: 30vw;
+  z-index: 2;
 }
 
 .logo img:hover {
-  filter: brightness(1.2) drop-shadow(0 0 2px rgba(255,255,255,0.5));
+  filter: brightness(1.2) drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
 }
 
 .logo img {

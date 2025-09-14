@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { LogoAndSearchBar } from './logo-and-search-bar';
+import {LogoAndSearchBar} from './logo-and-search-bar';
 
 describe('LogoAndSearchBar', () => {
   let component: LogoAndSearchBar;
@@ -10,7 +10,7 @@ describe('LogoAndSearchBar', () => {
     await TestBed.configureTestingModule({
       imports: [LogoAndSearchBar]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(LogoAndSearchBar);
     component = fixture.componentInstance;

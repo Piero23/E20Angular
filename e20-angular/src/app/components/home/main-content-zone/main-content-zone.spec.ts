@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { MainContentZone } from './main-content-zone';
+import {MainContentZone} from './main-content-zone';
 
 describe('MainContentZone', () => {
   let component: MainContentZone;
@@ -10,7 +10,7 @@ describe('MainContentZone', () => {
     await TestBed.configureTestingModule({
       imports: [MainContentZone]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(MainContentZone);
     component = fixture.componentInstance;

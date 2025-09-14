@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
 import {LogoAndSearchBar} from './logo-and-search-bar/logo-and-search-bar';
 

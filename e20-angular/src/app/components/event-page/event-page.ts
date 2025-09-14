@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {TopBar} from '../shared/top-bar/top-bar';
 import {NgOptimizedImage} from '@angular/common';
 @Component({
@@ -14,5 +14,8 @@ export class EventPage {
 
   toggleFavorite() {
 
+  }
+
+  toggleNotification() {
   }
 }

@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   height: 56px;
-  padding: 0 32px;
+  padding: 0 2vw;
   z-index: 1;
 }
 
@@ -14,4 +14,9 @@
 
 .user-icon, .e20-logo {
   cursor: pointer;
+}
+
+.e20-logo {
+  height: 24px;
+  width: auto;
 }
