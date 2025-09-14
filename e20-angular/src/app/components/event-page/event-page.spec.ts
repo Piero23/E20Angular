@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EventPage } from './event-page';
+import {EventPage} from './event-page';
 
 describe('EventPage', () => {
   let component: EventPage;
@@ -10,7 +10,7 @@ describe('EventPage', () => {
     await TestBed.configureTestingModule({
       imports: [EventPage]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(EventPage);
     component = fixture.componentInstance;

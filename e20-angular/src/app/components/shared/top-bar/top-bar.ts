@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { SearchBar } from '../search-bar/search-bar';
+import {Component} from '@angular/core';
+import {NgOptimizedImage} from '@angular/common';
+import {RouterLink} from '@angular/router';
+import {SearchBar} from '../search-bar/search-bar';
 
 @Component({
   selector: 'app-top-bar',

@@ -3,16 +3,16 @@
   <div class="search-wrapper">
     <div class="search-box">
       <input
-        type="text"
+        (input)="onSearchInputChange($event)"
+        (keypress)="onKeyPress($event)"
+        [(ngModel)]="searchQuery"
         class="search-input form-control"
         placeholder="Cerca eventi e utenti..."
-        [(ngModel)]="searchQuery"
-        (input)="onSearchInputChange($event)"
-        (keypress)="onKeyPress($event)">
-      <i class="fas fa-search search-icon" (click)="onSearchClick()"></i>
-      <i *ngIf="searchQuery && isSearchMode"
+        type="text">
+      <i (click)="onSearchClick()" class="fas fa-search search-icon"></i>
+      <i (click)="clearSearch()"
+         *ngIf="searchQuery && isSearchMode"
          class="fas fa-times clear-icon"
-         (click)="clearSearch()"
          title="Cancella ricerca"></i>
     </div>
   </div>
@@ -30,7 +30,7 @@
 <div *ngIf="hasError" class="alert alert-danger" role="alert">
   <i class="fas fa-exclamation-triangle"></i>
   {{ errorMessage }}
-  <button type="button" class="btn btn-outline-danger btn-sm ms-2">
+  <button class="btn btn-outline-danger btn-sm ms-2" type="button">
     Riprova
   </button>
 </div>
@@ -39,14 +39,14 @@
 <div *ngIf="!isLoading && !hasError && searchQuery && (isSearchMode || results.length > 0)" class="results-info">
   <div class="row align-items-center">
     <div class="col">
-      <p class="mb-0" *ngIf="isSearchMode">
+      <p *ngIf="isSearchMode" class="mb-0">
         <strong>{{ totalElements }}</strong> risultati trovati per "<em>{{ searchQuery }}</em>"
       </p>
-      <p class="mb-0" *ngIf="!isSearchMode">
+      <p *ngIf="!isSearchMode" class="mb-0">
         <strong>{{ totalElements }}</strong> elementi totali
       </p>
     </div>
-    <div class="col-auto" *ngIf="totalPages > 1">
+    <div *ngIf="totalPages > 1" class="col-auto">
       <small class="text-muted">
         Pagina {{ currentPage + 1 }} di {{ totalPages }}
       </small>
@@ -61,10 +61,10 @@
     <div class="text-center py-5">
       <i class="fas fa-search fa-3x text-muted mb-3"></i>
       <h4 class="text-muted">Nessun risultato trovato</h4>
-      <p class="text-muted" *ngIf="isSearchMode">
+      <p *ngIf="isSearchMode" class="text-muted">
         Prova a modificare i termini di ricerca
       </p>
-      <p class="text-muted" *ngIf="!isSearchMode">
+      <p *ngIf="!isSearchMode" class="text-muted">
         Non ci sono elementi da visualizzare
       </p>
     </div>
@@ -96,7 +96,7 @@
             <i class="fas fa-calendar-alt text-success me-2"></i>
             {{ result.nome }}
           </h5>
-          <small class="text-muted" *ngIf="hasEventData(result)">{{ formatDate(getEventData(result)) }}</small>
+          <small *ngIf="hasEventData(result)" class="text-muted">{{ formatDate(getEventData(result)) }}</small>
         </div>
         <button class="btn btn-outline-success btn-sm">
           <i class="fas fa-eye"></i>
@@ -112,8 +112,8 @@
 <nav *ngIf="!isLoading && !hasError && isSearchMode && totalPages > 1" aria-label="Paginazione risultati" class="mt-4">
   <ul class="pagination justify-content-center">
     <!-- Previous Button -->
-    <li class="page-item" [class.disabled]="currentPage === 0">
-      <button class="page-link" (click)="goToPreviousPage()" [disabled]="currentPage === 0">
+    <li [class.disabled]="currentPage === 0" class="page-item">
+      <button (click)="goToPreviousPage()" [disabled]="currentPage === 0" class="page-link">
         <i class="fas fa-chevron-left"></i>
         <span class="sr-only">Precedente</span>
       </button>
@@ -121,7 +121,7 @@
 
     <!-- First Page -->
     <li *ngIf="currentPage > 2" class="page-item">
-      <button class="page-link" (click)="goToPage(0)">1</button>
+      <button (click)="goToPage(0)" class="page-link">1</button>
     </li>
     <li *ngIf="currentPage > 3" class="page-item disabled">
       <span class="page-link">...</span>
@@ -129,9 +129,9 @@
 
     <!-- Page Numbers -->
     <li *ngFor="let pageNum of getPaginationArray()"
-        class="page-item"
-        [class.active]="pageNum === currentPage">
-      <button class="page-link" (click)="goToPage(pageNum)">
+        [class.active]="pageNum === currentPage"
+        class="page-item">
+      <button (click)="goToPage(pageNum)" class="page-link">
         {{ pageNum + 1 }}
       </button>
     </li>
@@ -141,12 +141,12 @@
       <span class="page-link">...</span>
     </li>
     <li *ngIf="currentPage < totalPages - 3" class="page-item">
-      <button class="page-link" (click)="goToPage(totalPages - 1)">{{ totalPages }}</button>
+      <button (click)="goToPage(totalPages - 1)" class="page-link">{{ totalPages }}</button>
     </li>
 
     <!-- Next Button -->
-    <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
-      <button class="page-link" (click)="goToNextPage()" [disabled]="currentPage === totalPages - 1">
+    <li [class.disabled]="currentPage === totalPages - 1" class="page-item">
+      <button (click)="goToNextPage()" [disabled]="currentPage === totalPages - 1" class="page-link">
         <i class="fas fa-chevron-right"></i>
         <span class="sr-only">Successivo</span>
       </button>

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { MainContentZone } from './main-content-zone/main-content-zone';
-import { EventsShowcase } from './events-showcase/events-showcase';
+import {Component} from '@angular/core';
+import {MainContentZone} from './main-content-zone/main-content-zone';
+import {EventsShowcase} from './events-showcase/events-showcase';
 
 @Component({
   selector: 'app-home',

@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
-import { HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import {Application, Dto, PageResponse} from './application';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Application, Dto} from './application';
 
 export interface EventoDto extends Dto {
   descrizione: string;
@@ -19,6 +18,7 @@ export interface EventoDto extends Dto {
 })
 export class EventoService extends Application<EventoDto> {
   protected override API_URL = '/api/evento';
+
   /***********************CRUD OPERATIONS***********************/
 
   // Create new event

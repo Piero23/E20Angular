@@ -21,7 +21,7 @@
   border: none;
   border-radius: 48px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),
-              0 4px 8px rgba(0, 0, 0, 0.19);
+  0 4px 8px rgba(0, 0, 0, 0.19);
   font-size: 1rem;
   outline: none;
   z-index: 1;
@@ -31,7 +31,7 @@
 
 .search-input:focus {
   box-shadow: 0 2px 8px rgba(199, 79, 0, 0.3),
-              0 4px 16px rgba(199, 79, 0, 0.2);
+  0 4px 16px rgba(199, 79, 0, 0.2);
 }
 
 .search-icon {
@@ -88,11 +88,11 @@
   z-index: 9999; /* high to sit above other UI */
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
   overflow: auto;
   /* Max height: use dvh where available to handle mobile keyboard better; fallback to vh */
-  max-height: 55vh;    /* fallback */
-  max-height: 50dvh;   /* prefer dynamic viewport unit on supporting browsers */
+  max-height: 55vh; /* fallback */
+  max-height: 50dvh; /* prefer dynamic viewport unit on supporting browsers */
   -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
   padding: 0.5rem 0;
   box-sizing: border-box;
@@ -107,7 +107,7 @@
   z-index: 9999;
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
   overflow: auto;
   max-height: 50dvh; /* prefer dynamic viewport unit; fallback below */
   max-height: 55vh;

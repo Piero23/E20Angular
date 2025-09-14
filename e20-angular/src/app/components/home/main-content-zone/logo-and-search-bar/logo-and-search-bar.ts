@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { SiteLogo } from './site-logo/site-logo';
-import { SearchBar } from '../../../shared/search-bar/search-bar';
+import {Component} from '@angular/core';
+import {SiteLogo} from './site-logo/site-logo';
+import {SearchBar} from '../../../shared/search-bar/search-bar';
 
 
 @Component({

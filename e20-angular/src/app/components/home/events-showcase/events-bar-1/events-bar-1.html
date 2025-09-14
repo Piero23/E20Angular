@@ -5,14 +5,14 @@
   </div>
   <div
     #cardContainer
-    class="events-cards-row"
-    (touchstart)="onTouchStart($event)"
-    (touchmove)="onTouchMove($event)"
-    (touchend)="onTouchEnd()"
     (mousedown)="onMouseDown($event)"
+    (mouseleave)="onMouseUp()"
     (mousemove)="onMouseMove($event)"
     (mouseup)="onMouseUp()"
-    (mouseleave)="onMouseUp()">
+    (touchend)="onTouchEnd()"
+    (touchmove)="onTouchMove($event)"
+    (touchstart)="onTouchStart($event)"
+    class="events-cards-row">
 
     <div class="event-card card-blue"></div>
     <div class="event-card card-orange" routerLink="/evento">

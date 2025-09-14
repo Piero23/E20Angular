@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { forkJoin, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
-import { EventoDto, EventoService } from '../../../services/evento-service';
-import { UtenteDto, UtenteService } from '../../../services/utente-service';
-import { Dto, PageResponse } from '../../../services/application';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
+import {forkJoin, of, Subject} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil} from 'rxjs/operators';
+import {EventoDto, EventoService} from '../../../services/evento-service';
+import {UtenteDto, UtenteService} from '../../../services/utente-service';
+import {Dto, PageResponse} from '../../../services/application';
 
 // Define the combined result type
 interface CombinedResults {
@@ -29,35 +29,31 @@ interface CombinedResults {
   styleUrls: ['./search-bar.css']
 })
 export class SearchBar implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
-  private searchTerms = new Subject<string>();
-
   searchQuery = '';
   isLoading = false;
   hasError = false;
   errorMessage = '';
-
   // Pagination
   currentPage = 0;
   pageSize = 20;
   totalPages = 0;
   totalElements = 0;
-
   // Results - separate arrays for different types
   userResults: UtenteDto[] = [];
   eventResults: EventoDto[] = [];
   results: Dto[] = []; // Combined results for display
-
   isSearchMode = false;
-
   // Filter options
   showUsers = true;
   showEvents = true;
+  private destroy$ = new Subject<void>();
+  private searchTerms = new Subject<string>();
 
   constructor(
     private eventoService: EventoService,
     private utenteService: UtenteService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
 
@@ -135,6 +131,70 @@ export class SearchBar implements OnInit, OnDestroy {
     if (this.currentPage > 0) {
       this.goToPage(this.currentPage - 1);
     }
+  }
+
+  // Utility methods for template
+  getPaginationArray(): number[] {
+    const pages = [];
+    const maxPagesToShow = 5;
+
+    let startPage = Math.max(0, this.currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(this.totalPages - 1, startPage + maxPagesToShow - 1);
+
+    if (endPage - startPage < maxPagesToShow - 1) {
+      startPage = Math.max(0, endPage - maxPagesToShow + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('it-IT', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  formatPrice(price: number): string {
+    return price === 0 ? 'Gratuito' : `€${price.toFixed(2)}`;
+  }
+
+  // Helper methods to identify item types in template
+  isUser(item: Dto): boolean {
+    return 'username' in item;
+  }
+
+  isEvent(item: Dto): boolean {
+    return !('username' in item);
+  }
+
+  // Helper methods to safely access typed properties
+  getUserUsername(item: Dto): string {
+    return (item as UtenteDto).username;
+  }
+
+  getUserEmail(item: Dto): string {
+    return (item as UtenteDto).email;
+  }
+
+  getUserDataNascita(item: Dto): string {
+    return (item as UtenteDto).dataNascita;
+  }
+
+  getEventData(item: Dto): string {
+    return (item as EventoDto).data;
+  }
+
+  hasEventData(item: Dto): boolean {
+    return !!(item as EventoDto).data;
   }
 
   private searchAllDataObservable(term: string) {
@@ -225,69 +285,5 @@ export class SearchBar implements OnInit, OnDestroy {
     this.hasError = true;
     this.errorMessage = message;
     this.isLoading = false;
-  }
-
-  // Utility methods for template
-  getPaginationArray(): number[] {
-    const pages = [];
-    const maxPagesToShow = 5;
-
-    let startPage = Math.max(0, this.currentPage - Math.floor(maxPagesToShow / 2));
-    let endPage = Math.min(this.totalPages - 1, startPage + maxPagesToShow - 1);
-
-    if (endPage - startPage < maxPagesToShow - 1) {
-      startPage = Math.max(0, endPage - maxPagesToShow + 1);
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
-    }
-
-    return pages;
-  }
-
-  formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('it-IT', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  }
-
-  formatPrice(price: number): string {
-    return price === 0 ? 'Gratuito' : `€${price.toFixed(2)}`;
-  }
-
-  // Helper methods to identify item types in template
-  isUser(item: Dto): boolean {
-    return 'username' in item;
-  }
-
-  isEvent(item: Dto): boolean {
-    return !('username' in item);
-  }
-
-  // Helper methods to safely access typed properties
-  getUserUsername(item: Dto): string {
-    return (item as UtenteDto).username;
-  }
-
-  getUserEmail(item: Dto): string {
-    return (item as UtenteDto).email;
-  }
-
-  getUserDataNascita(item: Dto): string {
-    return (item as UtenteDto).dataNascita;
-  }
-
-  getEventData(item: Dto): string {
-    return (item as EventoDto).data;
-  }
-
-  hasEventData(item: Dto): boolean {
-    return !!(item as EventoDto).data;
   }
 }
