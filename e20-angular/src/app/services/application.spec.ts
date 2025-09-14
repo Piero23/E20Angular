@@ -3,7 +3,7 @@ import {TestBed} from '@angular/core/testing';
 import {Application} from './application';
 
 describe('Application', () => {
-  let service: Application;
+  let service: Application<any>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
