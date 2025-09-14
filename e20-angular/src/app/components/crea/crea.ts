@@ -39,7 +39,7 @@ export class Crea implements AfterViewInit {
 
   onHoursInput() {
     const el = this.hoursRef.nativeElement;
-    el.value = el.value.replace(/[^\d]/g, '');
+    el.value = el.value.replace(/\D/g, '');
     if (el.value.length >= 2) {
       this.normalizzaOrario(el, 0, 23);
       this.minutesRef.nativeElement.focus();
@@ -48,7 +48,7 @@ export class Crea implements AfterViewInit {
 
   onMinutesInput() {
     const el = this.minutesRef.nativeElement;
-    el.value = el.value.replace(/[^\d]/g, '');
+    el.value = el.value.replace(/\D/g, '');
     if (el.value.length > 2) el.value = el.value.slice(0, 2);
   }
 

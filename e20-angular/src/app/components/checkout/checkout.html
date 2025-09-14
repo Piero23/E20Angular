@@ -1,0 +1,47 @@
+<app-top-bar/>
+<section class="row justify-content-center py-5 gap-5" style="min-height: 70vh">
+  <div class="col-3 align-items-center h-100">
+    <h4 class="d-flex align-items-center justify-content-center pb-3 border-bottom">Checkout</h4>
+    <section class="d-flex flex-column gap-4">
+      @for (group of listaBigliettiFormArray.controls; track group; let i = $index) {
+        <span class="d-flex flex-column gap-2">
+          <form [formGroup]="group" class="row flex-wrap gap-3">
+            <input type="text" formControlName="nome" placeholder="Nome" class="flex-grow-1 col-2">
+            <input type="text" formControlName="cognome" placeholder="Cognome" class="flex-grow-1 col-2">
+            <input type="text" formControlName="email" placeholder="Email" class="col-12">
+            <input type="date" formControlName="dataNascita" placeholder="Data di nascita" class="col-6">
+          </form>
+          @if (listaBigliettiFormArray.length > 1) {
+            <button (click)="removeBiglietto(i)">Rimuovi biglietto</button>
+          }
+      </span>
+      }
+    </section>
+    <div class="d-flex align-items-center justify-content-center pt-3">
+      <button (click)="addBiglietto()">Aggiungi biglietto</button>
+    </div>
+  </div>
+  <div class="col-1 border-end border-black" style="width: 0px"></div>
+  <div class="col-3 align-items-center h-100">
+    <h4 class="d-flex align-items-center justify-content-center">Dettagli</h4>
+    <div class="d-flex flex-column gap-1 align-items-stretch justify-content-center">
+      <span>{{ username }}</span>
+      <span>{{ email }}</span>
+      <hr>
+      <span class="d-flex justify-content-between w-100">
+      <p>Numero biglietti</p>
+        <p>{{ listaBigliettiFormArray.length }}</p>
+      </span>
+      <span class="d-flex justify-content-between">
+      <p>Costo biglietto</p>
+        <p>{{ costo_biglietto.toFixed(2) }}€</p>
+      </span>
+      <span class="d-flex justify-content-between">
+      <p>Totale</p>
+        <p>{{ (this.listaBigliettiFormArray.length * costo_biglietto).toFixed(2) }}€</p>
+      </span>
+
+      <button (click)="paga()">Paga</button>
+    </div>
+  </div>
+</section>

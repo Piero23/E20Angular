@@ -19,25 +19,8 @@ export interface EventoDto extends Dto {
 export class EventoService extends Application<EventoDto> {
   protected override API_URL = '/api/evento';
 
-  /***********************CRUD OPERATIONS***********************/
-
-  // Create new event
-  createEvent(evento: EventoDto): Observable<EventoDto> {
-    return this.http.post<EventoDto>(this.API_URL, evento);
-  }
-
-  // Update event
-  updateEvent(id: number, evento: EventoDto): Observable<EventoDto> {
-    return this.http.put<EventoDto>(`${this.API_URL}/${id}`, evento);
-  }
-
-  // Delete event
-  deleteEvent(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.API_URL}/${id}`);
-  }
-
   // Upload event image
-  uploadEventImage(id: number, image: File): Observable<any> {
+  uploadEventImage(id: number, image: File): Observable<unknown> {
     const formData = new FormData();
     formData.append('immagine', image);
 
@@ -45,14 +28,14 @@ export class EventoService extends Application<EventoDto> {
   }
 
   // Get event image
-  getEventImage(id: number): Observable<Blob> {
+  getEventImage(id: number) {
     return this.http.get(`${this.API_URL}/${id}/image`, {
       responseType: 'blob'
     });
   }
 
   // Get remaining spots
-  getRemainingSpots(id: number): Observable<number> {
+  getRemainingSpots(id: number) {
     return this.http.get<number>(`${this.API_URL}/${id}/spots`);
   }
 }
