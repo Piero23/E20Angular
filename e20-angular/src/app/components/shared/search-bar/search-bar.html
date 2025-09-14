@@ -36,7 +36,7 @@
 </div>
 
 <!-- Search Results Info -->
-<div *ngIf="!isLoading && !hasError && (isSearchMode || results.length > 0)" class="results-info">
+<div *ngIf="!isLoading && !hasError && searchQuery && (isSearchMode || results.length > 0)" class="results-info">
   <div class="row align-items-center">
     <div class="col">
       <p class="mb-0" *ngIf="isSearchMode">
@@ -57,7 +57,7 @@
 <!-- Events List -->
 <div *ngIf="!isLoading && !hasError" class="events-container">
   <!-- No Results -->
-  <div *ngIf="results.length === 0 && isSearchMode" class="no-results">
+  <div *ngIf="results.length === 0 && isSearchMode && searchQuery" class="no-results">
     <div class="text-center py-5">
       <i class="fas fa-search fa-3x text-muted mb-3"></i>
       <h4 class="text-muted">Nessun risultato trovato</h4>
