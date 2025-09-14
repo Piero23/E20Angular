@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {Dto, PageResponse} from './application';
+import {Application, Dto, PageResponse} from './application';
 
 export interface EventoDto extends Dto {
-  id?: number;
-  nome: string;
   descrizione: string;
   organizzatore: string;
   posti: number;
@@ -19,41 +17,8 @@ export interface EventoDto extends Dto {
 @Injectable({
   providedIn: 'root'
 })
-export class EventoService {
-  private readonly API_URL = '/api/evento';
-
-  constructor(private http: HttpClient) { }
-
-  // GET ALL EVENTS WITH PAGINATION
-  getAllEvents(page: number = 0, size: number = 20, sort?: string): Observable<PageResponse<EventoDto>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
-
-    if (sort) {
-      params = params.set('sort', sort);
-    }
-
-    return this.http.get<PageResponse<EventoDto>>(this.API_URL, { params });
-  }
-
-  // SEARCH EVENTS WITH PAGINATION
-  searchEvents(searchTerm: string, page: number = 0, size: number = 20, sort?: string): Observable<PageResponse<EventoDto>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
-
-    if (sort) {
-      params = params.set('sort', sort);
-    }
-
-    return this.http.get<PageResponse<EventoDto>>(`${this.API_URL}/search/${encodeURIComponent(searchTerm)}`, { params });
-  }
-
-  getEventById(id: number): Observable<EventoDto> {
-    return this.http.get<EventoDto>(`${this.API_URL}/${id}`);
-  }
-
+export class EventoService extends Application<EventoDto> {
+  protected override API_URL = '/api/evento';
   /***********************CRUD OPERATIONS***********************/
 
   // Create new event
@@ -90,14 +55,4 @@ export class EventoService {
   getRemainingSpots(id: number): Observable<number> {
     return this.http.get<number>(`${this.API_URL}/${id}/spots`);
   }
-
-  // TODO: Get bookings for event (ORGANIZER)
-  /*
-  getEventImagetEventBookings(id: number): Observable<BigliettoDto[]> {
-    const params = new HttpParams().set('id', id.toString());
-    return this.http.get<BigliettoDto[]>(`${this.API_URL}/bookings`, { params });
-  }
-  */
-
-  // TODO: Get user's event
 }

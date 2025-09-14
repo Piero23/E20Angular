@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {Dto, PageResponse} from './application';
+import {Application, Dto, PageResponse} from './application';
 
 export interface UtenteDto extends Dto {
-  id?: number;
   username: string;
   email: string;
   dataNascita: string;
@@ -13,44 +11,11 @@ export interface UtenteDto extends Dto {
 @Injectable({
   providedIn: 'root'
 })
-export class UtenteService {
-  private readonly API_URL = '/api/utente';
+export class UtenteService extends Application<UtenteDto> {
+  protected override API_URL = '/api/utente';
 
-  constructor(private http: HttpClient) { }
-
-  // GET ALL USERS WITH PAGINATION
-  getAllUsers(page: number = 0, size: number = 20, sort?: string): Observable<PageResponse<UtenteDto>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
-
-    if (sort) {
-      params = params.set('sort', sort);
-    }
-
-    return this.http.get<PageResponse<UtenteDto>>(this.API_URL, { params });
-  }
-
-  // SEARCH USERS WITH PAGINATION
-  searchUsers(searchTerm: string, page: number = 0, size: number = 20, sort?: string): Observable<PageResponse<UtenteDto>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
-
-    if (sort) {
-      params = params.set('sort', sort);
-    }
-    return this.http.get<PageResponse<UtenteDto>>(`${this.API_URL}/search/${encodeURIComponent(searchTerm)}`, {params});
-  }
   /***********************CRUD OPERATIONS***********************/
 
-  getUtenteById(id: number): Observable<UtenteDto> {
-    return this.http.get<UtenteDto>(`${this.API_URL}/${id}`);
-  }
-
-  getUtenteByUsername(username: string): Observable<UtenteDto> {
-    return this.http.get<UtenteDto>(`${this.API_URL}/${username}`)
-  }
 
   // Create new utente
   createUtente(utente: UtenteDto): Observable<UtenteDto> {

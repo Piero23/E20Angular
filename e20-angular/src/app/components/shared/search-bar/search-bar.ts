@@ -2,11 +2,20 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { of, Subject } from 'rxjs';
+import { forkJoin, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 import { EventoDto, EventoService } from '../../../services/evento-service';
-import {UtenteDto, UtenteService} from '../../../services/utente-service';
-import {Dto, PageResponse} from '../../../services/application';
+import { UtenteDto, UtenteService } from '../../../services/utente-service';
+import { Dto, PageResponse } from '../../../services/application';
+
+// Define the combined result type
+interface CombinedResults {
+  users: Dto[];
+  events: Dto[];
+  all: Dto[]; // Combined array for display
+  totalElements: number;
+  totalPages: number;
+}
 
 @Component({
   selector: 'app-search-bar',
@@ -34,46 +43,43 @@ export class SearchBar implements OnInit, OnDestroy {
   totalPages = 0;
   totalElements = 0;
 
-  // Results
-  results: Dto[] = [];
-  isSearchMode = false; // Track if we're showing search results or all events
+  // Results - separate arrays for different types
+  userResults: UtenteDto[] = [];
+  eventResults: EventoDto[] = [];
+  results: Dto[] = []; // Combined results for display
+
+  isSearchMode = false;
+
+  // Filter options
+  showUsers = true;
+  showEvents = true;
 
   constructor(
     private eventoService: EventoService,
-    private utenteService: UtenteService) { }
+    private utenteService: UtenteService
+  ) { }
 
   ngOnInit(): void {
-    // Load initial events
-    this.loadAllEvents();
-    this.loadAllUsers();
 
     // Setup search with debounce
     this.searchTerms.pipe(
       debounceTime(300),
       distinctUntilChanged(),
       switchMap((term: string) => {
-        if (term.trim() === '') {
-          this.isSearchMode = false;
-          return this.eventoService.getAllEvents(0, this.pageSize);
-        } else {
-          this.isSearchMode = true;
-          this.isLoading = true;
-          return (this.eventoService.searchEvents(term, 0, this.pageSize));
-        }
+        this.isSearchMode = true;
+        this.isLoading = true;
+        return this.searchAllDataObservable(term);
       }),
       catchError(error => {
         console.error('Search error:', error);
-        this.hasError = true;
-        this.errorMessage = 'Errore durante la ricerca. Riprova più tardi.';
-        this.isLoading = false;
-        //@ts-ignore
-        return of({ content: [], totalPages: 0, totalElements: 0 } as PageResponse<EventoDto>);
+        this.handleError('Errore durante la ricerca. Riprova più tardi.');
+        return of(this.createEmptyResults());
       }),
       takeUntil(this.destroy$)
-    ).subscribe(response => {
-      this.updateResults(response);
+    ).subscribe(combinedResults => {
+      this.updateAllResults(combinedResults);
       this.isLoading = false;
-      this.currentPage = 0; // Reset to first page
+      this.currentPage = 0;
     });
   }
 
@@ -82,6 +88,7 @@ export class SearchBar implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  // Event handlers
   onSearchInputChange(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.searchQuery = target.value;
@@ -98,12 +105,16 @@ export class SearchBar implements OnInit, OnDestroy {
     if (event.key === 'Enter') {
       this.onSearchClick();
     }
+
+    if (event.key === 'Backspace') {
+      this.searchQuery = '';
+      this.isSearchMode = false;
+    }
   }
 
   clearSearch(): void {
     this.searchQuery = '';
     this.isSearchMode = false;
-    this.loadAllEvents();
   }
 
   // Pagination methods
@@ -126,68 +137,94 @@ export class SearchBar implements OnInit, OnDestroy {
     }
   }
 
+  private searchAllDataObservable(term: string) {
+    return forkJoin({
+      users: this.utenteService.searchElements(term, this.currentPage, this.pageSize).pipe(
+        catchError(error => {
+          console.error('Search users error:', error);
+          return of({content: [], totalPages: 0, totalElements: 0} as unknown as PageResponse<Dto>);
+        })
+      ),
+      events: this.eventoService.searchElements(term, this.currentPage, this.pageSize).pipe(
+        catchError(error => {
+          console.error('Search events error:', error);
+          return of({content: [], totalPages: 0, totalElements: 0} as unknown as PageResponse<Dto>);
+        })
+      )
+    });
+  }
+
   private loadPage(page: number): void {
+    // Only load pages if we're in search mode
+    if (!this.isSearchMode || !this.searchQuery.trim()) return;
+
     this.isLoading = true;
 
-    const request$ = this.isSearchMode
-      ? this.eventoService.searchEvents(this.searchQuery, page, this.pageSize)
-      : this.eventoService.getAllEvents(page, this.pageSize);
+    const request$ = this.searchAllDataObservable(this.searchQuery);
 
     request$.pipe(
       catchError(error => {
         console.error('Load page error:', error);
-        this.hasError = true;
-        this.errorMessage = 'Errore durante il caricamento. Riprova più tardi.';
-        //@ts-ignore
-        return of({ content: [], totalPages: 0, totalElements: 0 } as PageResponse<Dto>);
+        this.handleError('Errore durante il caricamento. Riprova più tardi.');
+        return of(null);
       }),
       takeUntil(this.destroy$)
-    ).subscribe(response => {
-      this.updateResults(response);
+    ).subscribe(combinedResults => {
+      if (combinedResults) {
+        this.updateAllResults(combinedResults);
+      }
       this.isLoading = false;
     });
   }
 
-  public loadAllEvents(): void {
-    this.isLoading = true;
-    this.eventoService.getAllEvents(0, this.pageSize).pipe(
-      catchError(error => {
-        console.error('Load all events error:', error);
-        this.hasError = true;
-        this.errorMessage = 'Errore durante il caricamento degli eventi.';
-        //@ts-ignore
-        return of({ content: [], totalPages: 0, totalElements: 0 } as PageResponse<EventoDto>);
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe(response => {
-      this.updateResults(response);
-      this.isLoading = false;
-    });
-  }
+  // Result management
+  private updateAllResults(response: any): void {
+    // Store separate results with proper typing
+    this.userResults = (response.users?.content || []) as UtenteDto[];
+    this.eventResults = (response.events?.content || []) as EventoDto[];
 
-    public loadAllUsers(): void {
-    this.isLoading = true;
-    this.utenteService.getAllUsers(0, this.pageSize).pipe(
-      catchError(error => {
-        console.error('Load all users error:', error);
-        this.hasError = true;
-        this.errorMessage = 'Errore durante il caricamento degli utenti.';
-        //@ts-ignore
-        return of({ content: [], totalPages: 0, totalElements: 0 } as PageResponse<UtenteDto>);
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe(response => {
-      this.updateResults(response);
-      this.isLoading = false;
-    });
-  }
+    // Calculate totals
+    const userTotal = response.users?.totalElements || 0;
+    const eventTotal = response.events?.totalElements || 0;
 
-  private updateResults(response: PageResponse<Dto>): void {
-    this.results = response.content || [];
-    this.totalPages = response.totalPages || 0;
-    this.totalElements = response.totalElements || 0;
+    this.totalElements = userTotal + eventTotal;
+    this.totalPages = Math.max(
+      response.users?.totalPages || 0,
+      response.events?.totalPages || 0
+    );
+
+    // Update display
+    this.updateDisplayResults();
     this.hasError = false;
     this.errorMessage = '';
+  }
+
+  private updateDisplayResults(): void {
+    this.results = [];
+
+    if (this.showUsers) {
+      this.results.push(...this.userResults);
+    }
+
+    if (this.showEvents) {
+      this.results.push(...this.eventResults);
+    }
+  }
+
+  private createEmptyResults(): CombinedResults {
+    return {
+      users: [],
+      events: [],
+      all: [],
+      totalElements: 0,
+      totalPages: 0
+    };
+  }
+
+  private handleError(message: string): void {
+    this.hasError = true;
+    this.errorMessage = message;
+    this.isLoading = false;
   }
 
   // Utility methods for template
@@ -198,7 +235,6 @@ export class SearchBar implements OnInit, OnDestroy {
     let startPage = Math.max(0, this.currentPage - Math.floor(maxPagesToShow / 2));
     let endPage = Math.min(this.totalPages - 1, startPage + maxPagesToShow - 1);
 
-    // Adjust start if we're at the end
     if (endPage - startPage < maxPagesToShow - 1) {
       startPage = Math.max(0, endPage - maxPagesToShow + 1);
     }
@@ -223,5 +259,35 @@ export class SearchBar implements OnInit, OnDestroy {
 
   formatPrice(price: number): string {
     return price === 0 ? 'Gratuito' : `€${price.toFixed(2)}`;
+  }
+
+  // Helper methods to identify item types in template
+  isUser(item: Dto): boolean {
+    return 'username' in item;
+  }
+
+  isEvent(item: Dto): boolean {
+    return !('username' in item);
+  }
+
+  // Helper methods to safely access typed properties
+  getUserUsername(item: Dto): string {
+    return (item as UtenteDto).username;
+  }
+
+  getUserEmail(item: Dto): string {
+    return (item as UtenteDto).email;
+  }
+
+  getUserDataNascita(item: Dto): string {
+    return (item as UtenteDto).dataNascita;
+  }
+
+  getEventData(item: Dto): string {
+    return (item as EventoDto).data;
+  }
+
+  hasEventData(item: Dto): boolean {
+    return !!(item as EventoDto).data;
   }
 }

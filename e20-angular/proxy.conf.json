@@ -1,5 +1,5 @@
 {
-  "/api/evento": {
+  "/api": {
     "target": "https://localhost:8060",
     "secure": false,
     "changeOrigin": true,
