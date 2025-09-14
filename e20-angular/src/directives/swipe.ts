@@ -31,3 +31,6 @@ export class SwipeDirective {
     });
   }
 }
+
+export class Swipe {
+}
