@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
-import {MainContentZone} from './main-content-zone/main-content-zone';
-import {EventsShowcase} from './events-showcase/events-showcase';
+import { Component } from '@angular/core';
+import { MainContentZone } from './main-content-zone/main-content-zone';
+import { EventsShowcase } from './events-showcase/events-showcase';
 
 @Component({
   selector: 'app-home',
@@ -12,8 +12,4 @@ import {EventsShowcase} from './events-showcase/events-showcase';
   styleUrl: './home.css'
 })
 export class Home {
-
-  navigateToWebsite(url: string): void {
-    window.location.href = url;
-  }
 }

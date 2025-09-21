@@ -1,12 +1,12 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-import {forkJoin, of, Subject} from 'rxjs';
-import {catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil} from 'rxjs/operators';
-import {EventoDto, EventoService} from '../../../services/evento-service';
-import {UtenteDto, UtenteService} from '../../../services/utente-service';
-import {Dto, PageResponse} from '../../../services/application';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { forkJoin, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
+import { EventoDto, EventoService } from '../../../services/evento-service';
+import { UtenteDto, UtenteService } from '../../../services/utente-service';
+import { Dto, PageResponse } from '../../../services/application';
 
 // Define the combined result type
 interface CombinedResults {
@@ -59,7 +59,7 @@ export class SearchBar implements OnInit, OnDestroy {
 
     // Setup search with debounce
     this.searchTerms.pipe(
-      debounceTime(300),
+      debounceTime(100),
       distinctUntilChanged(),
       switchMap((term: string) => {
         this.isSearchMode = true;
@@ -109,28 +109,9 @@ export class SearchBar implements OnInit, OnDestroy {
   }
 
   clearSearch(): void {
+    this.searchTerms.next('');
     this.searchQuery = '';
     this.isSearchMode = false;
-  }
-
-  // Pagination methods
-  goToPage(page: number): void {
-    if (page >= 0 && page < this.totalPages && page !== this.currentPage) {
-      this.currentPage = page;
-      this.loadPage(page);
-    }
-  }
-
-  goToNextPage(): void {
-    if (this.currentPage < this.totalPages - 1) {
-      this.goToPage(this.currentPage + 1);
-    }
-  }
-
-  goToPreviousPage(): void {
-    if (this.currentPage > 0) {
-      this.goToPage(this.currentPage - 1);
-    }
   }
 
   // Utility methods for template
@@ -189,7 +170,7 @@ export class SearchBar implements OnInit, OnDestroy {
     return (item as UtenteDto).dataNascita;
   }
 
-  getEventData(item: Dto): string {
+  getEventDate(item: Dto): string {
     return (item as EventoDto).data;
   }
 
@@ -197,43 +178,24 @@ export class SearchBar implements OnInit, OnDestroy {
     return !!(item as EventoDto).data;
   }
 
+  getEventPrice(item: Dto): number {
+    return (item as EventoDto).prezzo;
+  }
+
   private searchAllDataObservable(term: string) {
     return forkJoin({
       users: this.utenteService.searchElements(term, this.currentPage, this.pageSize).pipe(
         catchError(error => {
           console.error('Search users error:', error);
-          return of({content: [], totalPages: 0, totalElements: 0} as unknown as PageResponse<Dto>);
+          return of({ content: [], totalPages: 0, totalElements: 0 } as unknown as PageResponse<Dto>);
         })
       ),
       events: this.eventoService.searchElements(term, this.currentPage, this.pageSize).pipe(
         catchError(error => {
           console.error('Search events error:', error);
-          return of({content: [], totalPages: 0, totalElements: 0} as unknown as PageResponse<Dto>);
+          return of({ content: [], totalPages: 0, totalElements: 0 } as unknown as PageResponse<Dto>);
         })
       )
-    });
-  }
-
-  private loadPage(page: number): void {
-    // Only load pages if we're in search mode
-    if (!this.isSearchMode || !this.searchQuery.trim()) return;
-
-    this.isLoading = true;
-
-    const request$ = this.searchAllDataObservable(this.searchQuery);
-
-    request$.pipe(
-      catchError(error => {
-        console.error('Load page error:', error);
-        this.handleError('Errore durante il caricamento. Riprova più tardi.');
-        return of(null);
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe(combinedResults => {
-      if (combinedResults) {
-        this.updateAllResults(combinedResults);
-      }
-      this.isLoading = false;
     });
   }
 

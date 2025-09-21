@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
-import {NgOptimizedImage} from '@angular/common';
-import {LogoAndSearchBar} from './logo-and-search-bar/logo-and-search-bar';
+import { Component } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
+import { LogoAndSearchBar } from './logo-and-search-bar/logo-and-search-bar';
 
 @Component({
   selector: 'app-main-content-zone',
@@ -12,4 +12,7 @@ import {LogoAndSearchBar} from './logo-and-search-bar/logo-and-search-bar';
   styleUrl: './main-content-zone.css'
 })
 export class MainContentZone {
+  navigateToWebsite(url: string): void {
+    window.location.href = url;
+  }
 }

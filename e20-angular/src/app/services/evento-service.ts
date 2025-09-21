@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {Application, Dto} from './application';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Application, Dto } from './application';
 
 export interface EventoDto extends Dto {
   descrizione: string;
@@ -11,6 +11,7 @@ export interface EventoDto extends Dto {
   age_restricted: boolean;
   data: string; // Date as ISO string from backend
   prezzo: number;
+  location: number;
 }
 
 @Injectable({

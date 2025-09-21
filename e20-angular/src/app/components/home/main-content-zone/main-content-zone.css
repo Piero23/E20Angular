@@ -1,47 +1,98 @@
-.flyers-container {
+.hero-container {
+  width: 100%;
+  height: 100%;
   position: relative;
-  height: 66vh;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  overflow: hidden;
-  z-index: 0;
-}
+  display: flex;
+  flex-direction: column;
 
-.flyer {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
+  /* Login button style*/
+  .top-bar-login-button {
+    position: absolute;
+    z-index: 3;
+    align-self: flex-end;
+    padding: 1vh 1vw;
+    .top-right-btn {
+      background: #222121;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      box-shadow: 0 2px 2px #222121;
+    }
 
-.flyers-container::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.7) 0%,
-    rgba(0, 0, 0, 0.5) 100%
-  );
-}
+    .top-right-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px #222121;
+      background: #2a2a2a;
+    }
 
-.flyer img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
+    .top-right-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 2px #222121;
+    }
+  }
 
-.bottom-gradient-zone {
-  position: absolute;
-  inset: 0;
-  height: 100%;
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(250, 252, 252, 0) 80%
-  );
-  z-index: 1;
+  /*Flyers zone style*/
+  .flyers-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    overflow: hidden;
 
+    .flyer {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .flyer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+  }
+
+  .flyers-container::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+;
+  }
+
+  .bottom-gradient-zone {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    background: linear-gradient(
+      to top,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(250, 252, 252, 0) 80%
+    );
+    z-index: 1;
+  }
+
+  /* Logo and search bar*/
+  .logo-and-search-bar-zone {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
 }

@@ -9,7 +9,7 @@
 }
 
 .top-search-bar {
-  resize: vertical;
+  width: 100%;
 }
 
 .user-icon, .e20-logo {
