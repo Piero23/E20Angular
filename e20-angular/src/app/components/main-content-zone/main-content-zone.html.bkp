@@ -1,0 +1,13 @@
+<div class="hero-container">
+  <div class="flyers-container">
+    <div class="flyer">
+      <img alt="Flyer 1" height="1627" ngSrc="/assets/flyer1.jpg" width="1160" />
+    </div>
+    <div class="flyer">
+      <img alt="Flyer 2" height="1683" ngSrc="/assets/flyer2.jpg" width="1200" />
+    </div>
+    <div class="flyer">
+      <img alt="Flyer 3" height="736" ngSrc="/assets/flyer3.jpg" width="736" />
+    </div>
+  </div>
+</div>

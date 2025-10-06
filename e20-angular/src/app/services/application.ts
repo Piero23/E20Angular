@@ -1,34 +1,10 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-export interface PageResponse<T> {
+export interface SearchResponse<T> {
   content: T[];
-  pageable: {
-    sort: {
-      empty: boolean;
-      sorted: boolean;
-      unsorted: boolean;
-    };
-    offset: number;
-    pageSize: number;
-    pageNumber: number;
-    paged: boolean;
-    unpaged: boolean;
-  };
-  last: boolean;
-  totalPages: number;
   totalElements: number;
-  size: number;
-  number: number;
-  sort: {
-    empty: boolean;
-    sorted: boolean;
-    unsorted: boolean;
-  };
-  first: boolean;
-  numberOfElements: number;
-  empty: boolean;
 }
 
 export interface Dto {
@@ -45,42 +21,35 @@ export abstract class Application<T extends Dto> {
   constructor(protected http: HttpClient) {
   }
 
-  // GET ALL ELEMENTS WITH PAGINATION
-  getAllElements(
-    page: number = 0,
-    size: number = 20,
-    sort?: string
-  ): Observable<PageResponse<T>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
-
-    if (sort) {
-      params = params.set('sort', sort);
-    }
-
-    return this.http.get<PageResponse<T>>(this.API_URL, {params});
-  }
-
-  // SEARCH ELEMENTS WITH PAGINATION
+  // SEARCH ELEMENTS
   searchElements(
     searchTerm: string,
-    page: number = 0,
-    size: number = 20,
-    sort?: string
-  ): Observable<PageResponse<T>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
-
-    if (sort) {
-      params = params.set('sort', sort);
-    }
-    return this.http.get<PageResponse<T>>(`${this.API_URL}/search/${encodeURIComponent(searchTerm)}`, {params});
+  ): Observable<SearchResponse<T>> {
+    return this.http.get<SearchResponse<T>>(`${this.API_URL}/search/${encodeURIComponent(searchTerm)}`);
   }
 
   /***********************CRUD OPERATIONS***********************/
+  createElement(element: T): Observable<T> {
+    return this.http.post<T>(this.API_URL, element);
+  }
+
+  updateElement(id: number, element: T): Observable<T> {
+    return this.http.put<T>(`${this.API_URL}/${id}`, element);
+  }
+
+  deleteElement(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
+
   getElementById(id: number): Observable<T> {
     return this.http.get<T>(`${this.API_URL}/${id}`);
+  }
+
+  getElementByName(nome: string): Observable<T> {
+    return this.http.get<T>(`${this.API_URL}/${nome}`);
+  }
+
+  getApiUrl(): string {
+    return this.API_URL;
   }
 }

@@ -1,0 +1,25 @@
+<div class="events-container">
+  <div class="events-header">
+    <h2 class="events-title">Eventi più seguiti</h2>
+  </div>
+  <div #cardContainer (mousedown)="onMouseDown($event)" (mouseleave)="onMouseUp()" (mousemove)="onMouseMove($event)"
+    (mouseup)="onMouseUp()" (touchend)="onTouchEnd()" (touchmove)="onTouchMove($event)"
+    (touchstart)="onTouchStart($event)" class="events-cards-row">
+
+    <div class="event-card card-blue"></div>
+    <div class="event-card card-orange">
+      <div class="event-card-content">
+        <h3>Questo è un evento</h3>
+        <p>Questa è la descrizione di un evento, bla bla bla...</p>
+      </div>
+    </div>
+    <div class="event-card card-green"></div>
+    <div class="event-card card-blue"></div>
+    <div class="event-card card-orange">
+      <div class="event-card-content">
+        <h3>Altro evento</h3>
+        <p>Descrizione evento...</p>
+      </div>
+    </div>
+  </div>
+</div>

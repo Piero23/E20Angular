@@ -1,0 +1,34 @@
+.container-fluid {
+  gap: 0;
+  height: 66vh;
+}
+
+.row {
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  overflow: hidden;
+}
+
+.col {
+  padding: 0;
+  height: 100%;
+}
+
+.col img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.container-fluid::after {
+  position: absolute;
+  inset: 0;
+  height: 66vh;
+  content: "";
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.5) 100%);
+  z-index: 1;
+}

@@ -1,0 +1,59 @@
+.interaction-container {
+  inset: 0;
+  height: 66vh;
+  z-index: 3;
+
+  /* Login button style*/
+  .top-bar-login-button {
+
+    padding-right: 1vw;
+    padding-top: 1vw;
+
+    .top-right-btn {
+      background: #222121;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      box-shadow: 0 2px 2px #222121;
+      width: 80px;
+      height: 40px;
+    }
+
+    .top-right-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px #222121;
+      background: #2a2a2a;
+    }
+
+    .top-right-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 2px #222121;
+    }
+  }
+
+  .logo {
+    width: 100vw;
+  }
+
+  .search-home-page {
+    z-index: 4;
+  }
+}
+
+.interaction-container::after {
+  position: absolute;
+  top: 33vh;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  content: "";
+  background: linear-gradient(to top,
+      rgba(255, 255, 255, 1) 0,
+      rgba(250, 252, 252, 0) 100%);
+  z-index: 2;
+}
