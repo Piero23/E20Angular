@@ -124,7 +124,6 @@
   justify-content: end;
 }
 
-
 .buy-now-label {
   background: linear-gradient(to right, #FF9D47, #C74F00);
   border: none;
@@ -138,7 +137,6 @@
 .event-and-location-info {
   padding-top: 10rem;
 }
-
 
 .event-location-col {
   display: flex;
