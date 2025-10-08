@@ -63,8 +63,8 @@
                   <i class="fa-regular fa-pen-to-square"></i>
                 </div>
                 <div class="col notify-and-save-col">
-                  <i class="action available-spots-label-col fa-regular fa-bell"></i>
-                  <i class="action fa-regular fa-heart"></i>
+                  <i class="action available-spots-label-col fa-regular fa-bell" (click)="toggleNotification()"></i>
+                  <i class="action fa-regular fa-heart" (click)="toggleNotification()"></i>
                 </div>
               </div>
               <div class="row available-spots-row">
@@ -77,7 +77,7 @@
               </div>
               <div class="row buy-now-row">
                 <div class="col buy-now-col ">
-                  <button class="btn buy-now-label">
+                  <button class="btn buy-now-label" (click)="buyTicket()">
                     <i class="fas fa-ticket-alt"></i>
                     {{ evento.posti && evento!.posti > 0 ? 'Compra ora' : 'Sold out' }}
                   </button>

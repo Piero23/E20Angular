@@ -8,7 +8,7 @@ export interface SearchResponse<T> {
 }
 
 export interface Dto {
-  id?: number;
+  id: number;
   nome: string;
 }
 
@@ -49,6 +49,13 @@ export abstract class Application<T extends Dto> {
     return this.http.get<T>(`${this.API_URL}/${nome}`);
   }
 
+  getAllElementsPaginated(page: number = 0, size: number = 100): Observable<SearchResponse<T>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<SearchResponse<T>>(this.API_URL, { params });
+  }
   getApiUrl(): string {
     return this.API_URL;
   }

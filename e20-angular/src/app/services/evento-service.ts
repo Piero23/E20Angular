@@ -29,6 +29,13 @@ export class EventoService extends Application<EventoDto> {
     return this.http.put(`${this.API_URL}/${id}/image`, formData);
   }
 
+  // Get event image
+  getEventImage(id: number): Observable<Blob> {
+    return this.http.get(`${this.API_URL}/${id}/image`, {
+      responseType: 'blob'
+    });
+  }
+
   override getApiUrl(): string {
     return this.API_URL;
   }

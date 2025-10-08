@@ -1,0 +1,37 @@
+<div class="container event-cards">
+  <div class="row py-5 trending-events-row">
+    <div class="trending-events-col">
+      <h1 class="trending-title">Eventi di tendenza</h1>
+      <div
+        #carousel
+        class="trending-cards-row"
+        (mousedown)="onMouseDownTrending($event, carousel)"
+        (mouseleave)="onMouseLeaveTrending(carousel)"
+        (mouseup)="onMouseUpTrending(carousel)"
+        (mousemove)="onMouseMoveTrending($event, carousel)"
+        (touchstart)="onTouchStartTrending($event, carousel)"
+        (touchmove)="onTouchMoveTrending($event, carousel)"
+        (touchend)="onTouchEndTrending(carousel)">
+        @for (event of events; track event.nome) {
+          <div class="trending-cards-col">
+            <img class="event-img" [src]="getImageUrl(event.id)" >
+            <div class="hidden">
+              <p class="event-name" (click)="goToEventDetails(event.id)">{{ event.nome }}</p>
+            </div>
+          </div>
+
+        }
+      </div>
+    </div>
+  </div>
+  <div class="row py-5 following-events-row">
+    <div class="col following-events-col">
+      <h1 class="following-title">Eventi a cui partecipano gli utenti che segui</h1>
+      <div class="row following-cards-row">
+        <div class="col following-cards-col">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
