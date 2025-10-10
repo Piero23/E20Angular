@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Application, Dto } from './application';
 
 export interface UtenteDto extends Dto {

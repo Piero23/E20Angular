@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EventoDto, EventoService } from '../../services/evento-service';
-import { Subject, Subscription, takeUntil, switchMap, EMPTY } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil, switchMap, EMPTY } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import { LocationDto, LocationService } from '../../services/location-service';
+import { PreferitiService } from '../../services/preferiti-service';
+import { UtenteDto } from '../../services/utente-service';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-event-page',
@@ -12,9 +15,9 @@ import { LocationDto, LocationService } from '../../services/location-service';
   styleUrl: './event-page.css'
 })
 export class EventPage implements OnInit, OnDestroy {
-
   evento: EventoDto | null = null;
   location: LocationDto | null = null;
+  utente: UtenteDto | null = null;
   isLoading = true;
   hasError = false;
   errorMessage = '';
@@ -22,15 +25,15 @@ export class EventPage implements OnInit, OnDestroy {
   isFavorite = false;
   showSuccessMessage = false;
   successMessage = '';
-  private subscriptions = new Subscription();
 
   private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private eventoService: EventoService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private preferitiService: PreferitiService,
+    private authService: AuthService,
   ) { }
 
   getImageUrl(): string {
@@ -118,7 +121,7 @@ export class EventPage implements OnInit, OnDestroy {
   }
 
   toggleFavorite(): void {
-    // Implementation for favorite toggle
+    this.preferitiService.addToFavorites(this.utente!.id, this.evento!.id)
     console.log('Favorite toggled for event:', this.evento?.id);
   }
 
@@ -136,20 +139,20 @@ export class EventPage implements OnInit, OnDestroy {
 
   getLocationNome(): string {
     if (!this.evento) return '';
-    return `${this.locationService.getApiUrl()}/${this.evento.location}/nome`;
+    return `${this.evento.location.nome}`;
   }
 
   getLocationPosition(): string {
     if (!this.evento) return '';
-    return `${this.locationService.getApiUrl()}/${this.evento.location}/position`;
+    return `${this.evento.location.position}`;
+
   }
 
   /*getFullAddress(): string {
     if (!this.evento) return '';
-    return `${this.evento.via} ${this.evento.civico}, ${this.evento.citta} (${this.evento.provincia}) ${this.evento.cap}`;
+    return `${ this.evento.via } ${ this.evento.civico }, ${ this.evento.citta } (${ this.evento.provincia }) ${ this.evento.cap } `;
   }*/
 
   shareEvent() { /* sharing logic */ }
   openInMaps() { /* maps navigation */ }
-  goBack() { this.router.navigate(['/events']); }
 }

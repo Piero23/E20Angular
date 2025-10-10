@@ -4,9 +4,13 @@
     <div class="row row-login">
       <div class="col col-login">
         <div class="login-button">
-          <button (click)="navigateToWebsite('https://localhost:8060/utente/me')" class="btn">
-            Login
-          </button>
+          @if (!auth.isLoggedIn) {
+            <button (click)="auth.login()" class="btn">
+              Login
+            </button>
+          } @else {
+            <button (click)="auth.logout()" class="btn">Logout</button>
+          }
         </div>
       </div>
     </div>

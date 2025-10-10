@@ -2,8 +2,7 @@ import { Routes } from '@angular/router';
 import { Homepage } from './homepage/homepage';
 import { EventPage } from './components/event-page/event-page';
 import { SearchBar } from './shared/search-bar/search-bar';
-import { TopBar } from './shared/top-bar/top-bar';
-
+import { UserPage } from './components/user-page/user-page'
 export const routes: Routes = [
   { path: '', component: Homepage },
   {
@@ -11,6 +10,10 @@ export const routes: Routes = [
     component: EventPage
   },
   { path: 's', component: SearchBar },
+  {
+    path: 'utente/:username',
+    component: UserPage
+  },
   { path: '**', redirectTo: '' },
 ];
 

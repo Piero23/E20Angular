@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Application, Dto } from './application';
-import { LocationService } from './location-service';
+import { LocationDto } from './location-service';
 
 export interface EventoDto extends Dto {
   descrizione: string;
@@ -12,7 +12,7 @@ export interface EventoDto extends Dto {
   age_restricted: boolean;
   data: string; // Date as ISO string from backend
   prezzo: number;
-  location: number;
+  location: LocationDto;
   imageUrl?: string;
 }
 
@@ -35,6 +35,7 @@ export class EventoService extends Application<EventoDto> {
       responseType: 'blob'
     });
   }
+
 
   override getApiUrl(): string {
     return this.API_URL;
