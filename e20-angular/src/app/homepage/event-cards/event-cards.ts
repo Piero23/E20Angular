@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EventoDto, EventoService } from '../../services/evento-service';
-import { Subject, takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {EventoDto, EventoService} from '../../services/evento-service';
+import {Subject, takeUntil} from 'rxjs';
+import {Router} from '@angular/router';
+import {CommonModule} from '@angular/common';
 
 interface EventCard extends EventoDto {
   imageUrl?: string;
@@ -33,7 +33,8 @@ export class EventCards implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private eventoService: EventoService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadTrendingEvents();
@@ -60,11 +61,6 @@ export class EventCards implements OnInit, OnDestroy {
         }
       });
   }
-
-  private loadFollowingEvents(): void {
-    // TODO
-  }
-
 
   // Mouse events
   onMouseDownTrending(e: MouseEvent, carousel: HTMLElement): void {
@@ -117,7 +113,6 @@ export class EventCards implements OnInit, OnDestroy {
     carousel.scrollLeft = this.scrollLeftFollowing - walk;
   }
 
-
   // Touch events
   onTouchStartTrending(e: TouchEvent, carousel: HTMLElement): void {
     this.isDraggingTrending = true;
@@ -159,11 +154,11 @@ export class EventCards implements OnInit, OnDestroy {
 
   // Navigation
   scrollLeft(carousel: HTMLElement): void {
-    carousel.scrollBy({ left: -400, behavior: 'smooth' });
+    carousel.scrollBy({left: -400, behavior: 'smooth'});
   }
 
   scrollRight(carousel: HTMLElement): void {
-    carousel.scrollBy({ left: 400, behavior: 'smooth' });
+    carousel.scrollBy({left: 400, behavior: 'smooth'});
   }
 
   goToEventDetails(eventId: number | undefined): void {
@@ -178,5 +173,9 @@ export class EventCards implements OnInit, OnDestroy {
 
   getImageUrl(id: number | null): string {
     return `${this.eventoService.getApiUrl()}/${id}/image`;
+  }
+
+  private loadFollowingEvents(): void {
+    // TODO
   }
 }

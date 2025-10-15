@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { forkJoin, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
-import { EventoDto, EventoService } from '../../services/evento-service';
-import { UtenteDto, UtenteService } from '../../services/utente-service';
-import { Dto, SearchResponse } from '../../services/application';
-import { Router, RouterLink, } from '@angular/router';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {forkJoin, of, Subject} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil} from 'rxjs/operators';
+import {EventoDto, EventoService} from '../../services/evento-service';
+import {UtenteDto, UtenteService} from '../../services/utente-service';
+import {Dto, SearchResponse} from '../../services/application';
+import {Router, RouterLink,} from '@angular/router';
 
 interface CombinedResults {
   users: Dto[];
@@ -50,7 +50,8 @@ export class SearchBar implements OnInit, OnDestroy {
     private eventoService: EventoService,
     private utenteService: UtenteService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
 
@@ -160,13 +161,13 @@ export class SearchBar implements OnInit, OnDestroy {
       users: this.utenteService.searchElements(term).pipe(
         catchError(error => {
           console.error('Search users error:', error);
-          return of({ content: [], totalPages: 0, totalElements: 0 } as unknown as SearchResponse<Dto>);
+          return of({content: [], totalPages: 0, totalElements: 0} as unknown as SearchResponse<Dto>);
         })
       ),
       events: this.eventoService.searchElements(term).pipe(
         catchError(error => {
           console.error('Search events error:', error);
-          return of({ content: [], totalPages: 0, totalElements: 0 } as unknown as SearchResponse<Dto>);
+          return of({content: [], totalPages: 0, totalElements: 0} as unknown as SearchResponse<Dto>);
         })
       )
     });

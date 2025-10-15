@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { BackgroundFlyers } from './background-flyers';
+import {BackgroundFlyers} from './background-flyers';
 
 describe('BackgroundFlyers', () => {
   let component: BackgroundFlyers;
@@ -10,7 +10,7 @@ describe('BackgroundFlyers', () => {
     await TestBed.configureTestingModule({
       imports: [BackgroundFlyers]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(BackgroundFlyers);
     component = fixture.componentInstance;

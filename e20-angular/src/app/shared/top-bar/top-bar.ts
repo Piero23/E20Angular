@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { SearchBar } from '../search-bar/search-bar';
+import {Component} from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
+import {SearchBar} from '../search-bar/search-bar';
 
 @Component({
   selector: 'app-top-bar',
@@ -12,7 +12,8 @@ import { SearchBar } from '../search-bar/search-bar';
   styleUrl: './top-bar.css'
 })
 export class TopBar {
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+  }
 
   goToProfilePage(): void {
     this.router.navigate(['/profilo']);

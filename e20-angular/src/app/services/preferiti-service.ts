@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Application, Dto } from './application';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Application, Dto} from './application';
+import {Observable} from 'rxjs';
 
 interface PreferitoDto extends Dto {
   utente_id: number;

@@ -33,7 +33,7 @@
       <div class="row event-image-row">
         <div class="col event-image-col">
           <img [alt]="evento.nome || 'Event image'" [src]="getImageUrl()" (error)="onImageError($event)"
-            class="event-main-image">
+               class="event-main-image">
         </div>
       </div>
     </div>
@@ -41,49 +41,49 @@
     <!-- Ticket Info Section -->
     <div class="container ticket">
       <div class="row main-ticket-row">
-            <div class="col left-ticket-zone">
-              <div class="row date-row">
-                <div class="col date-col">
-                  <p class="formatted-date">
-                    <i class="fas fa-calendar-alt"></i>
-                    {{ getFormattedDate() }}
-                  </p>
-                </div>
-              </div>
-              <div class="row title-row">
-                <div class="col title-col">
-                  <h1 class="event-title fw-bold">{{ evento.nome }}</h1>
-                </div>
-              </div>
+        <div class="col left-ticket-zone">
+          <div class="row date-row">
+            <div class="col date-col">
+              <p class="formatted-date">
+                <i class="fas fa-calendar-alt"></i>
+                {{ getFormattedDate() }}
+              </p>
             </div>
+          </div>
+          <div class="row title-row">
+            <div class="col title-col">
+              <h1 class="event-title fw-bold">{{ evento.nome }}</h1>
+            </div>
+          </div>
+        </div>
 
-            <div class="col right-ticket-zone">
-              <div class="row buttons-row">
-                <div class="col edit-col">
-                  <i class="fa-regular fa-pen-to-square"></i>
-                </div>
-                <div class="col notify-and-save-col">
-                  <i class="action available-spots-label-col fa-regular fa-bell" (click)="toggleNotification()"></i>
-                  <i class="action fa-regular fa-heart" (click)="toggleFavorite()"></i>
-                </div>
-              </div>
-              <div class="row available-spots-row">
-                <div class="col available-spots-num-col">
-                  <h1 class="availability">{{ evento.posti || 0 }}</h1>
-                  <p class="availability-label">
-                  {{ evento.posti === 1 ? 'Posto disponibile' : 'Posti disponibili' }}
-                  </p>
-                </div>
-              </div>
-              <div class="row buy-now-row">
-                <div class="col buy-now-col ">
-                  <button class="btn buy-now-label" (click)="buyTicket()">
-                    <i class="fas fa-ticket-alt"></i>
-                    {{ evento.posti && evento!.posti > 0 ? 'Compra ora' : 'Sold out' }}
-                  </button>
-                </div>
-              </div>
+        <div class="col right-ticket-zone">
+          <div class="row buttons-row">
+            <div class="col edit-col">
+              <i class="fa-regular fa-pen-to-square"></i>
             </div>
+            <div class="col notify-and-save-col">
+              <i class="action available-spots-label-col fa-regular fa-bell" (click)="toggleNotification()"></i>
+              <i class="action fa-regular fa-heart" (click)="toggleFavorite()"></i>
+            </div>
+          </div>
+          <div class="row available-spots-row">
+            <div class="col available-spots-num-col">
+              <h1 class="availability">{{ evento.posti || 0 }}</h1>
+              <p class="availability-label">
+                {{ evento.posti === 1 ? 'Posto disponibile' : 'Posti disponibili' }}
+              </p>
+            </div>
+          </div>
+          <div class="row buy-now-row">
+            <div class="col buy-now-col ">
+              <button class="btn buy-now-label" (click)="buyTicket()">
+                <i class="fas fa-ticket-alt"></i>
+                {{ evento.posti && evento!.posti > 0 ? 'Compra ora' : 'Sold out' }}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -100,7 +100,8 @@
                 class="map"
                 allowfullscreen=""
                 height="230px" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCeDOAa9GvBI4YzA3QCHedLMNh4Jy45nx4&q=Napoli,Italy"
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCeDOAa9GvBI4YzA3QCHedLMNh4Jy45nx4&q=Napoli,Italy"
                 width="230px">
               </iframe>
             </div>

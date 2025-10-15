@@ -1,16 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EventoDto, EventoService } from '../../services/evento-service';
-import { Subject, takeUntil, switchMap, EMPTY } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { LocationDto, LocationService } from '../../services/location-service';
-import { PreferitiService } from '../../services/preferiti-service';
-import { UtenteDto } from '../../services/utente-service';
-import { AuthService } from '../../services/auth-service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {EventoDto, EventoService} from '../../services/evento-service';
+import {EMPTY, Subject, switchMap, takeUntil} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {LocationDto, LocationService} from '../../services/location-service';
+import {PreferitiService} from '../../services/preferiti-service';
+import {UtenteDto} from '../../services/utente-service';
+import {AuthService} from '../../services/auth-service';
 
 @Component({
   selector: 'app-event-page',
-  imports: [
-  ],
+  imports: [],
   templateUrl: './event-page.html',
   styleUrl: './event-page.css'
 })
@@ -34,7 +33,8 @@ export class EventPage implements OnInit, OnDestroy {
     private locationService: LocationService,
     private preferitiService: PreferitiService,
     private authService: AuthService,
-  ) { }
+  ) {
+  }
 
   getImageUrl(): string {
     if (!this.evento?.id) {
@@ -109,12 +109,6 @@ export class EventPage implements OnInit, OnDestroy {
       });
   }
 
-  private handleError(message: string): void {
-    this.hasError = true;
-    this.errorMessage = message;
-    this.isLoading = false;
-  }
-
   toggleNotification(): void {
     // Implementation for notification toggle
     console.log('Notification toggled for event:', this.evento?.id);
@@ -134,7 +128,10 @@ export class EventPage implements OnInit, OnDestroy {
   getFormattedDate(): string {
     if (!this.evento?.data) return '';
     const date = new Date(this.evento.data);
-    return date.toLocaleDateString('it-IT') + ' - ' + date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleDateString('it-IT') + ' - ' + date.toLocaleTimeString('it-IT', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   }
 
   getLocationNome(): string {
@@ -148,11 +145,20 @@ export class EventPage implements OnInit, OnDestroy {
 
   }
 
+  shareEvent() { /* sharing logic */
+  }
+
   /*getFullAddress(): string {
     if (!this.evento) return '';
     return `${ this.evento.via } ${ this.evento.civico }, ${ this.evento.citta } (${ this.evento.provincia }) ${ this.evento.cap } `;
   }*/
 
-  shareEvent() { /* sharing logic */ }
-  openInMaps() { /* maps navigation */ }
+  openInMaps() { /* maps navigation */
+  }
+
+  private handleError(message: string): void {
+    this.hasError = true;
+    this.errorMessage = message;
+    this.isLoading = false;
+  }
 }

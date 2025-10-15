@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Application, Dto } from './application';
+import {Injectable} from '@angular/core';
+import {Application, Dto} from './application';
 
 export interface UtenteDto extends Dto {
   username: string;

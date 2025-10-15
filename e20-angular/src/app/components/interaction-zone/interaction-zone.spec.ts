@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { InteractionZone } from './interaction-zone';
+import {InteractionZone} from './interaction-zone';
 
 describe('InteractionZone', () => {
   let component: InteractionZone;
@@ -10,7 +10,7 @@ describe('InteractionZone', () => {
     await TestBed.configureTestingModule({
       imports: [InteractionZone]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(InteractionZone);
     component = fixture.componentInstance;

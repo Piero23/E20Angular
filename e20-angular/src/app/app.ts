@@ -1,9 +1,9 @@
-import { Component, signal } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { Footer } from './components/footer/footer';
-import { TopBar } from './shared/top-bar/top-bar';
-import { OAuthModule } from 'angular-oauth2-oidc';
-import { filter } from 'rxjs';
+import {Component, signal} from '@angular/core';
+import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
+import {Footer} from './components/footer/footer';
+import {TopBar} from './shared/top-bar/top-bar';
+import {OAuthModule} from 'angular-oauth2-oidc';
+import {filter} from 'rxjs';
 
 
 @Component({
@@ -13,9 +13,8 @@ import { filter } from 'rxjs';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('e20-angular');
-
   showTopBar = true;
+  protected readonly title = signal('e20-angular');
 
   constructor(private router: Router) {
     this.router.events

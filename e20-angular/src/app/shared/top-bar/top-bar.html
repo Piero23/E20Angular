@@ -3,8 +3,8 @@
     <div class="navbar-brand logo" routerLink="/">
       <img alt="Logo" src="/assets/e20_logo_alt.png"/>
     </div>
-      <app-search-bar class="sb"/>
-    <div class="user-icon" (click)="goToProfilePage()">
+    <app-search-bar class="sb"/>
+    <div (click)="goToProfilePage()" class="user-icon">
       <img alt="User Icon" src="/assets/user_icon.svg"/>
     </div>
   </div>

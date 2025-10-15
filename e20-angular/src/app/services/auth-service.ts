@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
-import { environment } from '../../environments/environment';
+import {Injectable} from '@angular/core';
+import {AuthConfig, OAuthService} from 'angular-oauth2-oidc';
+import {environment} from '../../environments/environment';
 
 
 /*
@@ -15,6 +15,7 @@ export const authConfig: AuthConfig = {
   issuer: environment.issuer, // LEGGI SOPRA
   clientId: 'angular-client', // stesso client-id del YAML
   redirectUri: window.location.origin + '/login/oauth2/code/angular-client',
+  postLogoutRedirectUri: window.location.origin,
   responseType: 'code', // PKCE code flow
   scope: 'openid profile',
   showDebugInformation: true,
@@ -22,12 +23,10 @@ export const authConfig: AuthConfig = {
 };
 
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private _userProfile: any = null;
   constructor(private oauthService: OAuthService) {
     // Configura OAuth
     this.oauthService.configure(authConfig);
@@ -40,15 +39,11 @@ export class AuthService {
     });
   }
 
-  /** Avvia il login */
-  login() {
-    this.oauthService.initCodeFlow();
-  }
+  private _userProfile: any = null;
 
-  /** Logout */
-  logout() {
-    this.oauthService.logOut();
-    this._userProfile = null;
+  /** Accesso pubblico al profilo utente */
+  get userProfile(): any {
+    return this._userProfile;
   }
 
   /** Access Token JWT */
@@ -61,16 +56,23 @@ export class AuthService {
     return this.oauthService.hasValidAccessToken();
   }
 
+  /** Avvia il login */
+  login() {
+    this.oauthService.initCodeFlow();
+  }
+
+  /** Logout */
+  logout() {
+    sessionStorage.clear();
+    /*this.oauthService.logOut();*/
+    this._userProfile = null;
+  }
+
   /** Carica il profilo utente da ID Token */
   async loadUserProfile(): Promise<void> {
     const claims = this.oauthService.getIdentityClaims();
     if (claims) {
       this._userProfile = claims;
     }
-  }
-
-  /** Accesso pubblico al profilo utente */
-  get userProfile(): any {
-    return this._userProfile;
   }
 }
