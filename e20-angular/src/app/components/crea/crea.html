@@ -1,138 +1,181 @@
-<form action="/submit-event" class="container-1" id="eventForm" method="post" novalidate>
-  <div aria-hidden="true" class="evento-box">
-    <div class="circle">
-      <i aria-hidden="true" class="fa-solid fa-image fa-2x icon"></i>
-    </div>
-  </div>
-
-  <div class="form-right">
-    <div class="field">
-      <p class="intestazione-campi" id="label-titolo">Titolo</p>
-      <input class="input-evento" id="title" name="title" placeholder="Titolo evento" required type="text">
-    </div>
-
-    <div class="field">
-      <div class="datetime-row">
-        <div class="datetime-item">
-          <p class="intestazione-campi intestazione-campi-secondari" id="label-data">Data</p>
-          <div class="sd-container">
-            <input #dateInput aria-labelledby="label-data" class="sd input-evento" id="date" name="date" required
-                   type="date">
-            <button #openButton aria-label="Apri calendario" class="open-button" type="button">
-              <i aria-hidden="true" class="fa-solid fa-calendar-days icon"></i>
-            </button>
-          </div>
+<div class="container crea-page">
+  <div class="row cont-1-row">
+    <div class="container-1 col event-image-col" id="eventForm">
+      <div aria-hidden="true" class="event-image-box">
+        <div class="circle" (click)="fileInput.click()">
+          <i class="fa-regular fa-image icon"></i>
         </div>
+        <input type="file" #fileInput accept="image/*" (change)="onFileSelected($event)" hidden>
+        @if (previewUrl) {
+          <img [src]="previewUrl" alt="Anteprima" class="event-image-preview">
+        }
+      </div>
 
-        <div class="datetime-item">
-          <p class="intestazione-campi intestazione-campi-secondari" id="label-ora">Ora</p>
-          <div class="sd-container">
-            <div aria-label="Orario" aria-labelledby="label-ora" class="input-evento time-input" role="group">
-              <input
-                #hoursInput
-                (blur)="onHoursBlur()"
-                (input)="onHoursInput()"
-                (keydown)="onHoursKeydown($event)"
-                aria-label="Ore"
-                class="time-part"
-                id="hoursInput"
-                inputmode="numeric"
-                max="23"
-                min="0"
-                name="hours"
-                placeholder="hh"
-                required
-                type="number"
-              >
-              <span aria-hidden="true" class="time-colon">:</span>
-              <input
-                #minutesInput
-                (blur)="onMinutesBlur()"
-                (input)="onMinutesInput()"
-                aria-label="Minuti"
-                class="time-part"
-                id="minutesInput"
-                inputmode="numeric"
-                max="59"
-                min="0"
-                name="minutes"
-                placeholder="mm"
-                required
-                type="number"
-              >
+      <div class="col event-fields-col">
+        <div class="form-right">
+          <div class="row">
+            <div class="col">
+              <div class="field">
+                <p class="intestazione-campi" id="label-titolo">Titolo</p>
+                <input class="input-evento intestazione-campi-secondari" id="title" name="title" placeholder="Titolo dell'evento" required type="text">
+              </div>
             </div>
-            <button aria-label="Apri selettore orario" class="open-button" type="button">
-              <i aria-hidden="true" class="fa-solid fa-clock icon"></i>
-            </button>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="field">
+                <div class="datetime-row">
+                  <div class="datetime-item">
+                    <p class="intestazione-campi intestazione-campi-secondari" id="label-data">Data</p>
+                    <div class="sd-container">
+                      <input class="sd input-evento input-date" id="date" name="date" required type="date">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="field">
+                <div class="datetime-row">
+                  <div class="datetime-item">
+                    <p class="intestazione-campi intestazione-campi-secondari" id="label-ora">Ora</p>
+                    <div class="sd-container">
+                      <div aria-label="Orario" aria-labelledby="label-ora" class="input-evento time-input" role="group">
+                        <input
+                          #hoursInput
+                          (blur)="onHoursBlur()"
+                          (input)="onHoursInput()"
+                          (keydown)="onHoursKeydown($event)"
+                          aria-label="Ore"
+                          class="time-part"
+                          id="hoursInput"
+                          inputmode="numeric"
+                          max="23"
+                          min="0"
+                          name="hours"
+                          placeholder="hh"
+                          required
+                          type="number">
+                        <span aria-hidden="true" class="time-colon">:</span>
+                        <input
+                          #minutesInput
+                          (blur)="onMinutesBlur()"
+                          (input)="onMinutesInput()"
+                          aria-label="Minuti"
+                          class="time-part"
+                          id="minutesInput"
+                          inputmode="numeric"
+                          max="59"
+                          min="0"
+                          name="minutes"
+                          placeholder="mm"
+                          required
+                          type="number">
+                      </div>
+                      <button aria-label="Apri selettore orario" class="open-button" type="button">
+                        <i aria-hidden="true" class="fa-solid fa-clock icon"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="field">
+                <p class="intestazione-campi intestazione-campi-secondari" id="label-location">Location</p>
+                <div class="sd-container">
+                  <input aria-labelledby="label-location" class="input-evento" id="location" name="location" placeholder="Dove si svolge"
+                         required style="padding-right: 9% !important" type="text">
+                  <button aria-label="Apri mappa" class="open-button" style="right: 20%" type="button">
+                    <i aria-hidden="true" class="fa-solid fa-map-marker-alt icon"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="field">
+                <div class="seats-price-row">
+                  <div class="seats-item">
+                    <p class="intestazione-campi intestazione-campi-secondari" id="label-seats">Posti</p>
+                    <input aria-labelledby="label-seats" class="input-evento" id="posti" min="0" name="posti" placeholder="Numero posti"
+                           type="number">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="field">
+                <div class="seats-price-row">
+                  <div class="price-item">
+                    <p class="intestazione-campi intestazione-campi-secondari" id="label-prezzo">Prezzo</p>
+                    <input aria-labelledby="label-prezzo" class="input-evento" id="prezzo" min="0" name="prezzo" placeholder="Prezzo"
+                           type="number">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="switch-group row">
+            <div class="field col switch-col" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
+              <label class="switch-text" for="vietato-minori">Vietato ai minori</label>
+              <label class="switch" for="vietato-minori">
+                <input id="vietato-minori" name="vietato-minori" type="checkbox">
+                <span aria-hidden="true" class="slider"></span>
+              </label>
+            </div>
+
+            <div class="field col switch-col" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
+              <label class="switch-text" for="nominativo">Biglietto nominativo</label>
+              <label class="switch" for="nominativo">
+                <input id="nominativo" name="nominativo" type="checkbox">
+                <span aria-hidden="true" class="slider"></span>
+              </label>
+            </div>
+
+            <div class="field col switch-col" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
+              <label class="switch-text" for="riutilizzabile">Biglietto riutilizzabile</label>
+              <label class="switch" for="riutilizzabile">
+                <input id="riutilizzabile" name="riutilizzabile" type="checkbox">
+                <span aria-hidden="true" class="slider"></span>
+              </label>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="field">
-      <p class="intestazione-campi intestazione-campi-secondari" id="label-location">Location</p>
-      <div class="sd-container">
-        <input aria-labelledby="label-location" class="input-evento" id="location" name="location" placeholder="Dove si svolge"
-               required style="padding-right: 9% !important" type="text">
-        <button aria-label="Apri mappa" class="open-button" style="right: 20%" type="button">
-          <i aria-hidden="true" class="fa-solid fa-map-marker-alt icon"></i>
-        </button>
-      </div>
-    </div>
-
-    <div class="field">
-      <div class="seats-price-row">
-        <div class="seats-item">
-          <p class="intestazione-campi intestazione-campi-secondari" id="label-seats">Posti</p>
-          <input aria-labelledby="label-seats" class="input-evento" id="posti" min="0" name="posti" placeholder="Numero posti"
-                 type="number">
-        </div>
-        <div class="price-item">
-          <p class="intestazione-campi intestazione-campi-secondari" id="label-prezzo">Prezzo</p>
-          <input aria-labelledby="label-prezzo" class="input-evento" id="prezzo" min="0" name="prezzo" placeholder="Prezzo"
-                 type="number">
-        </div>
-      </div>
-    </div>
-
-    <div class="switch-group">
-      <div class="field" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
-        <label class="switch-text" for="vietato-minori">Vietato ai minori</label>
-        <label class="switch" for="vietato-minori">
-          <input id="vietato-minori" name="vietato-minori" type="checkbox">
-          <span aria-hidden="true" class="slider"></span>
-        </label>
-      </div>
-
-      <div class="field" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
-        <label class="switch-text" for="nominativo">Biglietto nominativo</label>
-        <label class="switch" for="nominativo">
-          <input id="nominativo" name="nominativo" type="checkbox">
-          <span aria-hidden="true" class="slider"></span>
-        </label>
-      </div>
-
-      <div class="field" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
-        <label class="switch-text" for="riutilizzabile">Biglietto riutilizzabile</label>
-        <label class="switch" for="riutilizzabile">
-          <input id="riutilizzabile" name="riutilizzabile" type="checkbox">
-          <span aria-hidden="true" class="slider"></span>
-        </label>
+  <div class="row container-2">
+    <div class="col">
+      <div class="field desc">
+        <p>Descrizione</p>
+        <textarea class="description-box" placeholder="Inserisci una descrizione..."></textarea>
       </div>
     </div>
   </div>
-</form>
 
-<div class="container-2" style="gap: 0 !important; margin-top: 0 !important; width: 89%">
-  <div class="field">
-    <p style="font-size: 25px">Descrizione</p>
-    <p contenteditable="true"
-       style="font-weight: normal !important; background: linear-gradient(to right, #FF9D47, #C74F00) bottom left / 100% 2px no-repeat, linear-gradient(to bottom, #FF9D47, #C74F00) bottom left / 2px 100% no-repeat, white; padding: 8px 10px;">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec elementum, erat ut aliquam vehicula, dolor nisi
-      elementum nulla, in sagittis odio odio non sem. Curabitur dolor dolor, faucibus eleifend enim ac, blandit
-      condimentum elit. Donec placerat tortor quis orci vehicula rhoncus. Etiam eget ligula lobortis, tempor risus id,
-      scelerisque enim. Cras aliquet sollicitudin est, sed vehicula leo vestibulum facilisis. Praesent turpis massa,
-      ultrices vel orci at, congue gravida arcu.
-    </p>
+  <div class="row save-event-row">
+    <div class="col undo-event-col">
+      <button class="btn undo-event-label">
+        <i class="fas fa-undo"></i>
+        Annulla
+      </button>
+    </div>
+    <div class="col save-event-col">
+      <button class="btn save-event-label">
+        <i class="fas fa-save"></i>
+        Salva
+      </button>
+    </div>
   </div>
+
 </div>

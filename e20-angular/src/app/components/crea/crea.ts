@@ -14,6 +14,9 @@ export class Crea implements AfterViewInit {
   @ViewChild('dateInput', {static: true}) dateRef!: ElementRef<HTMLInputElement>;
   @ViewChild('openButton', {static: true}) openBtnRef!: ElementRef<HTMLButtonElement>;
 
+  previewUrl: string | ArrayBuffer | null = null;
+
+
   ngAfterViewInit() {
     const input = this.dateRef.nativeElement;
     const btn = this.openBtnRef.nativeElement;
@@ -85,4 +88,14 @@ export class Crea implements AfterViewInit {
     if (n > max) n = max;
     el.value = String(n);
   }
+
+  onFileSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => this.previewUrl = reader.result;
+    reader.readAsDataURL(file);
+  }
+}
 }

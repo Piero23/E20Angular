@@ -1,19 +1,41 @@
+.crea-page {
+  height: 100vh;
+  width: 100vw;
+}
+
+.cont-1-row {
+  padding-top: 5rem;
+}
 .container-1 {
   display: flex;
   align-items: stretch;
   gap: 24px;
   margin-left: 30px;
-  margin-top: 50px;
   flex-wrap: nowrap;
+  width: 100vw;
+  height: fit-content;
+}
+
+.event-image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+  border-radius: 20px;
+}
+
+.input-title {
+  width: 100%;
 }
 
 .container-2 {
-  margin-left: 30px;
-  margin-top: 50px;
+  padding-top: 50px;
   flex-wrap: nowrap;
 }
 
-.evento-box {
+.event-image-box {
+  border: none;
+  box-shadow: 0.1rem 0.1rem 0.1rem lightgrey;
   border-radius: 20px;
   width: 40%;
   min-width: 220px;
@@ -31,16 +53,17 @@
 }
 
 .circle {
-  height: 19%;
+  height: 3rem;
   aspect-ratio: 1 / 1;
   background: linear-gradient(to right, #FF9D47, #C74F00);
   border-radius: 50%;
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: 20px;
+  right: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .icon {
@@ -57,6 +80,7 @@
 }
 
 .field {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -66,23 +90,24 @@
 
 .intestazione-campi {
   margin: 0;
-  font-size: clamp(25px, 1.6vh, 20px);
+  font-size: 24px;
+  font-weight: bold;
   padding-left: 6px;
   flex: 0 0 auto;
 }
 
 .intestazione-campi-secondari {
-  font-size: clamp(12px, 1.4vh, 16px) !important;
+  font-size: 16px;
   flex: 0 0 auto;
 }
 
 .input-evento {
   border: none;
   box-sizing: border-box;
-  width: 82%;
+  width: 100%;
   height: 44px;
   padding: 8px 12px;
-  font-size: clamp(14px, 1.6vh, 18px);
+  font-size: 14px;
   background: linear-gradient(to right, #FF9D47, #C74F00) bottom left / 100% 2px no-repeat,
   linear-gradient(to bottom, #FF9D47, #C74F00) bottom left / 2px 100% no-repeat,
   white;
@@ -90,31 +115,15 @@
   appearance: none;
 }
 
-.datetime-item .input-evento {
+.datetime-item .input-evento,
+.datetime-row {
   width: 100%;
 }
 
-.datetime-row {
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  align-items: stretch;
-  width: 82%;
-}
-
 .datetime-item {
-  flex: 1 1 0;
-  min-width: 0;
-  max-width: 82%;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  height: 100%;
 }
 
-input[type="date"],
-input[type="time"] {
-  padding-right: 34px;
-}
 
 .time-input {
   flex: 1 1 0;
@@ -216,18 +225,20 @@ input[type="time"] {
 }
 
 .switch-group {
-  display: flex;
+  font-weight: bold;
+  width: 100%;
   gap: 24px;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+}
+
+.switch-col {
+  width: fit-content;
 }
 
 .seats-price-row {
   display: flex;
   gap: 12px;
-  width: 82%;
-  align-items: stretch;
 }
 
 .seats-item,
@@ -251,7 +262,6 @@ input[type="time"] {
 
 .sd {
   width: 100%;
-  padding-right: 45px;
   box-sizing: border-box;
 }
 
@@ -270,4 +280,43 @@ input[type="time"] {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.description-box {
+  background: linear-gradient(to right, #FF9D47, #C74F00) bottom left / 100% 2px no-repeat,
+  linear-gradient(to bottom, #FF9D47, #C74F00) bottom left / 2px 100% no-repeat, white;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  min-height: 50px;
+  max-height: 200px;
+}
+
+.desc {
+  padding: 0;
+}
+
+.desc p {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.save-event-row {
+  padding-top: 3rem;
+  align-items: center;
+  width: 100%;
+}
+
+.save-event-col,
+.undo-event-col {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  align-items: center;
+}
+
+.save-event-label,
+.undo-event-label {
+  background: linear-gradient(to right, #FF9D47, #C74F00);
+  border: none;
 }
