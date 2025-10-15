@@ -1,18 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { EventsShowcase } from './events-showcase';
-
-describe('EventsShowcase', () => {
-  let component: EventsShowcase;
-  let fixture: ComponentFixture<EventsShowcase>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [EventsShowcase]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(EventsShowcase);
-import { ProfiloEOrdini } from './profilo-e-ordini';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ProfiloEOrdini} from './profilo-e-ordini';
 
 describe('ProfiloEOrdini', () => {
   let component: ProfiloEOrdini;
@@ -22,7 +9,7 @@ describe('ProfiloEOrdini', () => {
     await TestBed.configureTestingModule({
       imports: [ProfiloEOrdini]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ProfiloEOrdini);
     component = fixture.componentInstance;

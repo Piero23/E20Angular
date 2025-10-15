@@ -83,10 +83,9 @@
   height: 44px;
   padding: 8px 12px;
   font-size: clamp(14px, 1.6vh, 18px);
-  background:
-    linear-gradient(to right, #FF9D47, #C74F00) bottom left / 100% 2px no-repeat,
-    linear-gradient(to bottom, #FF9D47, #C74F00) bottom left / 2px 100% no-repeat,
-    white;
+  background: linear-gradient(to right, #FF9D47, #C74F00) bottom left / 100% 2px no-repeat,
+  linear-gradient(to bottom, #FF9D47, #C74F00) bottom left / 2px 100% no-repeat,
+  white;
   border-radius: 0 0 0 8px;
   appearance: none;
 }
@@ -204,7 +203,7 @@ input[type="time"] {
   transform: translateY(-50%);
   background: #fff;
   border-radius: 50%;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   transition: left 0.22s ease, transform 0.22s ease;
 }
 

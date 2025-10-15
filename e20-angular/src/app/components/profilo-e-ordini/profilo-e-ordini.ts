@@ -1,11 +1,8 @@
-import { Component } from '@angular/core';
-import {RowbarSearch} from '../rowbar-search/rowbar-search';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-profilo-e-ordini',
-  imports: [
-    RowbarSearch
-  ],
+  imports: [],
   templateUrl: './profilo-e-ordini.html',
   styleUrl: './profilo-e-ordini.css'
 })

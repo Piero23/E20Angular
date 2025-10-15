@@ -1,19 +1,18 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {RowbarSearch} from '../rowbar-search/rowbar-search';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-crea',
   standalone: true,
-  imports: [CommonModule, RowbarSearch],
+  imports: [CommonModule],
   templateUrl: './crea.html',
   styleUrls: ['./crea.css']
 })
 export class Crea implements AfterViewInit {
-  @ViewChild('hoursInput', { static: true }) hoursRef!: ElementRef<HTMLInputElement>;
-  @ViewChild('minutesInput', { static: true }) minutesRef!: ElementRef<HTMLInputElement>;
-  @ViewChild('dateInput', { static: true }) dateRef!: ElementRef<HTMLInputElement>;
-  @ViewChild('openButton', { static: true }) openBtnRef!: ElementRef<HTMLButtonElement>;
+  @ViewChild('hoursInput', {static: true}) hoursRef!: ElementRef<HTMLInputElement>;
+  @ViewChild('minutesInput', {static: true}) minutesRef!: ElementRef<HTMLInputElement>;
+  @ViewChild('dateInput', {static: true}) dateRef!: ElementRef<HTMLInputElement>;
+  @ViewChild('openButton', {static: true}) openBtnRef!: ElementRef<HTMLButtonElement>;
 
   ngAfterViewInit() {
     const input = this.dateRef.nativeElement;
@@ -24,17 +23,6 @@ export class Crea implements AfterViewInit {
         input.showPicker();
       }
     });
-  }
-
-  private normalizzaOrario(el: HTMLInputElement, min: number, max: number) {
-    let v = el.value ?? '';
-    v = v.replace(/\D/g, '');
-    if (v === '') { el.value = ''; return; }
-    let n = parseInt(v, 10);
-    if (isNaN(n)) { el.value = ''; return; }
-    if (n < min) n = min;
-    if (n > max) n = max;
-    el.value = String(n);
   }
 
   onHoursInput() {
@@ -79,5 +67,22 @@ export class Crea implements AfterViewInit {
     const hh = hhRaw === '' ? '' : String(hhRaw).padStart(2, '0');
     const mm = mmRaw === '' ? '' : String(mmRaw).padStart(2, '0');
     return (hh === '' && mm === '') ? '' : `${hh}:${mm}`;
+  }
+
+  private normalizzaOrario(el: HTMLInputElement, min: number, max: number) {
+    let v = el.value ?? '';
+    v = v.replace(/\D/g, '');
+    if (v === '') {
+      el.value = '';
+      return;
+    }
+    let n = parseInt(v, 10);
+    if (isNaN(n)) {
+      el.value = '';
+      return;
+    }
+    if (n < min) n = min;
+    if (n > max) n = max;
+    el.value = String(n);
   }
 }
