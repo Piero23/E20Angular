@@ -13,6 +13,7 @@ import { environment } from '../../environments/environment';
 export const authConfig: AuthConfig = {
 
   issuer: environment.issuer, // LEGGI SOPRA
+  clientId: 'angular-client', // stesso client-id del YAML
   redirectUri: window.location.origin + '/login/oauth2/code/angular-client',
   responseType: 'code', // PKCE code flow
   scope: 'openid profile',
