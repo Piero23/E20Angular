@@ -1,0 +1,274 @@
+.container-1 {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  margin-left: 30px;
+  margin-top: 50px;
+  flex-wrap: nowrap;
+}
+
+.container-2 {
+  margin-left: 30px;
+  margin-top: 50px;
+  flex-wrap: nowrap;
+}
+
+.evento-box {
+  border-radius: 20px;
+  width: 40%;
+  min-width: 220px;
+  max-width: 600px;
+  height: clamp(280px, 42vh, 56vh);
+  background: linear-gradient(to bottom,
+  #FBBA72,
+  #CA5310,
+  #BB4D00,
+  #8F250C,
+  #691E06
+  );
+  position: relative;
+  flex-shrink: 0;
+}
+
+.circle {
+  height: 19%;
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(to right, #FF9D47, #C74F00);
+  border-radius: 50%;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  font-size: clamp(1em, 2.5vh, 2.5em);
+  color: #ffffff;
+}
+
+.form-right {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 55%;
+  min-width: 200px;
+  align-self: stretch;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  flex: 0 0 auto;
+}
+
+.intestazione-campi {
+  margin: 0;
+  font-size: clamp(25px, 1.6vh, 20px);
+  padding-left: 6px;
+  flex: 0 0 auto;
+}
+
+.intestazione-campi-secondari {
+  font-size: clamp(12px, 1.4vh, 16px) !important;
+  flex: 0 0 auto;
+}
+
+.input-evento {
+  border: none;
+  box-sizing: border-box;
+  width: 82%;
+  height: 44px;
+  padding: 8px 12px;
+  font-size: clamp(14px, 1.6vh, 18px);
+  background:
+    linear-gradient(to right, #FF9D47, #C74F00) bottom left / 100% 2px no-repeat,
+    linear-gradient(to bottom, #FF9D47, #C74F00) bottom left / 2px 100% no-repeat,
+    white;
+  border-radius: 0 0 0 8px;
+  appearance: none;
+}
+
+.datetime-item .input-evento {
+  width: 100%;
+}
+
+.datetime-row {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: stretch;
+  width: 82%;
+}
+
+.datetime-item {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 82%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+input[type="date"],
+input[type="time"] {
+  padding-right: 34px;
+}
+
+.time-input {
+  flex: 1 1 0;
+  width: 82%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  box-sizing: border-box;
+  height: 44px;
+}
+
+.time-part {
+  border: none;
+  background: transparent;
+  width: 82%;
+  min-width: 44px;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-size: inherit;
+  text-align: center;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+.time-part::-webkit-outer-spin-button,
+.time-part::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.time-colon {
+  user-select: none;
+  font-weight: 600;
+  font-size: 1.05em;
+  padding: 0 2px;
+  color: #111;
+}
+
+.time-part::placeholder {
+  opacity: 0.5;
+}
+
+.input-evento.time-input {
+  border-radius: 0 0 0 8px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 56px;
+  height: 32px;
+  vertical-align: middle;
+}
+
+.switch input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #ccc;
+  border-radius: 999px;
+  transition: background 0.22s ease;
+  box-sizing: border-box;
+  padding: 4px;
+  z-index: 1;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  transition: left 0.22s ease, transform 0.22s ease;
+}
+
+.switch input:checked + .slider {
+  background: linear-gradient(to right, #FF9D47, #C74F00);
+}
+
+.switch input:checked + .slider:before {
+  left: calc(100% - 4px - 24px);
+}
+
+.switch-group {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.seats-price-row {
+  display: flex;
+  gap: 12px;
+  width: 82%;
+  align-items: stretch;
+}
+
+.seats-item,
+.price-item {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.seats-item input,
+.price-item input {
+  width: 100% !important;
+}
+
+.sd-container {
+  position: relative;
+  width: 100%;
+}
+
+.sd {
+  width: 100%;
+  padding-right: 45px;
+  box-sizing: border-box;
+}
+
+.open-button {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: linear-gradient(to right, #FF9D47, #C74F00);
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

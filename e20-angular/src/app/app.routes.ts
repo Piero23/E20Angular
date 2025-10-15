@@ -3,6 +3,8 @@ import {Homepage} from './homepage/homepage';
 import {EventPage} from './components/event-page/event-page';
 import {SearchBar} from './shared/search-bar/search-bar';
 import {UserPage} from './components/user-page/user-page'
+import {Crea} from './components/crea/crea';
+import {ProfiloEOrdini} from './components/profilo-e-ordini/profilo-e-ordini';
 
 export const routes: Routes = [
   {path: '', component: Homepage},
@@ -10,11 +12,13 @@ export const routes: Routes = [
     path: 'evento/:id',
     component: EventPage
   },
-  {path: 's', component: SearchBar},
   {
     path: 'utente/:username',
     component: UserPage
   },
-  {path: '**', redirectTo: ''},
+  { path: 'crea', component: Crea },
+  { path: 'profilo', component: ProfiloEOrdini },
+  { path: '**', redirectTo: '' }
+
 ];
 
