@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {EventoDto, EventoService} from '../../services/evento-service';
 import {Subject, takeUntil} from 'rxjs';
 import {Router} from '@angular/router';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 
 interface EventCard extends EventoDto {
   imageUrl?: string;
@@ -10,7 +10,7 @@ interface EventCard extends EventoDto {
 
 @Component({
   selector: 'app-event-cards',
-  imports: [CommonModule],
+  imports: [CommonModule, NgOptimizedImage],
   templateUrl: './event-cards.html',
   styleUrl: './event-cards.css'
 })

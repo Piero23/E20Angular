@@ -1,6 +1,16 @@
 img {
   height: 2.2rem;
+  width: fit-content;
   cursor: pointer;
+}
+
+.logo {
+  margin: 0;
+}
+
+.logo-div {
+  width: inherit;
+  height: inherit;
 }
 
 .sb {

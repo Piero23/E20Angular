@@ -1,181 +1,156 @@
-<div class="container crea-page">
+<div class="container-fluid crea-page" [formGroup]="eventForm">
   <div class="row cont-1-row">
-    <div class="container-1 col event-image-col" id="eventForm">
-      <div aria-hidden="true" class="event-image-box">
+    <!-- Colonna immagine -->
+    <div class="container-1 col event-image-col">
+      <div class="event-image-box">
         <div class="circle" (click)="fileInput.click()">
           <i class="fa-regular fa-image icon"></i>
         </div>
         <input type="file" #fileInput accept="image/*" (change)="onFileSelected($event)" hidden>
-        @if (previewUrl) {
+        @if(previewUrl) {
           <img [src]="previewUrl" alt="Anteprima" class="event-image-preview">
         }
       </div>
+    </div>
 
-      <div class="col event-fields-col">
-        <div class="form-right">
-          <div class="row">
-            <div class="col">
-              <div class="field">
-                <p class="intestazione-campi" id="label-titolo">Titolo</p>
-                <input class="input-evento intestazione-campi-secondari" id="title" name="title" placeholder="Titolo dell'evento" required type="text">
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <div class="field">
-                <div class="datetime-row">
-                  <div class="datetime-item">
-                    <p class="intestazione-campi intestazione-campi-secondari" id="label-data">Data</p>
-                    <div class="sd-container">
-                      <input class="sd input-evento input-date" id="date" name="date" required type="date">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col">
-              <div class="field">
-                <div class="datetime-row">
-                  <div class="datetime-item">
-                    <p class="intestazione-campi intestazione-campi-secondari" id="label-ora">Ora</p>
-                    <div class="sd-container">
-                      <div aria-label="Orario" aria-labelledby="label-ora" class="input-evento time-input" role="group">
-                        <input
-                          #hoursInput
-                          (blur)="onHoursBlur()"
-                          (input)="onHoursInput()"
-                          (keydown)="onHoursKeydown($event)"
-                          aria-label="Ore"
-                          class="time-part"
-                          id="hoursInput"
-                          inputmode="numeric"
-                          max="23"
-                          min="0"
-                          name="hours"
-                          placeholder="hh"
-                          required
-                          type="number">
-                        <span aria-hidden="true" class="time-colon">:</span>
-                        <input
-                          #minutesInput
-                          (blur)="onMinutesBlur()"
-                          (input)="onMinutesInput()"
-                          aria-label="Minuti"
-                          class="time-part"
-                          id="minutesInput"
-                          inputmode="numeric"
-                          max="59"
-                          min="0"
-                          name="minutes"
-                          placeholder="mm"
-                          required
-                          type="number">
-                      </div>
-                      <button aria-label="Apri selettore orario" class="open-button" type="button">
-                        <i aria-hidden="true" class="fa-solid fa-clock icon"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <div class="field">
-                <p class="intestazione-campi intestazione-campi-secondari" id="label-location">Location</p>
-                <div class="sd-container">
-                  <input aria-labelledby="label-location" class="input-evento" id="location" name="location" placeholder="Dove si svolge"
-                         required style="padding-right: 9% !important" type="text">
-                  <button aria-label="Apri mappa" class="open-button" style="right: 20%" type="button">
-                    <i aria-hidden="true" class="fa-solid fa-map-marker-alt icon"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <div class="field">
-                <div class="seats-price-row">
-                  <div class="seats-item">
-                    <p class="intestazione-campi intestazione-campi-secondari" id="label-seats">Posti</p>
-                    <input aria-labelledby="label-seats" class="input-evento" id="posti" min="0" name="posti" placeholder="Numero posti"
-                           type="number">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col">
-              <div class="field">
-                <div class="seats-price-row">
-                  <div class="price-item">
-                    <p class="intestazione-campi intestazione-campi-secondari" id="label-prezzo">Prezzo</p>
-                    <input aria-labelledby="label-prezzo" class="input-evento" id="prezzo" min="0" name="prezzo" placeholder="Prezzo"
-                           type="number">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="switch-group row">
-            <div class="field col switch-col" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
-              <label class="switch-text" for="vietato-minori">Vietato ai minori</label>
-              <label class="switch" for="vietato-minori">
-                <input id="vietato-minori" name="vietato-minori" type="checkbox">
-                <span aria-hidden="true" class="slider"></span>
-              </label>
-            </div>
-
-            <div class="field col switch-col" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
-              <label class="switch-text" for="nominativo">Biglietto nominativo</label>
-              <label class="switch" for="nominativo">
-                <input id="nominativo" name="nominativo" type="checkbox">
-                <span aria-hidden="true" class="slider"></span>
-              </label>
-            </div>
-
-            <div class="field col switch-col" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
-              <label class="switch-text" for="riutilizzabile">Biglietto riutilizzabile</label>
-              <label class="switch" for="riutilizzabile">
-                <input id="riutilizzabile" name="riutilizzabile" type="checkbox">
-                <span aria-hidden="true" class="slider"></span>
-              </label>
+    <!-- Colonna campi -->
+    <div class="col event-fields-col">
+      <div class="form-right">
+        <!-- Titolo -->
+        <div class="row">
+          <div class="col">
+            <div class="field">
+              <p class="intestazione-campi" id="label-titolo">Titolo</p>
+              <input class="input-evento intestazione-campi-secondari" formControlName="title" placeholder="Titolo dell'evento" type="text">
+              @if(eventForm.get('title')?.invalid && eventForm.get('title')?.touched) {
+                @if(eventForm.get('title')?.errors?.['required']) {
+                  <span class="text-danger">Il titolo è obbligatorio</span>
+                }
+                @if(eventForm.get('title')?.errors?.['minlength']) {
+                  <span class="text-danger">Minimo 3 caratteri</span>
+                }
+              }
             </div>
           </div>
         </div>
+
+        <!-- Data e ora -->
+        <div class="row datetime-row">
+          <div class="col datetime-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-data">Data</p>
+            <input class="input-evento input-date" formControlName="date" type="date">
+            @if(eventForm.get('date')?.invalid && eventForm.get('date')?.touched) {
+              <span class="text-danger">La data è obbligatoria</span>
+            }
+          </div>
+
+          <div class="col datetime-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-ora">Ora</p>
+            <input class="input-evento" formControlName="time" type="time">
+            @if(eventForm.get('time')?.invalid && eventForm.get('time')?.touched) {
+              <span class="text-danger">L'orario è obbligatorio</span>
+            }
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="row">
+          <div class="col">
+            <div class="field">
+              <p class="intestazione-campi intestazione-campi-secondari" id="label-location">Location</p>
+              <div class="sd-container">
+                <input class="input-evento" formControlName="location" placeholder="Dove si svolge" type="text">
+                @if(eventForm.get('location')?.invalid && eventForm.get('location')?.touched) {
+                  <span class="text-danger">La location è obbligatoria</span>
+                }
+                <button aria-label="Apri mappa" class="open-button" type="button">
+                  <i class="fa-solid fa-map-marker-alt icon"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Posti e prezzo -->
+        <div class="row seats-price-row">
+          <div class="col seats-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-seats">Posti</p>
+            <input class="input-evento" formControlName="posti" type="number" min="0">
+          </div>
+
+          <div class="col price-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-prezzo">Prezzo</p>
+            <input class="input-evento" formControlName="prezzo" type="number" min="0">
+            @if(eventForm.get('prezzo')?.invalid && eventForm.get('prezzo')?.touched) {
+              <span class="text-danger">Prezzo non valido</span>
+            }
+          </div>
+        </div>
+
+        <!-- Switch -->
+
+        <div class="switch-group row">
+          <div class="field switch-col col">
+            <label class="switch-text" for="vietato-minori">Vietato ai minori</label>
+            <label class="switch">
+              <input id="vietato-minori" type="checkbox" formControlName="ageRestricted">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="field switch-col col">
+            <label class="switch-text" for="nominativo">Biglietto nominativo</label>
+            <label class="switch">
+              <input id="nominativo" type="checkbox" formControlName="bNominativo">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="field switch-col col">
+            <label class="switch-text" for="riutilizzabile">Biglietto riutilizzabile</label>
+            <label class="switch">
+              <input id="riutilizzabile" type="checkbox" formControlName="riutilizzabile">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 
+  <!-- Descrizione -->
   <div class="row container-2">
-    <div class="col">
-      <div class="field desc">
-        <p>Descrizione</p>
-        <textarea class="description-box" placeholder="Inserisci una descrizione..."></textarea>
-      </div>
+    <div class="col field desc">
+      <p>Descrizione</p>
+      <textarea class="description-box" formControlName="description" placeholder="Inserisci una descrizione..."></textarea>
+      @if(eventForm.get('description')?.invalid && eventForm.get('description')?.touched) {
+        @if(eventForm.get('description')?.errors?.['required']) {
+          <span class="text-danger">La descrizione è obbligatoria</span>
+        }
+        @if(eventForm.get('description')?.errors?.['minlength']) {
+          <span class="text-danger">Minimo 10 caratteri</span>
+        }
+        @if(eventForm.get('description')?.errors?.['maxlength']) {
+          <span class="text-danger">Max 500 caratteri</span>
+        }
+      }
     </div>
   </div>
 
+  <!-- Pulsanti -->
   <div class="row save-event-row">
     <div class="col undo-event-col">
-      <button class="btn undo-event-label">
+      <button class="btn undo-event-label" type="button">
         <i class="fas fa-undo"></i>
         Annulla
       </button>
     </div>
     <div class="col save-event-col">
-      <button class="btn save-event-label">
+      <button class="btn save-event-label" type="button" (click)="onSubmit()">
         <i class="fas fa-save"></i>
         Salva
       </button>
     </div>
   </div>
-
 </div>

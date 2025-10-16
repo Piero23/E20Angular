@@ -4,6 +4,8 @@ import {EventPage} from './components/event-page/event-page';
 import {UserPage} from './components/user-page/user-page'
 import {Crea} from './components/crea/crea';
 import {ProfiloEOrdini} from './components/profilo-e-ordini/profilo-e-ordini';
+import {roleGuard} from './guards/role-guard';
+import {AccessDenied} from './shared/access-denied/access-denied';
 
 export const routes: Routes = [
   {path: '', component: Homepage},
@@ -15,7 +17,8 @@ export const routes: Routes = [
     path: 'utente/:username',
     component: UserPage
   },
-  {path: 'crea', component: Crea},
+  { path: 'access-denied', component: AccessDenied },
+  {path: 'crea', component: Crea, canActivate: [roleGuard]},
   {path: 'profilo', component: ProfiloEOrdini},
   {path: '**', redirectTo: ''}
 

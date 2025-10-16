@@ -4,19 +4,20 @@ import {environment} from '../../environments/environment';
 
 
 /*
- * LEGGI: creare environment con ng generate environments
+ * LEGGI: creare environment con `ng generate environments`
  *
  * inserire l'URL dell'issuer sia in environment.ts che in environment.development.ts
+ * `issuer: https://...`
  *
  */
 
 export const authConfig: AuthConfig = {
 
   issuer: environment.issuer, // LEGGI SOPRA
-  clientId: 'angular-client', // stesso client-id del YAML
+  clientId: 'angular-client',
   redirectUri: window.location.origin + '/login/oauth2/code/angular-client',
   postLogoutRedirectUri: window.location.origin,
-  responseType: 'code', // PKCE code flow
+  responseType: 'code',
   scope: 'openid profile',
   showDebugInformation: true,
   strictDiscoveryDocumentValidation: false
@@ -53,7 +54,7 @@ export class AuthService {
 
   /** Ritorna true se l’utente è autenticato */
   get isLoggedIn(): boolean {
-    return this.oauthService.hasValidAccessToken();
+    return this.getUser()?.roles;
   }
 
   /** Avvia il login */
@@ -75,4 +76,17 @@ export class AuthService {
       this._userProfile = claims;
     }
   }
+
+getUser() {
+  const token = this.oauthService.getAccessToken();
+  if (!token) return null;
+
+  const payload = JSON.parse(atob(token.split('.')[1])); // decodifica manuale
+  const roles = payload.roles || payload['roles']?.roles || [];
+
+  return {
+    username: payload.sub,
+    roles: roles
+  };
+}
 }
