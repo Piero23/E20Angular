@@ -98,10 +98,11 @@
               <p>{{ getLocationPosition() }}</p>
               <iframe
                 class="map"
-                allowfullscreen=""
-                height="230px" loading="lazy"
+                allowfullscreen
+                height="230px"
+                loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCeDOAa9GvBI4YzA3QCHedLMNh4Jy45nx4&q=Napoli,Italy"
+                [src]="mapUrl"
                 width="230px">
               </iframe>
             </div>

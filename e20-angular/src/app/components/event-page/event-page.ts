@@ -1,11 +1,13 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {EventoDto, EventoService} from '../../services/evento-service';
-import {EMPTY, Subject, switchMap, takeUntil} from 'rxjs';
-import {ActivatedRoute} from '@angular/router';
-import {LocationDto, LocationService} from '../../services/location-service';
-import {PreferitiService} from '../../services/preferiti-service';
-import {UtenteDto} from '../../services/utente-service';
-import {AuthService} from '../../services/auth-service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { EventoDto, EventoService } from '../../services/evento-service';
+import { EMPTY, Subject, switchMap, takeUntil } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { LocationDto, LocationService } from '../../services/location-service';
+import { PreferitiService } from '../../services/preferiti-service';
+import { UtenteDto } from '../../services/utente-service';
+import { AuthService } from '../../services/auth-service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-event-page',
@@ -25,15 +27,19 @@ export class EventPage implements OnInit, OnDestroy {
   showSuccessMessage = false;
   successMessage = '';
 
+  mapUrl: SafeResourceUrl;
+
   private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
     private eventoService: EventoService,
-    private locationService: LocationService,
     private preferitiService: PreferitiService,
-    private authService: AuthService,
+    private sanitizer: DomSanitizer
   ) {
+    const key = environment.googleMapsApiKey;
+    const q = encodeURIComponent('Napoli,Italy');
+    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.google.com/maps/embed/v1/place?key=${key}&q=${q}`);
   }
 
   getImageUrl(): string {
@@ -155,6 +161,8 @@ export class EventPage implements OnInit, OnDestroy {
 
   openInMaps() { /* maps navigation */
   }
+
+
 
   private handleError(message: string): void {
     this.hasError = true;

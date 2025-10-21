@@ -1,4 +1,4 @@
-<div class="container-fluid crea-page" [formGroup]="eventForm">
+<form class="container-fluid crea-page" [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="row cont-1-row">
     <!-- Colonna immagine -->
     <div class="container-1 col event-image-col">
@@ -6,7 +6,7 @@
         <div class="circle" (click)="fileInput.click()">
           <i class="fa-regular fa-image icon"></i>
         </div>
-        <input type="file" #fileInput accept="image/*" (change)="onFileSelected($event)" hidden>
+        <input type="file" #fileInput accept="image/*" hidden>
         @if(previewUrl) {
           <img [src]="previewUrl" alt="Anteprima" class="event-image-preview">
         }
@@ -22,11 +22,11 @@
             <div class="field">
               <p class="intestazione-campi" id="label-titolo">Titolo</p>
               <input class="input-evento intestazione-campi-secondari" formControlName="title" placeholder="Titolo dell'evento" type="text">
-              @if(eventForm.get('title')?.invalid && eventForm.get('title')?.touched) {
-                @if(eventForm.get('title')?.errors?.['required']) {
+              @if(form.get('title')?.invalid && form.get('title')?.touched) {
+                @if(form.get('title')?.errors?.['required']) {
                   <span class="text-danger">Il titolo è obbligatorio</span>
                 }
-                @if(eventForm.get('title')?.errors?.['minlength']) {
+                @if(form.get('title')?.errors?.['minlength']) {
                   <span class="text-danger">Minimo 3 caratteri</span>
                 }
               }
@@ -39,7 +39,7 @@
           <div class="col datetime-item">
             <p class="intestazione-campi intestazione-campi-secondari" id="label-data">Data</p>
             <input class="input-evento input-date" formControlName="date" type="date">
-            @if(eventForm.get('date')?.invalid && eventForm.get('date')?.touched) {
+            @if(form.get('date')?.invalid && form.get('date')?.touched) {
               <span class="text-danger">La data è obbligatoria</span>
             }
           </div>
@@ -47,7 +47,7 @@
           <div class="col datetime-item">
             <p class="intestazione-campi intestazione-campi-secondari" id="label-ora">Ora</p>
             <input class="input-evento" formControlName="time" type="time">
-            @if(eventForm.get('time')?.invalid && eventForm.get('time')?.touched) {
+            @if(form.get('time')?.invalid && form.get('time')?.touched) {
               <span class="text-danger">L'orario è obbligatorio</span>
             }
           </div>
@@ -60,7 +60,7 @@
               <p class="intestazione-campi intestazione-campi-secondari" id="label-location">Location</p>
               <div class="sd-container">
                 <input class="input-evento" formControlName="location" placeholder="Dove si svolge" type="text">
-                @if(eventForm.get('location')?.invalid && eventForm.get('location')?.touched) {
+                @if(form.get('location')?.invalid && form.get('location')?.touched) {
                   <span class="text-danger">La location è obbligatoria</span>
                 }
                 <button aria-label="Apri mappa" class="open-button" type="button">
@@ -81,14 +81,13 @@
           <div class="col price-item">
             <p class="intestazione-campi intestazione-campi-secondari" id="label-prezzo">Prezzo</p>
             <input class="input-evento" formControlName="prezzo" type="number" min="0">
-            @if(eventForm.get('prezzo')?.invalid && eventForm.get('prezzo')?.touched) {
+            @if(form.get('prezzo')?.invalid && form.get('prezzo')?.touched) {
               <span class="text-danger">Prezzo non valido</span>
             }
           </div>
         </div>
 
         <!-- Switch -->
-
         <div class="switch-group row">
           <div class="field switch-col col">
             <label class="switch-text" for="vietato-minori">Vietato ai minori</label>
@@ -124,14 +123,14 @@
     <div class="col field desc">
       <p>Descrizione</p>
       <textarea class="description-box" formControlName="description" placeholder="Inserisci una descrizione..."></textarea>
-      @if(eventForm.get('description')?.invalid && eventForm.get('description')?.touched) {
-        @if(eventForm.get('description')?.errors?.['required']) {
+      @if(form.get('description')?.invalid && form.get('description')?.touched) {
+        @if(form.get('description')?.errors?.['required']) {
           <span class="text-danger">La descrizione è obbligatoria</span>
         }
-        @if(eventForm.get('description')?.errors?.['minlength']) {
+        @if(form.get('description')?.errors?.['minlength']) {
           <span class="text-danger">Minimo 10 caratteri</span>
         }
-        @if(eventForm.get('description')?.errors?.['maxlength']) {
+        @if(form.get('description')?.errors?.['maxlength']) {
           <span class="text-danger">Max 500 caratteri</span>
         }
       }
@@ -147,10 +146,10 @@
       </button>
     </div>
     <div class="col save-event-col">
-      <button class="btn save-event-label" type="button" (click)="onSubmit()">
+      <button class="btn save-event-label" type="submit" [disabled]="isSubmitting">
         <i class="fas fa-save"></i>
         Salva
       </button>
     </div>
   </div>
-</div>
+</form>

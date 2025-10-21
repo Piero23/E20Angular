@@ -1,5 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Application, Dto} from './application';
+import { Injectable } from '@angular/core';
+import { Application, Dto } from './application';
+import { Observable } from 'rxjs';
+import { HttpHeaders } from '@angular/common/http';
 
 export interface UtenteDto extends Dto {
   username: string;

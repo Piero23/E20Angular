@@ -1,9 +1,10 @@
-import {Component} from '@angular/core';
-import {BackgroundFlyers} from './background-flyers/background-flyers';
-import {SiteLogo} from '../shared/site-logo/site-logo';
-import {SearchBar} from '../shared/search-bar/search-bar';
-import {EventCards} from './event-cards/event-cards';
-import {AuthService} from '../services/auth-service';
+import { Component } from '@angular/core';
+import { BackgroundFlyers } from './background-flyers/background-flyers';
+import { SiteLogo } from '../shared/site-logo/site-logo';
+import { SearchBar } from '../shared/search-bar/search-bar';
+import { EventCards } from './event-cards/event-cards';
+import { AuthService } from '../services/auth-service';
+import { UtenteService } from '../services/utente-service';
 
 @Component({
   selector: 'app-homepage',
@@ -17,7 +18,6 @@ import {AuthService} from '../services/auth-service';
   styleUrl: './homepage.css'
 })
 export class Homepage {
-  public isLoggedIn = false;
 
   constructor(public auth: AuthService) {
   }

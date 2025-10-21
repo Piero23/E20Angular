@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {AuthConfig, OAuthService} from 'angular-oauth2-oidc';
-import {environment} from '../../environments/environment';
+import { Injectable } from '@angular/core';
+import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
+import { environment } from '../../environments/environment';
 
 
 /*
@@ -77,16 +77,20 @@ export class AuthService {
     }
   }
 
-getUser() {
-  const token = this.oauthService.getAccessToken();
-  if (!token) return null;
+  getUser() {
+    const token = this.oauthService.getAccessToken();
+    if (!token) return null;
 
-  const payload = JSON.parse(atob(token.split('.')[1])); // decodifica manuale
-  const roles = payload.roles || payload['roles']?.roles || [];
+    const payload = JSON.parse(atob(token.split('.')[1])); // decodifica manuale
+    const roles = payload.roles || payload['roles']?.roles || [];
 
-  return {
-    username: payload.sub,
-    roles: roles
-  };
-}
+    return {
+      username: payload.sub,
+      roles: roles
+    };
+  }
+
+  getUserId(): string | null {
+    return this._userProfile?.id ?? null;
+  }
 }
