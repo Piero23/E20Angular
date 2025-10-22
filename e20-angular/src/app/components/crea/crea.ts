@@ -1,11 +1,13 @@
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {RowbarSearch} from '../rowbar-search/rowbar-search';
+import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
+import { RowbarSearch } from '../rowbar-search/rowbar-search';
+import { EventoService, EventoDto } from '../../services/evento.service';
 
 @Component({
   selector: 'app-crea',
   standalone: true,
-  imports: [CommonModule, RowbarSearch],
+  imports: [CommonModule, RowbarSearch, HttpClientModule],
   templateUrl: './crea.html',
   styleUrls: ['./crea.css']
 })
@@ -79,5 +81,66 @@ export class Crea implements AfterViewInit {
     const hh = hhRaw === '' ? '' : String(hhRaw).padStart(2, '0');
     const mm = mmRaw === '' ? '' : String(mmRaw).padStart(2, '0');
     return (hh === '' && mm === '') ? '' : `${hh}:${mm}`;
+  }
+
+public invia(): void {
+    const titleEl = document.getElementById('title') as HTMLInputElement | null;
+    const locationEl = document.getElementById('location') as HTMLInputElement | null;
+    const postiEl = document.getElementById('posti') as HTMLInputElement | null;
+    const prezzoEl = document.getElementById('prezzo') as HTMLInputElement | null;
+    const vietatoEl = document.getElementById('vietato-minori') as HTMLInputElement | null;
+    const nominativoEl = document.getElementById('nominativo') as HTMLInputElement | null;
+    const riutilizzabileEl = document.getElementById('riutilizzabile') as HTMLInputElement | null;
+    const descrEl = document.querySelector('.container-2 .field p[contenteditable]') as HTMLElement | null;
+
+    const nome = titleEl?.value?.trim() ?? '';
+    const locationText = locationEl?.value?.trim() ?? '';
+    const posti = postiEl && postiEl.value !== '' ? Number(postiEl.value) : null;
+    const prezzo = prezzoEl && prezzoEl.value !== '' ? Number(prezzoEl.value) : null;
+    const b_vietato = !!(vietatoEl && vietatoEl.checked);
+    const b_nominativo = !!(nominativoEl && nominativoEl.checked);
+    const b_riutilizzabile = !!(riutilizzabileEl && riutilizzabileEl.checked);
+    const descrizione = descrEl ? descrEl.innerText.trim() : '';
+
+    const dateValue = this.dateRef?.nativeElement?.value ?? '';
+    const timeValue = this.getOrario(); // "HH:mm" o ''
+    const dataIso = this.buildISODate(dateValue, timeValue);
+
+    if (!nome) { alert('Inserisci il titolo'); return; }
+    if (!dateValue) { alert('Inserisci la data'); return; }
+    if (!locationText) { alert('Inserisci la location'); return; }
+
+    const locationId = Number(locationText) || null;
+
+    const organizzatore = localStorage.getItem('user_id') || localStorage.getItem('sub') || '';
+
+    const dto: EventoDto = {
+      nome: nome,
+      descrizione: descrizione,
+      organizzatore: organizzatore,
+      locationId: locationId,
+      posti: posti,
+      b_riutilizzabile: b_riutilizzabile,
+      b_nominativo: b_nominativo,
+      data: dataIso
+    };
+    if (prezzo !== null) dto.prezzo = prezzo;
+
+    this.eventoService.creaEvento(dto).subscribe({
+      next: (created) => {
+        console.log('Evento creato:', created);
+        alert('Evento creato con successo!');
+        if (created && (created as any).id) {
+          this.router.navigate(['/evento', (created as any).id]);
+        }
+      },
+      error: (err) => {
+        console.error('Errore creazione evento', err);
+        if (err?.status === 403) alert('Operazione non consentita: organizzatore differente.');
+        else if (err?.status === 400) alert('Dati non validi.');
+        else if (err?.status === 404) alert('Location o risorsa non trovata.');
+        else alert('Errore di rete o server. Controlla la console.');
+      }
+    });
   }
 }
