@@ -38,26 +38,18 @@ export class EventoService extends Application<EventoDto> {
   }
 
   // Create a new event
-  createEvent(payload: any, headersObj: any): Observable<any> {
-    const headers = new HttpHeaders(headersObj);
+  createEvent(payload: any, token: string | null): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
     return this.http.post(`${this.API_URL}`, payload, { headers });
   }
 
-  createEventJson(token: string | null) {
+  createEventJson(payload: any, token: string | null) {
     this.http.post(
-      'https://localhost:8060/api/evento',
-      {
-        descrizione: "Concerto lesgosksdaus",
-        organizzatore: "b467a568-9304-4d26-ab1b-67a53a053316",
-        locationId: 1,
-        nome: "Concert forever",
-        posti: 100,
-        b_riutilizzabile: false,
-        b_nominativo: false,
-        age_restricted: false,
-        data: "2040-10-10",
-        prezzo: 9.5
-      },
+      this.API_URL,
+      payload,
       {
         headers: {
           'Authorization': `Bearer ${token}`, // <-- triggers preflight
@@ -68,7 +60,37 @@ export class EventoService extends Application<EventoDto> {
     ).subscribe(res => console.log(res));
   }
 
+  buyTicket(user_id: string, token: string | null) {
+    this.http.post(
+      'https://localhost:8060/api/stripe/checkout',
+      {
+        "utenteId": user_id,
+        "valuta": "eur",
+        "biglietti": [
+          {
+            "idEvento": 4,
+            "email": "dgfdsfg@gmail.com",
+            "eValido": true,
+            "nome": "fsdfgsd",
+            "cognome": "sdfgsdfg",
+            "dataNascita": "1994-01-01"
+          }
+        ]
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`, // <-- triggers preflight
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true  // optional, only if backend uses cookies
+      }
+    ).subscribe(res => console.log(res));
 
+  }
+
+  testandoPost() {
+    this.http.post('/api/evento/testandolo', {}).subscribe(res => console.log(res));
+  }
 
   override getApiUrl(): string {
     return this.API_URL;

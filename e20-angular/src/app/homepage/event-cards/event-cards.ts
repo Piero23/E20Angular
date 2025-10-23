@@ -1,8 +1,8 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {EventoDto, EventoService} from '../../services/evento-service';
-import {Subject, takeUntil} from 'rxjs';
-import {Router} from '@angular/router';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { EventoDto, EventoService } from '../../services/evento-service';
+import { Subject, takeUntil } from 'rxjs';
+import { Router } from '@angular/router';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 
 interface EventCard extends EventoDto {
   imageUrl?: string;
@@ -17,6 +17,10 @@ interface EventCard extends EventoDto {
 export class EventCards implements OnInit, OnDestroy {
   events: EventCard[] = [];
   followingEvents: EventCard[] = [];
+
+  // While loading...
+  isLoadingTrending = true;
+  trendingPlaceholders = Array.from({ length: 3 });
 
   // Trending events state
   isDraggingTrending = false;
@@ -47,6 +51,7 @@ export class EventCards implements OnInit, OnDestroy {
   }
 
   loadTrendingEvents(): void {
+    this.isLoadingTrending = true;
     this.eventoService.getAllElementsPaginated(0, 1000)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -55,9 +60,11 @@ export class EventCards implements OnInit, OnDestroy {
             ...event,
             imageUrl: `${this.eventoService.getApiUrl()}/${event.id}/image`,
           }));
+          this.isLoadingTrending = false;
         },
         error: (error) => {
           console.error('Error loading trending events:', error);
+          this.isLoadingTrending = false;
         }
       });
   }
@@ -154,11 +161,11 @@ export class EventCards implements OnInit, OnDestroy {
 
   // Navigation
   scrollLeft(carousel: HTMLElement): void {
-    carousel.scrollBy({left: -400, behavior: 'smooth'});
+    carousel.scrollBy({ left: -400, behavior: 'smooth' });
   }
 
   scrollRight(carousel: HTMLElement): void {
-    carousel.scrollBy({left: 400, behavior: 'smooth'});
+    carousel.scrollBy({ left: 400, behavior: 'smooth' });
   }
 
   goToEventDetails(eventId: number | undefined): void {
@@ -168,11 +175,11 @@ export class EventCards implements OnInit, OnDestroy {
   }
 
   onImageError(event: any): void {
-    event.target.src = '/assets/default-event.jpg';
+    event.target.src = '/assets/event_placeholder.jpg';
   }
 
   getImageUrl(id: number | null): string {
-    return `${this.eventoService.getApiUrl()}/${id}/image`;
+    return id ? `${this.eventoService.getApiUrl()}/${id}/image` : '/assets/event_placeholder.jpg';
   }
 
   private loadFollowingEvents(): void {

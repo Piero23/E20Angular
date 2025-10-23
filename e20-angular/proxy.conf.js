@@ -4,16 +4,23 @@ const PROXY_CONFIG = {
     secure: false,
     changeOrigin: true,
     logLevel: "debug",
+
+    // ⭐ RIMUOVI l'header Origin nelle richieste proxate
     onProxyReq: function (proxyReq, req, res) {
-      console.log('[PROXY] Request:', req.method, req.url);
-      console.log('[PROXY] Headers:', req.headers);
+      console.log('[PROXY] Request to:', req.url);
+      console.log('[PROXY] Method:', req.method);
+
+      // Rimuovi Origin header
+      proxyReq.removeHeader('origin');
+
+      // Oppure imposta Origin come il target
+      proxyReq.setHeader('origin', 'https://localhost:8060');
+
+      console.log('[PROXY] Headers sent:', JSON.stringify(proxyReq.getHeaders(), null, 2));
     },
+
     onProxyRes: function (proxyRes, req, res) {
-      console.log('[PROXY] Response:', proxyRes.statusCode);
-      console.log('[PROXY] Response Headers:', proxyRes.headers);
-    },
-    onError: function (err, req, res) {
-      console.error('[PROXY ERROR]', err);
+      console.log('[PROXY] Response status:', proxyRes.statusCode);
     }
   }
 };

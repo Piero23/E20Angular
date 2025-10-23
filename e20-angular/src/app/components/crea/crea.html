@@ -21,12 +21,12 @@
           <div class="col">
             <div class="field">
               <p class="intestazione-campi" id="label-titolo">Titolo</p>
-              <input class="input-evento intestazione-campi-secondari" formControlName="title" placeholder="Titolo dell'evento" type="text">
-              @if(form.get('title')?.invalid && form.get('title')?.touched) {
-                @if(form.get('title')?.errors?.['required']) {
+              <input class="input-evento intestazione-campi-secondari" formControlName="nome" placeholder="Titolo dell'evento" type="text">
+              @if(form.get('nome')?.invalid && form.get('nome')?.touched) {
+                @if(form.get('nome')?.errors?.['required']) {
                   <span class="text-danger">Il titolo è obbligatorio</span>
                 }
-                @if(form.get('title')?.errors?.['minlength']) {
+                @if(form.get('nome')?.errors?.['minlength']) {
                   <span class="text-danger">Minimo 3 caratteri</span>
                 }
               }
@@ -38,16 +38,16 @@
         <div class="row datetime-row">
           <div class="col datetime-item">
             <p class="intestazione-campi intestazione-campi-secondari" id="label-data">Data</p>
-            <input class="input-evento input-date" formControlName="date" type="date">
-            @if(form.get('date')?.invalid && form.get('date')?.touched) {
+            <input class="input-evento input-date" formControlName="data" type="date">
+            @if(form.get('data')?.invalid && form.get('data')?.touched) {
               <span class="text-danger">La data è obbligatoria</span>
             }
           </div>
 
           <div class="col datetime-item">
             <p class="intestazione-campi intestazione-campi-secondari" id="label-ora">Ora</p>
-            <input class="input-evento" formControlName="time" type="time">
-            @if(form.get('time')?.invalid && form.get('time')?.touched) {
+            <input class="input-evento" formControlName="ora" type="time">
+            @if(form.get('ora')?.invalid && form.get('ora')?.touched) {
               <span class="text-danger">L'orario è obbligatorio</span>
             }
           </div>
@@ -92,7 +92,7 @@
           <div class="field switch-col col">
             <label class="switch-text" for="vietato-minori">Vietato ai minori</label>
             <label class="switch">
-              <input id="vietato-minori" type="checkbox" formControlName="ageRestricted">
+              <input id="vietato-minori" type="checkbox" formControlName="age_restricted">
               <span class="slider"></span>
             </label>
           </div>
@@ -100,7 +100,7 @@
           <div class="field switch-col col">
             <label class="switch-text" for="nominativo">Biglietto nominativo</label>
             <label class="switch">
-              <input id="nominativo" type="checkbox" formControlName="bNominativo">
+              <input id="nominativo" type="checkbox" formControlName="b_nominativo">
               <span class="slider"></span>
             </label>
           </div>
@@ -108,7 +108,7 @@
           <div class="field switch-col col">
             <label class="switch-text" for="riutilizzabile">Biglietto riutilizzabile</label>
             <label class="switch">
-              <input id="riutilizzabile" type="checkbox" formControlName="riutilizzabile">
+              <input id="riutilizzabile" type="checkbox" formControlName="b_riutilizzabile">
               <span class="slider"></span>
             </label>
           </div>
@@ -122,15 +122,15 @@
   <div class="row container-2">
     <div class="col field desc">
       <p>Descrizione</p>
-      <textarea class="description-box" formControlName="description" placeholder="Inserisci una descrizione..."></textarea>
-      @if(form.get('description')?.invalid && form.get('description')?.touched) {
-        @if(form.get('description')?.errors?.['required']) {
+      <textarea class="description-box" formControlName="descrizione" placeholder="Inserisci una descrizione..."></textarea>
+      @if(form.get('descrizione')?.invalid && form.get('descrizione')?.touched) {
+        @if(form.get('descrizione')?.errors?.['required']) {
           <span class="text-danger">La descrizione è obbligatoria</span>
         }
-        @if(form.get('description')?.errors?.['minlength']) {
+        @if(form.get('descrizione')?.errors?.['minlength']) {
           <span class="text-danger">Minimo 10 caratteri</span>
         }
-        @if(form.get('description')?.errors?.['maxlength']) {
+        @if(form.get('descrizione')?.errors?.['maxlength']) {
           <span class="text-danger">Max 500 caratteri</span>
         }
       }

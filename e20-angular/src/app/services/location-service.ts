@@ -1,11 +1,12 @@
-import {Injectable} from '@angular/core';
-import {Application, Dto} from './application';
+import { Injectable } from '@angular/core';
+import { Application, Dto } from './application';
+import { Observable } from 'rxjs';
+import { HttpHeaders } from '@angular/common/http';
 
 export interface LocationDto extends Dto {
   descrizione: string;
   chiuso: boolean;
   position: string;
-
 }
 
 @Injectable({
@@ -17,4 +18,13 @@ export class LocationService extends Application<LocationDto> {
   override getApiUrl(): string {
     return this.API_URL;
   }
+
+  getLocationByName(nome: string, token: string | null): Observable<LocationDto> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.get<LocationDto>(`${this.API_URL}/nome/${nome}`, { headers });
+  }
+
 }

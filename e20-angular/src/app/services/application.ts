@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 export interface SearchResponse<T> {
   content: T[];
@@ -54,7 +54,7 @@ export abstract class Application<T extends Dto> {
       .set('page', page.toString())
       .set('size', size.toString());
 
-    return this.http.get<SearchResponse<T>>(this.API_URL, {params});
+    return this.http.get<SearchResponse<T>>(this.API_URL, { params });
   }
 
   getApiUrl(): string {

@@ -5,6 +5,7 @@ import { SearchBar } from '../shared/search-bar/search-bar';
 import { EventCards } from './event-cards/event-cards';
 import { AuthService } from '../services/auth-service';
 import { UtenteService } from '../services/utente-service';
+import { EventoService } from '../services/evento-service';
 
 @Component({
   selector: 'app-homepage',
@@ -19,10 +20,14 @@ import { UtenteService } from '../services/utente-service';
 })
 export class Homepage {
 
-  constructor(public auth: AuthService) {
+  constructor(public auth: AuthService, public event: EventoService) {
   }
 
   navigateToWebsite(url: string): void {
     window.location.href = url;
+  }
+
+  testandoClick() {
+    this.event.testandoPost();
   }
 }

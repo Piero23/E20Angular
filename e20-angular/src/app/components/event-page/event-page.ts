@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EventoDto, EventoService } from '../../services/evento-service';
 import { EMPTY, Subject, switchMap, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { LocationDto, LocationService } from '../../services/location-service';
 import { PreferitiService } from '../../services/preferiti-service';
 import { UtenteDto } from '../../services/utente-service';
 import { AuthService } from '../../services/auth-service';
@@ -17,7 +16,6 @@ import { environment } from '../../../environments/environment';
 })
 export class EventPage implements OnInit, OnDestroy {
   evento: EventoDto | null = null;
-  location: LocationDto | null = null;
   utente: UtenteDto | null = null;
   isLoading = true;
   hasError = false;
@@ -34,24 +32,26 @@ export class EventPage implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private eventoService: EventoService,
+    private authService: AuthService,
     private preferitiService: PreferitiService,
     private sanitizer: DomSanitizer
   ) {
-    const key = environment.googleMapsApiKey;
-    const q = encodeURIComponent('Napoli,Italy');
-    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.google.com/maps/embed/v1/place?key=${key}&q=${q}`);
+
+    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}&q=Italy`
+    )
   }
 
   getImageUrl(): string {
     if (!this.evento?.id) {
-      return '/assets/default-event.jpg';
+      return '/assets/event_placeholder.jpg';
     }
     return `${this.eventoService.getApiUrl()}/${this.evento.id}/image`;
   }
 
   onImageError(event: any): void {
     // Fallback to default image if the event image fails to load
-    event.target.src = '/assets/default-event.jpg';
+    event.target.src = '/assets/event_placeholder.jpg';
   }
 
   ngOnInit(): void {
@@ -76,6 +76,7 @@ export class EventPage implements OnInit, OnDestroy {
         next: (evento) => {
           this.evento = evento;
           this.isLoading = false;
+          this.updateMapUrl();
         },
         error: (error) => {
           console.error('Error loading event:', error);
@@ -107,6 +108,7 @@ export class EventPage implements OnInit, OnDestroy {
         next: (evento) => {
           this.evento = evento;
           this.isLoading = false;
+          this.updateMapUrl();
         },
         error: (error) => {
           console.error('Error loading event:', error);
@@ -121,13 +123,17 @@ export class EventPage implements OnInit, OnDestroy {
   }
 
   toggleFavorite(): void {
-    this.preferitiService.addToFavorites(this.utente!.id, this.evento!.id)
+    this.preferitiService.addToFavorites(this.utente!.id.toString(), this.evento!.id)
     console.log('Favorite toggled for event:', this.evento?.id);
   }
 
   buyTicket(): void {
     // Implementation for ticket purchase
     console.log('Buy ticket for event:', this.evento?.id);
+    const token = this.authService.token;
+    const id = this.utente!.id.toString();
+    console.log(id);
+    this.eventoService.buyTicket(id, token);
   }
 
   // Helper methods for template
@@ -154,10 +160,7 @@ export class EventPage implements OnInit, OnDestroy {
   shareEvent() { /* sharing logic */
   }
 
-  /*getFullAddress(): string {
-    if (!this.evento) return '';
-    return `${ this.evento.via } ${ this.evento.civico }, ${ this.evento.citta } (${ this.evento.provincia }) ${ this.evento.cap } `;
-  }*/
+  /*getFullAddress(): string {}*/
 
   openInMaps() { /* maps navigation */
   }
@@ -169,4 +172,19 @@ export class EventPage implements OnInit, OnDestroy {
     this.errorMessage = message;
     this.isLoading = false;
   }
+
+  private updateMapUrl(): void {
+    if (!this.evento?.location) return;
+
+    const key = environment.googleMapsApiKey;
+
+    // Combine name + position, encode safely
+    const query = encodeURIComponent(
+      `${this.evento.location.nome} ${this.evento.location.position}`
+    );
+
+    const url = `https://www.google.com/maps/embed/v1/place?key=${key}&q=${query}`;
+    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
 }

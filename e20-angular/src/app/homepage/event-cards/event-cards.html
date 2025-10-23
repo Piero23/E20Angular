@@ -12,15 +12,22 @@
         (touchmove)="onTouchMoveTrending($event, carousel)"
         (touchstart)="onTouchStartTrending($event, carousel)"
         class="trending-cards-row">
-        @for (event of events; track event.nome) {
-          <div class="trending-cards-col">
-            <img class="event-img" [ngSrc]="getImageUrl(event.id)" width="320" height="200" [alt]="event.nome">
-            <div class="hidden">
-              <p class="event-name" (click)="goToEventDetails(event.id)">{{ event.nome }}</p>
-            </div>
+        @if (isLoadingTrending) {
+          @for (ph of trendingPlaceholders; track $index) {
+           <div class="trending-cards-col">
+            <img class="event-img" [ngSrc]="getImageUrl(null)" width="320" height="200" [alt]="">
           </div>
-
-        }
+          }
+        } @else {
+            @for (event of events; track event.nome) {
+              <div class="trending-cards-col">
+                <img class="event-img" [ngSrc]="getImageUrl(event.id)" width="320" height="200" [alt]="event.nome">
+                <div class="hidden">
+                  <p class="event-name" (click)="goToEventDetails(event.id)">{{ event.nome }}</p>
+                </div>
+              </div>
+            }
+          }
       </div>
     </div>
   </div>

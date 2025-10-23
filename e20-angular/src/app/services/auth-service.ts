@@ -91,6 +91,7 @@ export class AuthService {
   }
 
   getUserId(): string | null {
-    return this._userProfile?.id ?? null;
+    console.log(this._userProfile.id);
+    return this._userProfile?.id;
   }
 }
