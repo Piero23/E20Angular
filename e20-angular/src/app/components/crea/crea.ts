@@ -6,6 +6,7 @@ import { EventoService } from '../../services/evento-service';
 import { UtenteDto, UtenteService } from '../../services/utente-service';
 import { LocationDto, LocationService } from '../../services/location-service';
 import { Observable, switchMap } from 'rxjs';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-crea',
   standalone: true,
@@ -27,7 +28,8 @@ export class Crea implements OnInit {
     private authService: AuthService,
     private eventService: EventoService,
     private userService: UtenteService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private router: Router
   ) {
     this.form = this.fb.group({});
   }
@@ -118,9 +120,13 @@ export class Crea implements OnInit {
         }
       })
     ).subscribe({
-      next: (response) => {
-        console.log('Evento creato:', response);
+      next: (response: any) => {
+        console.log('Evento creato');
         this.isSubmitting = false;
+        alert('Evento creato con successo');
+
+        // Redirect to newly created event page
+        this.router.navigate(['/']);
       },
       error: (err) => {
         console.error('Errore nella creazione evento:', err);
