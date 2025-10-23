@@ -5,7 +5,7 @@ import { AuthService } from '../../services/auth-service';
 import { EventoService } from '../../services/evento-service';
 import { UtenteDto, UtenteService } from '../../services/utente-service';
 import { LocationDto, LocationService } from '../../services/location-service';
-import { switchMap } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 @Component({
   selector: 'app-crea',
   standalone: true,
@@ -61,7 +61,19 @@ export class Crea implements OnInit {
       b_nominativo: [false],
       age_restricted: [false]
     })
+  }
 
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewUrl = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   buildPayload(locationId: number) {
@@ -81,6 +93,9 @@ export class Crea implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
+    if (!this.selectedFile) {
+      console.warn('No file selected, proceeding without image.');
+    }
     this.isSubmitting = true;
     const token = this.authService.token;
     const locationName = this.form.get('location')?.value;
@@ -89,6 +104,18 @@ export class Crea implements OnInit {
       switchMap((location: LocationDto) => {
         const payload = this.buildPayload(location.id);
         return this.eventService.createEvent(payload, token);
+      }),
+      switchMap((createdEvent: any) => {
+        if (this.selectedFile) {
+          const formData = new FormData();
+          formData.append('immagine', this.selectedFile);
+          return this.eventService.uploadEventImage(createdEvent.id, formData, token);
+        } else {
+          return new Observable((observer) => {
+            observer.next(null);
+            observer.complete();
+          });
+        }
       })
     ).subscribe({
       next: (response) => {

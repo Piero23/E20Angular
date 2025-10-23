@@ -6,7 +6,7 @@
         <div class="circle" (click)="fileInput.click()">
           <i class="fa-regular fa-image icon"></i>
         </div>
-        <input type="file" #fileInput accept="image/*" hidden>
+        <input type="file" #fileInput accept="image/*" hidden (change)="onFileSelected($event)">
         @if(previewUrl) {
           <img [src]="previewUrl" alt="Anteprima" class="event-image-preview">
         }

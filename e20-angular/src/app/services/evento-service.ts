@@ -24,11 +24,13 @@ export class EventoService extends Application<EventoDto> {
   protected override API_URL = '/api/evento';
 
   // Upload event image
-  uploadEventImage(id: number, image: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('immagine', image);
-    return this.http.put(`${this.API_URL}/${id}/image`, formData);
+
+  uploadEventImage(eventId: number, formData: FormData, token: string | null) {
+    return this.http.put(`/api/evento/${eventId}/image`, formData, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
   }
+
 
   // Get event image
   getEventImage(id: number): Observable<Blob> {
