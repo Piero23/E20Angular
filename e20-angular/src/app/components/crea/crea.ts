@@ -23,6 +23,9 @@ export class Crea implements OnInit {
   user: UtenteDto | null = null;
   user_id: string = '';
 
+  locationForm: FormGroup;
+  showLocation = false;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -32,6 +35,7 @@ export class Crea implements OnInit {
     private router: Router
   ) {
     this.form = this.fb.group({});
+    this.locationForm = this.fb.group({});
   }
 
 
@@ -48,6 +52,14 @@ export class Crea implements OnInit {
       }
     });
     this.form = this.createForm();
+  }
+
+  initPopup(): void {
+    this.showLocation = true;
+    this.locationForm = this.fb.group({
+      nomeLocation: ['', Validators.required],
+      al_chiuso: [false]
+    })
   }
 
   createForm() {
@@ -134,4 +146,10 @@ export class Crea implements OnInit {
       }
     });
   }
+
+  saveLocation() {
+
+  }
+
+  protected readonly location = location;
 }
