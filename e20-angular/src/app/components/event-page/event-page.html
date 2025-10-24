@@ -1,72 +1,122 @@
-<app-top-bar/>
-<div class="event-page-container">
-  <div class="event-image">
-    <img alt="Flyer 5" height="693" ngSrc="/assets/flyer5.jpg" width="535">
-  </div>
-  <div class="ticket-container">
-    <div class="left-side-ticket-info">
-      <div class="date-time-container">
-        <div class="date-time-event">
-          <p>01/01/2025 - 21:00</p>
-        </div>
-      </div>
-      <div class="event-title">
-        <p>Event Title</p>
-      </div>
-    </div>
-    <div class="vertical-separator"></div>
-    <div class="right-side-ticket-info">
-      <div class="ticket-action-icons">
-        <div class="icon edit-icon">
-          <i class="fa-solid fa-pencil"></i>
-        </div>
-        <div (click)="toggleNotification()" class="icon bell-icon">
-          <i class="fa-regular fa-bell"></i>
-        </div>
-        <div (click)="toggleFavorite()" class="icon favorite-icon">
-          <i class="fa-regular fa-heart"></i>
-        </div>
-      </div>
-      <div class="available-tickets">
-        <p class="availability">2</p>
-        <p>Posti disponibili</p>
-      </div>
-      <div class="buy-ticket-button-container">
-        <button class="buy-ticket-button">Compra ora</button>
-      </div>
+@if (isLoading) {
+  <!-- Loading State -->
+  <div class="container text-center loading-container">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+      <p>Caricamento evento...</p>
     </div>
   </div>
-  <div class="event-content">
-    <div class="event-location">
-      <h2>Location</h2>
-      <div class="event-location-info">
-        <div class="left-side-location-info">
-          <p>Via di tua mamma</p>
-          <p>118</p>
+}
+
+<!-- Error State -->
+@if (hasError) {
+  <div class="container  error-container">
+    <div class="error-icon">
+      <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <h2>Ops! Qualcosa è andato storto</h2>
+    <p class="error-message">{{ errorMessage }}</p>
+    <button (click)="loadEvent()" class="retry-button">
+      <i class="fas fa-redo"></i>
+      Riprova
+    </button>
+  </div>
+}
+
+<div class="container-fluid p-0 event-page">
+
+  <!-- Event Content -->
+  @if (!isLoading && !hasError && evento) {
+    <div class="container-fluid p-0 event-image-container">
+
+      <!-- Event Image Section -->
+      <div class="row event-image-row">
+        <div class="col event-image-col">
+          <img [alt]="evento.nome || 'Event image'" [src]="getImageUrl()" (error)="onImageError($event)"
+               class="event-main-image">
         </div>
-        <div class="right-side-location-info">
-          <p>Napoli (NA)</p>
-          <p>88888</p>
-        </div>
-      </div>
-      <div class="event-map">
-        <iframe
-          allowfullscreen=""
-          height="300px" loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3038.1234567890123!2d14.268123456789012!3d40.85123456789012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x133b086c1234567%3A0xabcdef1234567890!2sNapoli%2C%20Metropolitan%20City%20of%20Naples%2C%20Italy!5e0!3m2!1sen!2sus!4v1610000000000!5m2!1sen!2sus"
-          width="300px"></iframe>
       </div>
     </div>
 
-    <div class="event-description">
-      <h2>Event Description</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec elementum, erat ut aliquam vehicula, dolor nisi
-        elementum nulla, in sagittis odio odio non sem. Curabitur dolor dolor, faucibus eleifend enim ac, blandit
-        condimentum elit. Donec placerat tortor quis orci vehicula rhoncus. Etiam eget ligula lobortis, tempor risus
-        id, scelerisque enim. Cras aliquet sollicitudin est, sed vehicula leo vestibulum facilisis. Praesent turpis
-        massa, ultrices vel orci at, congue gravida arcu.
-      </p>
+    <!-- Ticket Info Section -->
+    <div class="container ticket">
+      <div class="row main-ticket-row">
+        <div class="col left-ticket-zone">
+          <div class="row date-row">
+            <div class="col date-col">
+              <p class="formatted-date">
+                <i class="fas fa-calendar-alt"></i>
+                {{ getFormattedDate() }}
+              </p>
+            </div>
+          </div>
+          <div class="row title-row">
+            <div class="col title-col">
+              <h1 class="event-title fw-bold">{{ evento.nome }}</h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="col right-ticket-zone">
+          <div class="row buttons-row">
+            <div class="col edit-col">
+              <i class="fa-regular fa-pen-to-square"></i>
+            </div>
+            <div class="col notify-and-save-col">
+              <i class="action available-spots-label-col fa-regular fa-bell" (click)="toggleNotification()"></i>
+              <i class="action fa-regular fa-heart" (click)="toggleFavorite()"></i>
+            </div>
+          </div>
+          <div class="row available-spots-row">
+            <div class="col available-spots-num-col">
+              <h1 class="availability">{{ evento.posti || 0 }}</h1>
+              <p class="availability-label">
+                {{ evento.posti === 1 ? 'Posto disponibile' : 'Posti disponibili' }}
+              </p>
+            </div>
+          </div>
+          <div class="row buy-now-row">
+            <div class="col buy-now-col ">
+              <button class="btn buy-now-label" (click)="buyTicket()">
+                <i class="fas fa-ticket-alt"></i>
+                {{ evento.posti && evento!.posti > 0 ? 'Compra ora' : 'Sold out' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+
+    <!-- Event and location info -->
+    <div class="container event-and-location-info">
+      <div class="row event-and-location-row">
+        <div class="col event-location-col">
+          <div class="row event-location-row">
+            <div class="col text-center event-location-inner-col">
+              <h3>Location</h3>
+              <p>{{ getLocationNome() }}</p>
+              <p>{{ getLocationPosition() }}</p>
+              <iframe
+                class="map"
+                allowfullscreen
+                height="230px"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                [src]="mapUrl"
+                width="230px">
+              </iframe>
+            </div>
+          </div>
+        </div>
+        <div class="col event-description-col">
+          <div class="row event-description-row">
+            <div class="col event-desc-inner-col">
+              <h3 class="desc">Descrizione</h3>
+              <p>{{ evento.descrizione }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
 </div>

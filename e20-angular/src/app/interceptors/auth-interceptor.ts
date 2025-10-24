@@ -1,11 +1,13 @@
-import {Injectable} from '@angular/core';
-import {HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  // @ts-ignore
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
-    // TOKEN BEARER HERE
-    const token = "";
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const token = sessionStorage.getItem('access_token'); // o localStorage
+  if (token) {
+    const cloned = req.clone({
+      setHeaders: { Authorization: `Bearer ${token}` }
+    });
+    return next(cloned);
   }
-}
+  return next(req);
+};
+

@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ProfiloEOrdini } from './profilo-e-ordini';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ProfiloEOrdini} from './profilo-e-ordini';
 
 describe('ProfiloEOrdini', () => {
   let component: ProfiloEOrdini;
@@ -9,7 +9,7 @@ describe('ProfiloEOrdini', () => {
     await TestBed.configureTestingModule({
       imports: [ProfiloEOrdini]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ProfiloEOrdini);
     component = fixture.componentInstance;

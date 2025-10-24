@@ -1,83 +1,137 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {RowbarSearch} from '../rowbar-search/rowbar-search';
-
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth-service';
+import { EventoService } from '../../services/evento-service';
+import { UtenteDto, UtenteService } from '../../services/utente-service';
+import { LocationDto, LocationService } from '../../services/location-service';
+import { Observable, switchMap } from 'rxjs';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-crea',
   standalone: true,
-  imports: [CommonModule, RowbarSearch],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './crea.html',
   styleUrls: ['./crea.css']
 })
-export class Crea implements AfterViewInit {
-  @ViewChild('hoursInput', { static: true }) hoursRef!: ElementRef<HTMLInputElement>;
-  @ViewChild('minutesInput', { static: true }) minutesRef!: ElementRef<HTMLInputElement>;
-  @ViewChild('dateInput', { static: true }) dateRef!: ElementRef<HTMLInputElement>;
-  @ViewChild('openButton', { static: true }) openBtnRef!: ElementRef<HTMLButtonElement>;
 
-  ngAfterViewInit() {
-    const input = this.dateRef.nativeElement;
-    const btn = this.openBtnRef.nativeElement;
+export class Crea implements OnInit {
+  form: FormGroup;
+  previewUrl: string | ArrayBuffer | null = null;
+  selectedFile: File | null = null;
+  isSubmitting = false;
+  user: UtenteDto | null = null;
+  user_id: string = '';
 
-    btn.addEventListener('click', () => {
-      if ('showPicker' in input) {
-        input.showPicker();
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private eventService: EventoService,
+    private userService: UtenteService,
+    private locationService: LocationService,
+    private router: Router
+  ) {
+    this.form = this.fb.group({});
+  }
+
+
+  ngOnInit(): void {
+
+    // Get the user id
+    this.userService.getMe(this.authService.token).subscribe({
+      next: (data) => {
+        this.user = data;
+        this.user_id = data.id.toString();
+      },
+      error: (err) => {
+        console.error('Failed to load user:', err);
       }
     });
+    this.form = this.createForm();
   }
 
-  private normalizzaOrario(el: HTMLInputElement, min: number, max: number) {
-    let v = el.value ?? '';
-    v = v.replace(/\D/g, '');
-    if (v === '') { el.value = ''; return; }
-    let n = parseInt(v, 10);
-    if (isNaN(n)) { el.value = ''; return; }
-    if (n < min) n = min;
-    if (n > max) n = max;
-    el.value = String(n);
+  createForm() {
+    return this.fb.group({
+      nome: ['', [Validators.required, Validators.minLength(3)]],
+      descrizione: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
+      location: ['', Validators.required],
+      posti: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
+      prezzo: ['', Validators.min(0)],
+      data: ['', Validators.required],
+      ora: ['', Validators.required],
+      b_riutilizzabile: [false],
+      b_nominativo: [false],
+      age_restricted: [false]
+    })
   }
 
-  onHoursInput() {
-    const el = this.hoursRef.nativeElement;
-    el.value = el.value.replace(/\D/g, '');
-    if (el.value.length >= 2) {
-      this.normalizzaOrario(el, 0, 23);
-      this.minutesRef.nativeElement.focus();
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewUrl = reader.result;
+      };
+      reader.readAsDataURL(file);
     }
   }
 
-  onMinutesInput() {
-    const el = this.minutesRef.nativeElement;
-    el.value = el.value.replace(/\D/g, '');
-    if (el.value.length > 2) el.value = el.value.slice(0, 2);
-  }
-
-  onHoursBlur() {
-    this.normalizzaOrario(this.hoursRef.nativeElement, 0, 23);
-    if (this.hoursRef.nativeElement.value !== '') {
-      this.hoursRef.nativeElement.value = this.hoursRef.nativeElement.value.padStart(2, '0');
+  buildPayload(locationId: number) {
+    const dateValue = this.form.get('data')?.value;
+    const timeValue = this.form.get('ora')?.value;
+    const combinedDateTime = new Date(`${dateValue}T${timeValue}:00`)
+    return {
+      ...this.form.value,
+      organizzatore: this.user_id,
+      locationId,
+      data: combinedDateTime,
     }
   }
 
-  onMinutesBlur() {
-    this.normalizzaOrario(this.minutesRef.nativeElement, 0, 59);
-    if (this.minutesRef.nativeElement.value !== '') {
-      this.minutesRef.nativeElement.value = this.minutesRef.nativeElement.value.padStart(2, '0');
+  onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
     }
-  }
-
-  onHoursKeydown(ev: KeyboardEvent) {
-    if (ev.key === ':') {
-      ev.preventDefault();
-      this.minutesRef.nativeElement.focus();
+    if (!this.selectedFile) {
+      console.warn('No file selected, proceeding without image.');
     }
-  }
+    this.isSubmitting = true;
+    const token = this.authService.token;
+    const locationName = this.form.get('location')?.value;
 
-  public getOrario(): string {
-    const hhRaw = this.hoursRef?.nativeElement?.value ?? '';
-    const mmRaw = this.minutesRef?.nativeElement?.value ?? '';
-    const hh = hhRaw === '' ? '' : String(hhRaw).padStart(2, '0');
-    const mm = mmRaw === '' ? '' : String(mmRaw).padStart(2, '0');
-    return (hh === '' && mm === '') ? '' : `${hh}:${mm}`;
+    this.locationService.getLocationByName(locationName, token).pipe(
+      switchMap((location: LocationDto) => {
+        const payload = this.buildPayload(location.id);
+        return this.eventService.createEvent(payload, token);
+      }),
+      switchMap((createdEvent: any) => {
+        if (this.selectedFile) {
+          const formData = new FormData();
+          formData.append('immagine', this.selectedFile);
+          return this.eventService.uploadEventImage(createdEvent.id, formData, token);
+        } else {
+          return new Observable((observer) => {
+            observer.next(null);
+            observer.complete();
+          });
+        }
+      })
+    ).subscribe({
+      next: (response: any) => {
+        console.log('Evento creato');
+        this.isSubmitting = false;
+        alert('Evento creato con successo');
+
+        // Redirect to newly created event page
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error('Errore nella creazione evento:', err);
+        this.isSubmitting = false;
+      }
+    });
   }
 }
