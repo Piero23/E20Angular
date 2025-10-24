@@ -27,4 +27,13 @@ export class LocationService extends Application<LocationDto> {
     return this.http.get<LocationDto>(`${this.API_URL}/nome/${nome}`, { headers });
   }
 
+  createLocation(payload: any, token: string | null): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(`${this.API_URL}`, payload, { headers });
+  }
+
 }
