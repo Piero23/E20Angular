@@ -52,14 +52,16 @@ export class EventCards implements OnInit, OnDestroy {
 
   loadTrendingEvents(): void {
     this.isLoadingTrending = true;
-    this.eventoService.getAllElementsPaginated(0, 1000)
+    this.eventoService.getAllElementsPaginated(0, 10)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
-          this.events = response.content.map(event => ({
-            ...event,
-            imageUrl: `${this.eventoService.getApiUrl()}/${event.id}/image`,
-          }));
+          const shuffled = response.content.sort(() => 0.5 - Math.random());
+          this.events = shuffled
+            .map(event => ({
+              ...event,
+              imageUrl: `${this.eventoService.getApiUrl()}/${event.id}/image`,
+            }));
           this.isLoadingTrending = false;
         },
         error: (error) => {
