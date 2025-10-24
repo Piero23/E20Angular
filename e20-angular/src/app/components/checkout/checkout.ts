@@ -3,6 +3,9 @@ import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Val
 
 import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
+import {EventoService} from '../../services/evento-service';
+import {AuthService} from '../../services/auth-service';
+import {UtenteService} from '../../services/utente-service';
 
 @Component({
   selector: 'app-checkout',
@@ -18,7 +21,10 @@ export class Checkout {
   idEvento: number = null!;
   utenteId?: string;
 
-  constructor(route: ActivatedRoute) {
+  constructor(route: ActivatedRoute,
+              private eventoService: EventoService,
+              private authService: AuthService,
+              private userService: UtenteService,) {
     if ("id" in route.snapshot.params) {
       const id = Number(route.snapshot.params['id']);
       if (Number.isSafeInteger(id)) {
@@ -29,21 +35,20 @@ export class Checkout {
       throw new Error('No id evento!');
     }
     this.listaBigliettiFormArray = new FormArray([this.bigliettoDefaultFormGroup]);
-    this.httpClient.get("/api/utente/me", {withCredentials: true}).subscribe({
-      next: (res) => {
-        if (!("id" in res) || typeof res.id !== "string") {
-          throw new Error("No id utente!");
-        }
-        this.utenteId = res.id;
+    this.userService.getMe(this.authService.token).subscribe({
+      next: (data) => {
+        this.utenteId = data.id.toString();
       },
-      error: console.error
+      error: (err) => {
+        console.error('Failed to load user:', err);
+      }
     });
   }
 
   get bigliettoDefaultFormGroup() {
     return this.#fb.group({
-      nome: new FormControl<string | null>(null, Validators.required),
-      cognome: new FormControl<string | null>(null, Validators.required),
+      nome: new FormControl<string | null>(null),
+      cognome: new FormControl<string | null>(null),
       email: new FormControl<string | null>(null, [Validators.required, Validators.email]),
       dataNascita: new FormControl<string | null>(null, [Validators.required]),
       idEvento: new FormControl<number>(this.idEvento, [Validators.required]),
@@ -89,17 +94,19 @@ export class Checkout {
       return;
     }
 
+    const biglietti = this.listaBigliettiFormArray.getRawValue().map(biglietto => ({
+      ...biglietto,
+      nome: biglietto.nome === '' ? null : biglietto.nome,
+      cognome: biglietto.cognome === '' ? null : biglietto.cognome,
+      email: biglietto.email === '' ? null : biglietto.email,
+      dataNascita: biglietto.dataNascita === '' ? null : biglietto.dataNascita
+    }));
+
     const body = {
       "utenteId": this.utenteId,
       "valuta": "eur",
-      "biglietti": this.listaBigliettiFormArray.getRawValue()
+      "biglietti": biglietti
     }
-    this.httpClient.post("https://localhost:8060/stripe/checkout", body, {withCredentials: true}).subscribe({
-      next: console.log,
-      error: console.error
-    });
-
-
-
+    this.eventoService.buyTicket(body, this.authService.token);
   }
 }
