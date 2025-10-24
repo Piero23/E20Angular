@@ -70,11 +70,11 @@ export class EventoService extends Application<EventoDto> {
         "valuta": "eur",
         "biglietti": [
           {
-            "idEvento": 4,
+            "idEvento": 1,
             "email": "dgfdsfg@gmail.com",
-            "eValido": true,
-            "nome": "fsdfgsd",
-            "cognome": "sdfgsdfg",
+            "e_valido": true,
+            "nome": null,
+            "cognome": null,
             "dataNascita": "1994-01-01"
           }
         ]

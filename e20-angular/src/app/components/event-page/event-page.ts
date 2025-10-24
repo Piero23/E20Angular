@@ -3,7 +3,7 @@ import { EventoDto, EventoService } from '../../services/evento-service';
 import { EMPTY, Subject, switchMap, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { PreferitiService } from '../../services/preferiti-service';
-import { UtenteDto } from '../../services/utente-service';
+import {UtenteDto, UtenteService} from '../../services/utente-service';
 import { AuthService } from '../../services/auth-service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
@@ -17,6 +17,7 @@ import { environment } from '../../../environments/environment';
 export class EventPage implements OnInit, OnDestroy {
   evento: EventoDto | null = null;
   utente: UtenteDto | null = null;
+  user_id="";
   isLoading = true;
   hasError = false;
   errorMessage = '';
@@ -34,6 +35,7 @@ export class EventPage implements OnInit, OnDestroy {
     private eventoService: EventoService,
     private authService: AuthService,
     private preferitiService: PreferitiService,
+    private userService: UtenteService,
     private sanitizer: DomSanitizer
   ) {
 
@@ -131,9 +133,17 @@ export class EventPage implements OnInit, OnDestroy {
     // Implementation for ticket purchase
     console.log('Buy ticket for event:', this.evento?.id);
     const token = this.authService.token;
-    const id = this.utente!.id.toString();
-    console.log(id);
-    this.eventoService.buyTicket(id, token);
+    this.userService.getMe(this.authService.token).subscribe({
+      next: (data) => {
+        this.utente = data;
+        this.user_id = data.id.toString();
+        console.log(this.user_id);
+        this.eventoService.buyTicket(this.user_id, token);
+      },
+      error: (err) => {
+        console.error('Failed to load user:', err);
+      }
+    });
   }
 
   // Helper methods for template
