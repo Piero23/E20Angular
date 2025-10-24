@@ -6,6 +6,7 @@ import { Crea } from './components/crea/crea';
 import { ProfiloEOrdini } from './components/profilo-e-ordini/profilo-e-ordini';
 import { roleGuard } from './guards/role-guard';
 import { AccessDenied } from './shared/access-denied/access-denied';
+import { Avatar } from './shared/avatar/avatar';
 
 export const routes: Routes = [
   { path: '', component: Homepage },

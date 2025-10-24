@@ -1,9 +1,11 @@
-
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   font-family: MuseoModerno, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
@@ -39,7 +41,7 @@ html, body {
 
 .content-grid {
   display: grid;
-  grid-template-columns:1fr 360px;
+  grid-template-columns: 1fr 360px;
   gap: 14px;
   align-items: start
 }
@@ -325,13 +327,15 @@ html, body {
 }
 
 
-.followers-list, .following-list {
+.followers-list,
+.following-list {
   display: flex;
   flex-direction: column;
   gap: 10px
 }
 
-.follower, .following {
+.follower,
+.following {
   display: flex;
   gap: 10px;
   align-items: center
@@ -401,7 +405,7 @@ html, body {
   }
 
   .content-grid {
-    grid-template-columns:1fr;
+    grid-template-columns: 1fr;
   }
 
   .right-col {

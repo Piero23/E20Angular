@@ -2,12 +2,12 @@
   <div class="container-fluid">
     <div class="navbar-brand logo" routerLink="/">
       <div class="logo-div">
-        <img class="logo-img" alt="Logo" ngSrc="/assets/e20_logo_alt.png" width="1160" height="460" priority/>
+        <img class="logo-img" alt="Logo" ngSrc="/assets/e20_logo_alt.png" width="1160" height="460" priority />
       </div>
     </div>
-    <app-search-bar class="sb"/>
-    <div (click)="goToProfilePage()" class="user-icon">
-      <img alt="User Icon" ngSrc="/assets/user_icon.svg" height="400" width="400"/>
+    <app-search-bar class="sb" />
+    <div class="user-icon">
+      <app-avatar />
     </div>
   </div>
 </nav>
