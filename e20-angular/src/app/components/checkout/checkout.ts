@@ -1,5 +1,4 @@
 import {Component, inject} from '@angular/core';
-import {TopBar} from '../../shared/top-bar/top-bar';
 import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 
 import {HttpClient} from '@angular/common/http';
@@ -8,7 +7,6 @@ import {ActivatedRoute} from '@angular/router';
 @Component({
   selector: 'app-checkout',
   imports: [
-    TopBar,
     ReactiveFormsModule
   ],
   templateUrl: './checkout.html',
@@ -96,10 +94,12 @@ export class Checkout {
       "valuta": "eur",
       "biglietti": this.listaBigliettiFormArray.getRawValue()
     }
-    this.httpClient.post("https://192.168.1.212:8060/stripe/checkout", body, {withCredentials: true}).subscribe({
+    this.httpClient.post("https://localhost:8060/stripe/checkout", body, {withCredentials: true}).subscribe({
       next: console.log,
       error: console.error
     });
+
+
 
   }
 }

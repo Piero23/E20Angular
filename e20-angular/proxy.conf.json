@@ -1,12 +1,6 @@
 {
-  "/api/**": {
-    "target": "https://192.168.1.212:8060",
-    "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
-  },
-  "/oauth2/**": {
-    "target": "https://192.168.1.212:8060",
+  "/api": {
+    "target": "https://localhost:8060",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
