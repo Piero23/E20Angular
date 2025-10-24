@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
-import {TopBar} from '../shared/top-bar/top-bar';
+import {TopBar} from '../../shared/top-bar/top-bar';
 import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {map} from 'rxjs';
+
 import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 
