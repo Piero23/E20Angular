@@ -26,7 +26,9 @@ export class Avatar {
 
   public logout() {
     this.authService.logout();
-    this.router.navigate(['/'])
+    this.router.navigate(['/']).then(() => {
+      window.location.reload();
+    });
   }
 
 
