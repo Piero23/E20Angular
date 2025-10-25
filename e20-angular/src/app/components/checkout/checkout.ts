@@ -6,6 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 import {EventoService} from '../../services/evento-service';
 import {AuthService} from '../../services/auth-service';
 import {UtenteService} from '../../services/utente-service';
+import {takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-checkout',
@@ -20,6 +21,9 @@ export class Checkout {
 
   idEvento: number = null!;
   utenteId?: string;
+
+  showName: boolean = false;
+  showBirthday: boolean = false;
 
   constructor(route: ActivatedRoute,
               private eventoService: EventoService,
@@ -43,6 +47,18 @@ export class Checkout {
         console.error('Failed to load user:', err);
       }
     });
+
+    this.eventoService.getElementById(this.idEvento)
+      .subscribe({
+        next: (evento) => {
+          this.showName = evento.b_nominativo;
+          this.showBirthday = evento.age_restricted;
+          this.costo_biglietto = evento.prezzo;
+        },
+        error: (error) => {
+          console.error('Error loading event:', error);
+        }
+      });
   }
 
   get bigliettoDefaultFormGroup() {
@@ -50,7 +66,7 @@ export class Checkout {
       nome: new FormControl<string | null>(null),
       cognome: new FormControl<string | null>(null),
       email: new FormControl<string | null>(null, [Validators.required, Validators.email]),
-      dataNascita: new FormControl<string | null>(null, [Validators.required]),
+      dataNascita: new FormControl<string | null>(null),
       idEvento: new FormControl<number>(this.idEvento, [Validators.required]),
       eValido: new FormControl<true>(true, [Validators.required])
     });
@@ -67,7 +83,7 @@ export class Checkout {
   username: string = "";
   email: string = "";
 
-  costo_biglietto: number = 10;
+  costo_biglietto: number = 0;
 
   addBiglietto() {
     this.listaBigliettiFormArray.push(this.bigliettoDefaultFormGroup);

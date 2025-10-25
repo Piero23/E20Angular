@@ -182,6 +182,12 @@ export class EventPage implements OnInit, OnDestroy {
   }
 
   checkout() {
-    this.router.navigate(['checkout'], { relativeTo: this.route });
+    if (!this.authService.token){
+      console.error("Devi essere loggato per comprare i biglietti");
+      alert('Devi essere loggato per comprare i biglietti');
+    }
+    else{
+      this.router.navigate(['checkout'], { relativeTo: this.route });
+    }
   }
 }

@@ -20,10 +20,10 @@
           }
         } @else {
             @for (event of events; track event.nome) {
-              <div class="trending-cards-col">
+              <div class="trending-cards-col" (click)="goToEventDetails(event.id)">
                 <img class="event-img" [ngSrc]="getImageUrl(event.id)" width="320" height="200" [alt]="event.nome">
                 <div class="hidden">
-                  <p class="event-name" (click)="goToEventDetails(event.id)">{{ event.nome }}</p>
+                  <p class="event-name">{{ event.nome }}</p>
                 </div>
               </div>
             }

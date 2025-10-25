@@ -6,10 +6,14 @@
       @for (group of listaBigliettiFormArray.controls; track group; let i = $index) {
         <span class="d-flex flex-column gap-2">
           <form [formGroup]="group" class="row flex-wrap gap-3">
-            <input type="text" formControlName="nome" placeholder="Nome" class="flex-grow-1 col-2">
-            <input type="text" formControlName="cognome" placeholder="Cognome" class="flex-grow-1 col-2">
+            @if (showName) {
+              <input type="text" formControlName="nome" placeholder="Nome" class="flex-grow-1 col-2">
+              <input type="text" formControlName="cognome" placeholder="Cognome" class="flex-grow-1 col-2">
+            }
             <input type="text" formControlName="email" placeholder="Email" class="col-12">
-            <input type="date" formControlName="dataNascita" placeholder="Data di nascita" class="col-6">
+            @if (showBirthday){
+              <input type="date" formControlName="dataNascita" placeholder="Data di nascita" class="col-6">
+            }
           </form>
           @if (listaBigliettiFormArray.length > 1) {
             <button (click)="removeBiglietto(i)">Rimuovi biglietto</button>
