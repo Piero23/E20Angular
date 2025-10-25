@@ -3,10 +3,11 @@ import { EventoDto, EventoService } from '../../services/evento-service';
 import { EMPTY, Subject, switchMap, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { PreferitiService } from '../../services/preferiti-service';
-import { UtenteDto } from '../../services/utente-service';
+import {UtenteDto, UtenteService} from '../../services/utente-service';
 import { AuthService } from '../../services/auth-service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-event-page',
@@ -34,7 +35,9 @@ export class EventPage implements OnInit, OnDestroy {
     private eventoService: EventoService,
     private authService: AuthService,
     private preferitiService: PreferitiService,
-    private sanitizer: DomSanitizer
+    private userService: UtenteService,
+    private sanitizer: DomSanitizer,
+    private router: Router
   ) {
 
     this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -127,15 +130,6 @@ export class EventPage implements OnInit, OnDestroy {
     console.log('Favorite toggled for event:', this.evento?.id);
   }
 
-  buyTicket(): void {
-    // Implementation for ticket purchase
-    console.log('Buy ticket for event:', this.evento?.id);
-    const token = this.authService.token;
-    const id = this.utente!.id.toString();
-    console.log(id);
-    this.eventoService.buyTicket(id, token);
-  }
-
   // Helper methods for template
   getFormattedDate(): string {
     if (!this.evento?.data) return '';
@@ -187,4 +181,13 @@ export class EventPage implements OnInit, OnDestroy {
     this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
+  checkout() {
+    if (!this.authService.token){
+      console.error("Devi essere loggato per comprare i biglietti");
+      alert('Devi essere loggato per comprare i biglietti');
+    }
+    else{
+      this.router.navigate(['checkout'], { relativeTo: this.route });
+    }
+  }
 }

@@ -62,32 +62,26 @@ export class EventoService extends Application<EventoDto> {
     ).subscribe(res => console.log(res));
   }
 
-  buyTicket(user_id: string, token: string | null) {
-    this.http.post(
+  buyTicket(payload: any, token: string | null) {
+    this.http.post<{ url: string }>(
       'https://localhost:8060/api/stripe/checkout',
-      {
-        "utenteId": user_id,
-        "valuta": "eur",
-        "biglietti": [
-          {
-            "idEvento": 4,
-            "email": "dgfdsfg@gmail.com",
-            "eValido": true,
-            "nome": "fsdfgsd",
-            "cognome": "sdfgsdfg",
-            "dataNascita": "1994-01-01"
-          }
-        ]
-      },
+      payload,
       {
         headers: {
-          'Authorization': `Bearer ${token}`, // <-- triggers preflight
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        withCredentials: true  // optional, only if backend uses cookies
+        withCredentials: true
       }
-    ).subscribe(res => console.log(res));
-
+    ).subscribe({
+      next: (response) => {
+        console.log('Redirect URL:', response.url);
+        window.location.href = response.url;
+      },
+      error: (err) => {
+        console.error('Errore durante il checkout:', err);
+      }
+    });
   }
 
   testandoPost() {

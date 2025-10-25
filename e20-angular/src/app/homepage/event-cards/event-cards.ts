@@ -171,6 +171,7 @@ export class EventCards implements OnInit, OnDestroy {
   }
 
   goToEventDetails(eventId: number | undefined): void {
+    console.log(eventId)
     if (eventId) {
       this.router.navigate(['/evento', eventId]);
     }
