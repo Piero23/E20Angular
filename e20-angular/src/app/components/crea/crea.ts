@@ -1,12 +1,12 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth-service';
-import { EventoService } from '../../services/evento-service';
-import { UtenteDto, UtenteService } from '../../services/utente-service';
-import { LocationDto, LocationService } from '../../services/location-service';
-import { Observable, switchMap } from 'rxjs';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {AuthService} from '../../services/auth-service';
+import {EventoService} from '../../services/evento-service';
+import {UtenteDto, UtenteService} from '../../services/utente-service';
+import {LocationDto, LocationService} from '../../services/location-service';
+import {Observable, switchMap} from 'rxjs';
+import {Router} from '@angular/router';
 import * as L from 'leaflet';
 
 @Component({
@@ -23,6 +23,7 @@ export class Crea implements OnInit {
   isSubmitting = false;
   user: UtenteDto | null = null;
   user_id: string = '';
+  imageLoaded = false;
 
   locationForm: FormGroup;
   showLocation = false;
@@ -204,15 +205,36 @@ export class Crea implements OnInit {
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
+    if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewUrl = reader.result;
-      };
-      reader.readAsDataURL(file);
+    const MAX_FILE_SIZE = 1024 * 1024; // 1 MB in bytes
+
+    if (file.size > MAX_FILE_SIZE) {
+      alert('L\'immagine è troppo grande. La dimensione massima consentita è di 1 MB.');
+      this.selectedFile = null;
+      this.previewUrl = null;
+      this.imageLoaded = false;
+      event.target.value = ''; // reset file input
+      return;
     }
+
+    this.selectedFile = file;
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.previewUrl = reader.result;
+      this.imageLoaded = true; // ✅ Image successfully loaded
+    };
+
+    reader.onerror = () => {
+      console.error('Errore nel caricamento dell\'immagine');
+      this.imageLoaded = false;
+      this.selectedFile = null;
+      this.previewUrl = null;
+      alert('Errore durante il caricamento dell\'immagine. Riprova.');
+    };
+
+    reader.readAsDataURL(file);
   }
 
   buildPayload(locationId: number) {
@@ -232,9 +254,12 @@ export class Crea implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    if (!this.selectedFile) {
-      console.warn('No file selected, proceeding without image.');
+
+    if (this.selectedFile && !this.imageLoaded) {
+      alert('Attendi che l\'immagine sia stata caricata completamente prima di procedere.');
+      return;
     }
+
     this.isSubmitting = true;
     const token = this.authService.token;
     const locationName = this.form.get('location')?.value;
@@ -245,25 +270,31 @@ export class Crea implements OnInit {
         return this.eventService.createEvent(payload, token);
       }),
       switchMap((createdEvent: any) => {
+        const eventId = createdEvent.id;
         if (this.selectedFile) {
           const formData = new FormData();
           formData.append('immagine', this.selectedFile);
-          return this.eventService.uploadEventImage(createdEvent.id, formData, token);
+          return this.eventService.uploadEventImage(createdEvent.id, formData, token).pipe(
+            switchMap(() => new Observable(observer => {
+              observer.next(eventId);
+              observer.complete();
+            }))
+          );
         } else {
           return new Observable((observer) => {
-            observer.next(null);
+            observer.next(eventId);
             observer.complete();
           });
         }
       })
     ).subscribe({
-      next: (response: any) => {
+      next: (eventId: any) => {
         console.log('Evento creato');
         this.isSubmitting = false;
         alert('Evento creato con successo');
 
         // Redirect to newly created event page
-        this.router.navigate(['/']);
+        this.router.navigate(['/evento', eventId]);
       },
       error: (err) => {
         console.error('Errore nella creazione evento:', err);
