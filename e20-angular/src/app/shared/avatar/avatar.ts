@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UtenteService} from '../../services/utente-service';
 import {AuthService} from '../../services/auth-service';
 import {Router} from '@angular/router';
@@ -9,10 +9,12 @@ import {Router} from '@angular/router';
   templateUrl: './avatar.html',
   styleUrl: './avatar.css',
 })
-export class Avatar {
+export class Avatar implements OnInit {
   username: string | null | undefined = '';
 
-  constructor(private userService: UtenteService, private authService: AuthService, private router: Router) {
+  constructor(private userService: UtenteService, private authService: AuthService, private router: Router) {}
+
+  ngOnInit() {
     this.userService.getMe(this.authService.token).subscribe({
       next: (data) => {
         this.username = data.username;

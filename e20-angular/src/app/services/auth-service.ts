@@ -65,7 +65,7 @@ export class AuthService {
   /** Logout */
   logout() {
     sessionStorage.clear();
-    /*this.oauthService.logOut();*/
+    this.oauthService.logOut();
     this._userProfile = null;
   }
 

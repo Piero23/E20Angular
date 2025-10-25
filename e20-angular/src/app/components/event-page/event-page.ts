@@ -24,6 +24,7 @@ export class EventPage implements OnInit, OnDestroy {
   isFavorite = false;
   showSuccessMessage = false;
   successMessage = '';
+  cityNameToShow = '';
 
   mapUrl: SafeResourceUrl;
 
@@ -75,8 +76,11 @@ export class EventPage implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: (evento) => {
+        next: async (evento) => {
           this.evento = evento;
+          if (this.evento?.location?.position) {
+            this.cityNameToShow = await this.resolveCityName(this.evento.location.position);
+          }
           this.isLoading = false;
           this.updateMapUrl();
         },
@@ -153,12 +157,30 @@ export class EventPage implements OnInit, OnDestroy {
   shareEvent() { /* sharing logic */
   }
 
-  /*getFullAddress(): string {}*/
+  private async resolveCityName(position: string): Promise<string> {
+    if (!position) return '';
 
-  openInMaps() { /* maps navigation */
+    // Check if position looks like coordinates: "lat,lng"
+    const coordMatch = position.match(/^(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)$/);
+    if (!coordMatch) {
+      // Not coordinates, treat as city name
+      return position;
+    }
+
+    const lat = parseFloat(coordMatch[1]);
+    const lng = parseFloat(coordMatch[3]);
+
+    // Reverse geocode using Nominatim
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=it`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      return data.address.city || data.address.town || data.address.village || data.address.state || data.address.country || position;
+    } catch (err) {
+      console.error('Reverse geocoding failed:', err);
+      return position; // fallback to original string
+    }
   }
-
-
 
   private handleError(message: string): void {
     this.hasError = true;
