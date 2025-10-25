@@ -7,6 +7,7 @@ import {ProfiloEOrdini} from './components/profilo-e-ordini/profilo-e-ordini';
 import {roleGuard} from './guards/role-guard';
 import {AccessDenied} from './shared/access-denied/access-denied';
 import {Checkout} from './components/checkout/checkout';
+import {Register} from './components/register/register';
 
 export const routes: Routes = [
   { path: '', component: Homepage },
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: 'access-denied', component: AccessDenied },
   { path: 'crea', component: Crea, canActivate: [roleGuard] },
   { path: 'profilo', component: ProfiloEOrdini },
+  { path: 'register', component: Register },
   { path: '**', redirectTo: '' }
 
 ];

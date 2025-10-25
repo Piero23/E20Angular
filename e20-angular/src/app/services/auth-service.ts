@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {AuthConfig, OAuthService} from 'angular-oauth2-oidc';
 import {environment} from '../../environments/environment';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
 
 
 /*
@@ -23,12 +25,19 @@ export const authConfig: AuthConfig = {
   strictDiscoveryDocumentValidation: false
 };
 
+export interface UtenteRegistrationDTO {
+  username: string;
+  password: string;
+  email: string;
+  dataNascita: string; // e.g., '1990-01-01'
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private oauthService: OAuthService) {
+  private API_URL = '/auth'
+  constructor(private oauthService: OAuthService, private http: HttpClient) {
     // Configura OAuth
     this.oauthService.configure(authConfig);
 
@@ -93,5 +102,9 @@ export class AuthService {
   getUserId(): string | null {
     console.log(this._userProfile.id);
     return this._userProfile?.id;
+  }
+
+  register(user: UtenteRegistrationDTO): Observable<any> {
+    return this.http.post(`${this.API_URL}/register`, user, { responseType: 'text' });
   }
 }

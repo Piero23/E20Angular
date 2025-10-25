@@ -6,6 +6,8 @@ import {EventCards} from './event-cards/event-cards';
 import {AuthService} from '../services/auth-service';
 import {EventoService} from '../services/evento-service';
 import {Avatar} from '../shared/avatar/avatar';
+import {Register} from '../components/register/register';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-homepage',
@@ -21,7 +23,7 @@ import {Avatar} from '../shared/avatar/avatar';
 })
 export class Homepage {
 
-  constructor(private auth: AuthService, public event: EventoService) {
+  constructor(private auth: AuthService, public event: EventoService, private router: Router) {
   }
 
   public isLoggedIn() {
@@ -31,7 +33,10 @@ export class Homepage {
     this.auth.login();
   }
 
-  navigateToWebsite(url: string): void {
-    window.location.href = url;
+  public register() {
+    this.router.navigate(['/register']);
   }
+
+
+  protected readonly Register = Register;
 }

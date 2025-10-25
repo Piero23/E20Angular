@@ -43,7 +43,8 @@
   transition: all 0.1s ease;
   box-shadow: 0 2px 2px #222121;
   height: 2.5rem;
-  width: 5rem;
+  width: fit-content;
+  margin-left: 1rem;
 }
 
 .btn:hover {

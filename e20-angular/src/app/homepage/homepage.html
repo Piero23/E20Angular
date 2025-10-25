@@ -5,6 +5,9 @@
       <div class="col col-login">
         <div class="login-button">
           @if (!isLoggedIn()) {
+            <button (click)="register()" class="login-btn btn">
+              Registrati
+            </button>
             <button (click)="login()" class="login-btn btn">
               Login
             </button>
