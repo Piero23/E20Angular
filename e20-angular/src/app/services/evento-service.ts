@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Application, Dto } from './application';
-import { LocationDto } from './location-service';
-import { HttpHeaders } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Application, Dto} from './application';
+import {LocationDto} from './location-service';
+import {HttpHeaders} from '@angular/common/http';
 
 export interface EventoDto extends Dto {
   descrizione: string;

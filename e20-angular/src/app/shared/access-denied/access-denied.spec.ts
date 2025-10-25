@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { AccessDenied } from './access-denied';
+import {AccessDenied} from './access-denied';
 
 describe('AccessDenied', () => {
   let component: AccessDenied;

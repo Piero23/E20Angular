@@ -1,12 +1,11 @@
-import { Routes } from '@angular/router';
-import { Homepage } from './homepage/homepage';
-import { EventPage } from './components/event-page/event-page';
-import { UserPage } from './components/user-page/user-page'
-import { Crea } from './components/crea/crea';
-import { ProfiloEOrdini } from './components/profilo-e-ordini/profilo-e-ordini';
-import { roleGuard } from './guards/role-guard';
-import { AccessDenied } from './shared/access-denied/access-denied';
-import { Avatar } from './shared/avatar/avatar';
+import {Routes} from '@angular/router';
+import {Homepage} from './homepage/homepage';
+import {EventPage} from './components/event-page/event-page';
+import {UserPage} from './components/user-page/user-page'
+import {Crea} from './components/crea/crea';
+import {ProfiloEOrdini} from './components/profilo-e-ordini/profilo-e-ordini';
+import {roleGuard} from './guards/role-guard';
+import {AccessDenied} from './shared/access-denied/access-denied';
 import {Checkout} from './components/checkout/checkout';
 
 export const routes: Routes = [

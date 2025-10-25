@@ -1,9 +1,8 @@
-import { CanActivateFn, Router } from '@angular/router';
+import {CanActivateFn, Router} from '@angular/router';
 import {inject} from '@angular/core';
 import {AuthService} from '../services/auth-service';
-import { AccessDenied } from '../shared/access-denied/access-denied';
 
-export const roleGuard: CanActivateFn = (route, state) => {
+export const roleGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -17,7 +16,7 @@ export const roleGuard: CanActivateFn = (route, state) => {
   const roles = user?.roles || [];
 
   if (roles.includes('ADMIN') || roles.includes('MANAGER')) {
-    console.log("ACCESS GRANTED\n" + roles)
+    console.log("ACCESS GRANTED\n")
     return true;
   }
 

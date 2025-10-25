@@ -6,7 +6,6 @@ import {ActivatedRoute} from '@angular/router';
 import {EventoService} from '../../services/evento-service';
 import {AuthService} from '../../services/auth-service';
 import {UtenteService} from '../../services/utente-service';
-import {takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-checkout',

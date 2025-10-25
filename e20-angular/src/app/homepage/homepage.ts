@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { BackgroundFlyers } from './background-flyers/background-flyers';
-import { SiteLogo } from '../shared/site-logo/site-logo';
-import { SearchBar } from '../shared/search-bar/search-bar';
-import { EventCards } from './event-cards/event-cards';
-import { AuthService } from '../services/auth-service';
-import { EventoService } from '../services/evento-service';
-import { Avatar } from '../shared/avatar/avatar';
+import {Component} from '@angular/core';
+import {BackgroundFlyers} from './background-flyers/background-flyers';
+import {SiteLogo} from '../shared/site-logo/site-logo';
+import {SearchBar} from '../shared/search-bar/search-bar';
+import {EventCards} from './event-cards/event-cards';
+import {AuthService} from '../services/auth-service';
+import {EventoService} from '../services/evento-service';
+import {Avatar} from '../shared/avatar/avatar';
 
 @Component({
   selector: 'app-homepage',

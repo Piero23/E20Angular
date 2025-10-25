@@ -1,13 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EventoDto, EventoService } from '../../services/evento-service';
-import { EMPTY, Subject, switchMap, takeUntil } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { PreferitiService } from '../../services/preferiti-service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {EventoDto, EventoService} from '../../services/evento-service';
+import {EMPTY, Subject, switchMap, takeUntil} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {PreferitiService} from '../../services/preferiti-service';
 import {UtenteDto, UtenteService} from '../../services/utente-service';
-import { AuthService } from '../../services/auth-service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { environment } from '../../../environments/environment';
-import { Router } from '@angular/router';
+import {AuthService} from '../../services/auth-service';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-event-page',

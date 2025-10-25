@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { UtenteService } from '../../services/utente-service';
-import { AuthService } from '../../services/auth-service';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
+import {UtenteService} from '../../services/utente-service';
+import {AuthService} from '../../services/auth-service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-avatar',

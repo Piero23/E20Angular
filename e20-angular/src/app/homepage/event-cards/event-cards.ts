@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EventoDto, EventoService } from '../../services/evento-service';
-import { Subject, takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {EventoDto, EventoService} from '../../services/evento-service';
+import {Subject, takeUntil} from 'rxjs';
+import {Router} from '@angular/router';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 
 interface EventCard extends EventoDto {
   imageUrl?: string;

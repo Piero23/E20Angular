@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { SearchBar } from '../search-bar/search-bar';
-import { NgOptimizedImage } from '@angular/common';
-import { Avatar } from '../avatar/avatar';
+import {Component} from '@angular/core';
+import {RouterLink} from '@angular/router';
+import {SearchBar} from '../search-bar/search-bar';
+import {NgOptimizedImage} from '@angular/common';
+import {Avatar} from '../avatar/avatar';
 
 
 @Component({
