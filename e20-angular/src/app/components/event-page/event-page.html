@@ -64,7 +64,7 @@
             </div>
             <div class="col notify-and-save-col">
               <i class="action available-spots-label-col fa-regular fa-bell" (click)="toggleNotification()"></i>
-              <i class="action fa-regular fa-heart" (click)="toggleFavorite()"></i>
+              <i class="action fa-regular fa-heart"  [style.color]="isFavorite ? 'red' : 'black'"  (click)="toggleFavorite()"></i>
             </div>
           </div>
           <div class="row available-spots-row">

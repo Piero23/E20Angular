@@ -58,6 +58,34 @@ export class EventPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (this.authService.token) {
+      this.userService.getMe(this.authService.token)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (utente) => {
+            this.utente = utente;
+            console.log('Utente caricato:', this.utente);
+
+            if (this.authService.token) {
+              this.preferitiService.getFavorites(this.utente!.username, this.authService.token)
+                .pipe(takeUntil(this.destroy$)) // Aggiungi questo per evitare memory leaks
+                .subscribe({
+                  next: (favorites) => {
+                    this.isFavorite = favorites.some(favorite => favorite.id === this.evento?.id);
+                  },
+                  error: (error) => {
+                    console.error('Impossibile caricare preferiti:', error);
+                    this.handleError('Impossibile caricare preferiti');
+                  }
+                });
+            }
+          },
+          error: (error) => {
+            console.error('Errore caricamento utente:', error);
+          }
+        });
+    }
+
     this.route.params
       .pipe(
         switchMap(params => {
@@ -89,6 +117,8 @@ export class EventPage implements OnInit, OnDestroy {
           this.handleError('Errore nel caricamento dell\'evento');
         }
       });
+
+
   }
 
   ngOnDestroy(): void {
@@ -115,6 +145,7 @@ export class EventPage implements OnInit, OnDestroy {
           this.evento = evento;
           this.isLoading = false;
           this.updateMapUrl();
+
         },
         error: (error) => {
           console.error('Error loading event:', error);
@@ -129,8 +160,50 @@ export class EventPage implements OnInit, OnDestroy {
   }
 
   toggleFavorite(): void {
-    this.preferitiService.addToFavorites(this.utente!.id.toString(), this.evento!.id)
-    console.log('Favorite toggled for event:', this.evento?.id);
+    console.log("prima del toggle: " + this.isFavorite);
+
+    if (!this.authService.token) {
+      alert('Devi essere loggato per avere dei preferiti');
+      return;
+    }
+
+    const token = this.authService.token;
+    const wasLiked = this.isFavorite;
+
+    // Aggiorna subito l'UI (feedback immediato)
+    this.isFavorite = !this.isFavorite;
+
+    if (wasLiked) {
+      // Era nei preferiti, lo rimuovo
+      this.preferitiService.removeFromFavorites(
+        this.utente!.username,
+        this.evento!.id,
+        token
+      ).subscribe({
+        next: () => console.log('Rimosso dai preferiti'),
+        error: (err) => {
+          console.error('Errore rimozione:', err);
+          this.isFavorite = wasLiked; // Ripristina in caso di errore
+          alert('Errore durante la rimozione dai preferiti');
+        }
+      });
+    } else {
+      // Non era nei preferiti, lo aggiungo
+      this.preferitiService.addToFavorites(
+        this.utente!.username,
+        this.evento!.id,
+        token
+      ).subscribe({
+        next: () => console.log('Aggiunto ai preferiti'),
+        error: (err) => {
+          console.error('Errore aggiunta:', err);
+          this.isFavorite = wasLiked; // Ripristina in caso di errore
+          alert('Errore durante l\'aggiunta ai preferiti');
+        }
+      });
+    }
+
+    console.log("dopo il toggle: " + this.isFavorite);
   }
 
   // Helper methods for template
