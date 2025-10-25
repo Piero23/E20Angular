@@ -63,7 +63,7 @@
                 @if(form.get('location')?.invalid && form.get('location')?.touched) {
                   <span class="text-danger">La location è obbligatoria</span>
                 }
-                <button aria-label="Apri mappa" class="open-button" type="button">
+                <button aria-label="Apri mappa" class="open-button" type="button" (click)="initPopup()">
                   <i class="fa-solid fa-map-marker-alt icon"></i>
                 </button>
               </div>
@@ -153,3 +153,72 @@
     </div>
   </div>
 </form>
+
+<!-- Popup crea location -->
+@if (showLocation) {
+  <form class="container-fluid crea-page popup" [formGroup]="locationForm" (ngSubmit)="saveLocation()">
+    <div class="popup-center">
+      <div class="col d-flex flex-column align-items-center">
+
+        <p class="intestazione-campi" id="label-crea-location">Nuova Location</p>
+
+        <!-- Row nome e al chiuso -->
+        <div class="row w-100 justify-content-between align-items-start">
+
+          <div class="col-md-8">
+            <p class="intestazione-campi" id="label-titolo">Nome</p>
+
+            <input class="input-evento intestazione-campi-secondari"
+                   formControlName="nomeLocation"
+                   placeholder="Nome della location"
+                   type="text">
+
+            <div class="error-space" style="min-height: 20px;">
+              @if(locationForm.get('nomeLocation')?.invalid && locationForm.get('nomeLocation')?.touched) {
+                @if(locationForm.get('nomeLocation')?.errors?.['required']) {
+                  <span class="text-danger">Il nome è obbligatorio</span>
+                }
+              }
+            </div>
+          </div>
+
+          <div class="col-md-4 field switch-col d-flex flex-column align-items-center justify-content-end">
+            <label class="intestazione-campi" for="al-chiuso">Al chiuso</label>
+            <label class="switch">
+              <input id="al-chiuso" type="checkbox" formControlName="al_chiuso">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+        </div>
+
+        <!-- Mappa location picker -->
+
+        <div class="row w-100 justify-content-between align-items-start">
+
+          <div class="col-md-8">
+            <p class="intestazione-campi" id="label-titolo">Nome</p>
+
+            <input class="input-evento intestazione-campi-secondari"
+                   formControlName="nomeLocation"
+                   placeholder="Nome della location"
+                   type="text">
+
+            <div class="error-space" style="min-height: 20px;">
+              @if(locationForm.get('nomeLocation')?.invalid && locationForm.get('nomeLocation')?.touched) {
+                @if(locationForm.get('nomeLocation')?.errors?.['required']) {
+                  <span class="text-danger">Il nome è obbligatorio</span>
+                }
+              }
+            </div>
+          </div>
+
+        </div>
+
+        <button (click)="showLocation=false">
+          Suca
+        </button>
+      </div>
+    </div>
+  </form>
+}
