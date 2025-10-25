@@ -2,7 +2,6 @@ import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { RowbarSearch } from '../rowbar-search/rowbar-search';
-import { EventoService, EventoDto } from '../../services/evento.service';
 
 @Component({
   selector: 'app-crea',
@@ -83,6 +82,7 @@ export class Crea implements AfterViewInit {
     return (hh === '' && mm === '') ? '' : `${hh}:${mm}`;
   }
 
+/*
 public invia(): void {
     const titleEl = document.getElementById('title') as HTMLInputElement | null;
     const locationEl = document.getElementById('location') as HTMLInputElement | null;
@@ -142,5 +142,5 @@ public invia(): void {
         else alert('Errore di rete o server. Controlla la console.');
       }
     });
-  }
+  } */
 }

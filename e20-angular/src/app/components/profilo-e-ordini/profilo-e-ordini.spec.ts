@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EventsShowcase } from './events-showcase';
+import { ProfiloEOrdini} from './profilo-e-ordini';
 
 describe('EventsShowcase', () => {
   let component: EventsShowcase;
@@ -9,10 +10,11 @@ describe('EventsShowcase', () => {
     await TestBed.configureTestingModule({
       imports: [EventsShowcase]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(EventsShowcase);
-import { ProfiloEOrdini } from './profilo-e-ordini';
+  });
+});
 
 describe('ProfiloEOrdini', () => {
   let component: ProfiloEOrdini;
