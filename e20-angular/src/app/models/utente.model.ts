@@ -5,7 +5,7 @@ export interface Utente {
   email: string;
   luogo: string;
   dataNascita: string;
-  seguiti: string[];
-  seguaci: string[];
-  preferiti: number[];
+  seguiti?: string[];
+  seguaci?: string[];
+  preferiti?: number[];
 }

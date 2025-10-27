@@ -1,28 +1,30 @@
-// src/app/services/utente.service.ts
+// utente.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Utente } from '../models/utente.model';
-import { Evento } from '../models/evento.model';
+import { Observable } from 'rxjs';
+import {Utente} from '../models/utente.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtenteService {
-  private baseUrl = 'http://localhost:8060';
+  private base = 'http://localhost:8060'; // porta backend
 
   constructor(private http: HttpClient) {}
 
   getUtente(username: string): Observable<Utente> {
-    return this.http.get<Utente>(`${this.baseUrl}/utente/${username}`);
+    return this.http.get<Utente>(`${this.base}/api/utente/${encodeURIComponent(username)}`);
   }
 
   getSeguiti(username: string): Observable<string[]> {
-    return this.http.get<string[]>(`${this.baseUrl}/utente/${username}/seguiti`);
+    return this.http.get<string[]>(`${this.base}/api/utente/${encodeURIComponent(username)}/seguiti`);
   }
 
   getSeguaci(username: string): Observable<string[]> {
-    return this.http.get<string[]>(`${this.baseUrl}/utente/${username}/seguaci`);
+    return this.http.get<string[]>(`${this.base}/api/utente/${encodeURIComponent(username)}/seguaci`);
+  }
+
+  getPreferiti(username: string): Observable<number[]> {
+    return this.http.get<number[]>(`${this.base}/api/utente/${encodeURIComponent(username)}/preferiti`);
   }
 }

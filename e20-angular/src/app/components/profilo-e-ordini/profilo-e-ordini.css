@@ -79,3 +79,17 @@ html,body{height:100%;margin:0;font-family: MuseoModerno, system-ui, -apple-syst
   .right-col{order:2}
   .left-col{order:1}
 }
+
+.order-status-dot {
+  position: absolute;
+  left: 7px;
+  bottom: 12px;
+  width: 15px;
+  height: 15px;
+  border-radius: 9999px;
+  background: red;
+}
+
+.order-status-dot.valid {
+  background: green;
+}

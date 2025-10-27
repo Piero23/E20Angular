@@ -4,36 +4,36 @@
     <div class="avatar-wrap">
       <div class="badge">
         <div class="circle"></div>
-        <div class="initial">U</div>
+        <div class="initial"> {{ utente.nome.charAt(0) }} </div>
       </div>
       <div class="profile-name">
         <div class="hi">Ciao</div>
-        <div class="username">Username</div>
+        <div class="username"> {{ utente.username }} </div>
       </div>
     </div>
 
     <nav>
       <div class="nav-item">
-        <i class="fa-solid fa-user fa-orange" aria-hidden="true"></i>
+        <i class="fa-solid fa-user fa-orange"></i>
         <div style="display:flex;flex-direction:column">
-          <div>Nome</div>
-          <div>Cognome</div>
+          <div>{{ utente.nome }}</div>
+          <div>{{ utente.cognome }}</div>
         </div>
       </div>
 
       <div class="nav-item">
-        <i class="fa-solid fa-calendar-days fa-orange" aria-hidden="true"></i>
-        <div>Data di nascita</div>
+        <i class="fa-solid fa-calendar-days fa-orange"></i>
+        <div>{{ utente.dataNascita }}</div>
       </div>
 
       <div class="nav-item">
-        <i class="fa-solid fa-envelope fa-orange" aria-hidden="true"></i>
-        <div>Email</div>
+        <i class="fa-solid fa-envelope fa-orange"></i>
+        <div>{{ utente.email }}</div>
       </div>
 
       <div class="nav-item">
-        <i class="fa-solid fa-location-dot fa-orange" aria-hidden="true"></i>
-        <div>Luogo</div>
+        <i class="fa-solid fa-location-dot fa-orange"></i>
+        <div>{{ utente.luogo }}</div>
       </div>
 
       <div class="nav-item">
@@ -42,7 +42,7 @@
       </div>
 
       <div class="nav-item">
-        <i class="fa-solid fa-right-from-bracket fa-orange" aria-hidden="true"></i>
+        <i class="fa-solid fa-right-from-bracket fa-orange"></i>
         <div>Log out</div>
       </div>
     </nav>
@@ -50,26 +50,37 @@
 
   <main class="content">
 
+    <!-- Preferiti -->
     <div class="panel panel--spaced" id="preferiti-panel">
-      <div class="header"><div style="font-weight:600">I tuoi Preferiti</div><div style="color:#E9BA8E;font-style:italic;font-weight:600">5</div></div>
+      <div class="header">
+        <div style="font-weight:600">I tuoi Preferiti</div>
+        <div style="color:#E9BA8E;font-style:italic;font-weight:600">{{ preferiti.length }}</div>
+      </div>
       <div class="card-row">
         <div class="tile">+</div>
-        <div class="item">
+        <div class="item" *ngFor="let ev of preferiti">
           <img src="https://placehold.co/366x251" alt="Evento">
           <div class="overlay"></div>
-          <div class="title">Vieni a vedere le mucche</div>
-          <div class="date-badges"><div class="badge-chip"><span>Apr 1,</span><span>2025</span></div><div class="badge-chip badge-chip--transparent">9:41 AM</div></div>
+          <div class="title">{{ ev.nome }}</div>
+          <div class="date-badges">
+            <div class="badge-chip"><span>{{ ev.data }}</span></div>
+            <div class="badge-chip badge-chip--transparent">{{ ev.ora }}</div>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="content-grid">
 
+      <!-- Ordini -->
       <div class="left-col">
         <div class="panel" id="ordini-panel">
-          <div class="header"><div style="font-weight:600">I tuoi Ordini</div><div style="color:#E9BA8E;font-style:italic;font-weight:600">25</div></div>
+          <div class="header">
+            <div style="font-weight:600">I tuoi Ordini</div>
+            <div style="color:#E9BA8E;font-style:italic;font-weight:600">{{ ordini.length }}</div>
+          </div>
           <div class="orders-list">
-            <div class="order-card">
+            <div class="order-card" *ngFor="let ordine of ordini">
               <div class="bg"></div>
               <div class="shapes">
                 <div class="shape left1"></div>
@@ -80,45 +91,52 @@
                 <div class="shape right4"></div>
               </div>
               <div class="content">
-                <div class="title">Evento Bellissimo a cui parteciperai</div>
-                <div class="order-status-dot" aria-hidden="true"></div>
-                <div class="meta">5 persone</div>
+                <div class="title">{{ ordine.nome }}</div>
+                <div class="order-status-dot" [class.valid]="ordine.e_valido"></div>
+                <div class="meta">{{ ordine.persone }} persone</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-
+      <!-- Seguiti e Seguaci -->
       <div class="right-col">
         <div class="right-container">
           <div class="panel" id="seguiti-panel">
-            <div class="header"><div style="font-weight:600">I tuoi Seguiti</div><div style="color:#E9BA8E;font-style:italic;font-weight:600">0</div></div>
+            <div class="header">
+              <div style="font-weight:600">I tuoi Seguiti</div>
+              <div style="color:#E9BA8E;font-style:italic;font-weight:600">{{ seguiti.length }}</div>
+            </div>
             <div class="following-list">
-              <div class="following">
-                <div class="avatar-sm">U</div>
+              <div class="following" *ngFor="let s of seguiti">
+                <div class="avatar-sm">{{ s.charAt(0) }}</div>
                 <div>
-                  <div style="color:#DB9A5D;font-weight:700">&#64;ugo_fosforo</div>
-                  <div style="font-weight:700">Ugo Fosforo</div>
+                  <div style="color:#DB9A5D;font-weight:700">&#64;{{ s }}</div>
+                  <div style="font-weight:700">{{ s }}</div>
                 </div>
               </div>
             </div>
           </div>
 
           <div class="panel" id="seguaci-panel">
-            <div class="header"><div style="font-weight:600">I tuoi Seguaci</div><div style="color:#E9BA8E;font-style:italic;font-weight:600">0</div></div>
+            <div class="header">
+              <div style="font-weight:600">I tuoi Seguaci</div>
+              <div style="color:#E9BA8E;font-style:italic;font-weight:600">{{ seguaci.length }}</div>
+            </div>
             <div class="followers-list">
-              <div class="follower">
-                <div class="avatar-sm">U</div>
+              <div class="follower" *ngFor="let s of seguaci">
+                <div class="avatar-sm">{{ s.charAt(0) }}</div>
                 <div>
-                  <div style="color:#DB9A5D;font-weight:700">&#64;ugo_fosforo</div>
-                  <div style="font-weight:700">Ugo Fosforo</div>
+                  <div style="color:#DB9A5D;font-weight:700">&#64;{{ s }}</div>
+                  <div style="font-weight:700">{{ s }}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </main>
 </div>

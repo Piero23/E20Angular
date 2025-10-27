@@ -1,37 +1,33 @@
-// src/app/services/utente.service.ts
+// src/app/services/evento.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {Observable, forkJoin, switchMap} from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Utente } from '../models/utente.model';
-import { Evento } from '../models/evento.model';
+import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+export interface Evento {
+  id: number;
+  nome: string;
+  data: string;
+  ora: string;
+  persone: number;
+  e_valido: boolean;
+}
+
+@Injectable({ providedIn: 'root' })
 export class EventoService {
-  private baseUrl = 'http://localhost:8060';
+  private base = 'http://localhost:8060'; // porta del backend
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
+  // Chiama /api/ordine/utente?utente=...
   getOrdini(username: string): Observable<Evento[]> {
-    return this.http.get<{ id: number; eventoId: number; persone: number }[]>(`${this.baseUrl}/api/ordine/utente?utente=${username}`)
-      .pipe(
-        switchMap(ordini =>
-          this.http.get<Evento[]>(`${this.baseUrl}/eventi`).pipe(
-            map(eventi => ordini.map(o => {
-              const ev = eventi.find(e => e.id === o.eventoId);
-              return {
-                id: ev?.id || 0,
-                nome: ev?.nome || 'Evento sconosciuto',
-                data: ev?.data || '',
-                ora: ev?.ora || '',
-                persone: o.persone,
-                e_valido: ev?.e_valido || false
-              } as Evento;
-            }))
-          )
-        )
-      );
+    const url = `${this.base}/api/ordine/utente?utente=${encodeURIComponent(username)}`;
+    return this.http.get<Evento[]>(url);
+  }
+
+  // Chiama /api/utente/:username/preferiti
+  getPreferiti(username: string): Observable<Evento[]> {
+    const url = `${this.base}/api/utente/${encodeURIComponent(username)}/preferiti`;
+    return this.http.get<Evento[]>(url);
   }
 }
