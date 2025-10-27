@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {EventoDto, EventoService} from '../../services/evento-service';
-import {EMPTY, Subject, switchMap, takeUntil} from 'rxjs';
+import {EMPTY, Observable, Subject, switchMap, takeUntil} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PreferitiService} from '../../services/preferiti-service';
 import {UtenteDto, UtenteService} from '../../services/utente-service';
@@ -77,7 +77,6 @@ export class EventPage implements OnInit, OnDestroy {
         .subscribe({
           next: (utente) => {
             this.utente = utente;
-            console.log('Utente caricato:', this.utente);
 
             if (this.authService.token) {
               this.preferitiService.getFavorites(this.utente!.username, this.authService.token)
@@ -124,7 +123,6 @@ export class EventPage implements OnInit, OnDestroy {
             hour: '2-digit',
             minute: '2-digit'
           });
-          console.log(dataEvento, oraEvento);
           if (this.evento?.location?.position) {
             this.cityNameToShow = await this.resolveCityName(this.evento.location.position);
           }

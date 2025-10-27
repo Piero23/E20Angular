@@ -36,7 +36,6 @@ export class PreferitiService extends Application<EventoDto> {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
-    console.log("ching chong")
     return this.http.get<EventoDto[]>(`${this.API_URL}/${username}/preferiti`, {headers: headers});
   }
 }
