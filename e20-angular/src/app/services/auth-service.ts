@@ -51,10 +51,6 @@ export class AuthService {
 
   private _userProfile: any = null;
 
-  /** Accesso pubblico al profilo utente */
-  get userProfile(): any {
-    return this._userProfile;
-  }
 
   /** Access Token JWT */
   get token(): string | null {
@@ -76,6 +72,7 @@ export class AuthService {
     sessionStorage.clear();
     this.oauthService.logOut();
     this._userProfile = null;
+    window.location.reload();
   }
 
   /** Carica il profilo utente da ID Token */
@@ -97,11 +94,6 @@ export class AuthService {
       username: payload.sub,
       roles: roles
     };
-  }
-
-  getUserId(): string | null {
-    console.log(this._userProfile.id);
-    return this._userProfile?.id;
   }
 
   register(user: UtenteRegistrationDTO): Observable<any> {

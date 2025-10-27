@@ -60,7 +60,9 @@
         <div class="col right-ticket-zone">
           <div class="row buttons-row">
             <div class="col edit-col">
-              <i class="fa-regular fa-pen-to-square"></i>
+              @if (evento.organizzatore === userId) {
+                <i class="fa-regular fa-pen-to-square edit-button" (click)="openEditForm()"></i>
+              }
             </div>
             <div class="col notify-and-save-col">
               <i class="action fa-regular fa-heart"  [style.color]="isFavorite ? 'red' : 'black'"  (click)="toggleFavorite()"></i>
@@ -119,3 +121,158 @@
     </div>
   }
 </div>
+
+@if (showEditForm) {
+  <form class="container-fluid crea-page popup" [formGroup]="editForm" (ngSubmit)="saveEditedform()">
+    <div class="popup-center">
+  <div class="row cont-1-row">
+    <!-- Colonna immagine -->
+    <div class="container-1 col event-image-col">
+      <div class="event-image-box">
+        <div class="circle" (click)="fileInput.click()">
+          <i class="fa-regular fa-image icon"></i>
+        </div>
+        <input type="file" #fileInput accept="image/*" hidden (change)="onFileSelected($event)">
+        <img [src]="previewUrl" alt="Anteprima" class="event-image-preview">
+      </div>
+    </div>
+    <!-- Colonna campi -->
+    <div class="col event-fields-col">
+      <div class="form-right">
+        <!-- Titolo -->
+        <div class="row">
+          <div class="col">
+            <div class="field">
+              <p class="intestazione-campi" id="label-titolo">Titolo</p>
+              <input class="input-evento intestazione-campi-secondari" formControlName="nome" type="text">
+              @if(editForm.get('nome')?.invalid && editForm.get('nome')?.touched) {
+                @if(editForm.get('nome')?.errors?.['required']) {
+                  <span class="text-danger">Il titolo è obbligatorio</span>
+                }
+                @if(editForm.get('nome')?.errors?.['minlength']) {
+                  <span class="text-danger">Minimo 3 caratteri</span>
+                }
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Data e ora -->
+        <div class="row datetime-row">
+          <div class="col datetime-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-data">Data</p>
+            <input class="input-evento input-date" formControlName="data" type="date">
+            @if(editForm.get('data')?.invalid && editForm.get('data')?.touched) {
+              <span class="text-danger">La data è obbligatoria</span>
+            }
+          </div>
+
+          <div class="col datetime-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-ora">Ora</p>
+            <input class="input-evento" formControlName="ora" type="time">
+            @if(editForm.get('ora')?.invalid && editForm.get('ora')?.touched) {
+              <span class="text-danger">L'orario è obbligatorio</span>
+            }
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="row">
+          <div class="col">
+            <div class="field">
+              <p class="intestazione-campi intestazione-campi-secondari" id="label-location">Location</p>
+              <div class="sd-container">
+                <input class="input-evento" formControlName="location" placeholder="Dove si svolge" type="text">
+
+                @if(editForm.get('location')?.invalid && editForm.get('location')?.touched) {
+                  <span class="text-danger">La location è obbligatoria</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Posti e prezzo -->
+        <div class="row seats-price-row">
+          <div class="col seats-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-seats">Posti</p>
+            <input class="input-evento" formControlName="posti" type="number" min="0">
+          </div>
+
+          <div class="col price-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-prezzo">Prezzo</p>
+            <input class="input-evento" formControlName="prezzo" type="number" min="0">
+            @if(editForm.get('prezzo')?.invalid && editForm.get('prezzo')?.touched) {
+              <span class="text-danger">Prezzo non valido</span>
+            }
+          </div>
+        </div>
+
+        <!-- Switch -->
+        <div class="switch-group row">
+          <div class="field switch-col col">
+            <label class="switch-text" for="vietato-minori">Vietato ai minori</label>
+            <label class="switch">
+              <input id="vietato-minori" type="checkbox" formControlName="age_restricted">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="field switch-col col">
+            <label class="switch-text" for="nominativo">Biglietto nominativo</label>
+            <label class="switch">
+              <input id="nominativo" type="checkbox" formControlName="b_nominativo">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="field switch-col col">
+            <label class="switch-text" for="riutilizzabile">Biglietto riutilizzabile</label>
+            <label class="switch">
+              <input id="riutilizzabile" type="checkbox" formControlName="b_riutilizzabile">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Descrizione -->
+  <div class="row container-2">
+    <div class="col field desc">
+      <p>Descrizione</p>
+      <textarea class="description-box" formControlName="descrizione" placeholder="Inserisci una descrizione..."></textarea>
+      @if(editForm.get('descrizione')?.invalid && editForm.get('descrizione')?.touched) {
+        @if(editForm.get('descrizione')?.errors?.['required']) {
+          <span class="text-danger">La descrizione è obbligatoria</span>
+        }
+        @if(editForm.get('descrizione')?.errors?.['minlength']) {
+          <span class="text-danger">Minimo 10 caratteri</span>
+        }
+        @if(editForm.get('descrizione')?.errors?.['maxlength']) {
+          <span class="text-danger">Max 500 caratteri</span>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Pulsanti -->
+  <div class="row save-event-row">
+    <div class="col undo-event-col">
+      <button class="btn undo-event-label" type="button" (click)="closeEditForm()">
+        <i class="fas fa-undo"></i>
+        Chiudi
+      </button>
+    </div>
+    <div class="col save-event-col">
+      <button class="btn save-event-label" type="submit" [disabled]="isSubmitting">
+        <i class="fas fa-save"></i>
+        Salva
+      </button>
+    </div>
+  </div>
+</div>
+</form>
+}
