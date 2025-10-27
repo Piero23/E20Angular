@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth-service';
 import {EventoService} from '../../services/evento-service';
 import {UtenteDto, UtenteService} from '../../services/utente-service';
 import {LocationDto, LocationService} from '../../services/location-service';
-import {Observable, switchMap} from 'rxjs';
+import {Observable, Subject, switchMap} from 'rxjs';
 import {Router} from '@angular/router';
 import * as L from 'leaflet';
 
@@ -16,7 +16,8 @@ import * as L from 'leaflet';
   templateUrl: './crea.html',
   styleUrls: ['./crea.css']
 })
-export class Crea implements OnInit {
+export class Crea implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   form: FormGroup;
   previewUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
@@ -61,6 +62,11 @@ export class Crea implements OnInit {
       }
     });
     this.form = this.createForm();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   initPopup(): void {

@@ -84,8 +84,12 @@ export class EventoService extends Application<EventoDto> {
     });
   }
 
-  testandoPost() {
-    this.http.post('/api/evento/testandolo', {}).subscribe(res => console.log(res));
+  updateEvent(id: number, payload: any, token: string | null): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.put(`${this.API_URL}/${id}`, payload, { headers });
   }
 
   override getApiUrl(): string {
