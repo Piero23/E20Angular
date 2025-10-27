@@ -7,27 +7,33 @@
       <div class="mb-3">
         <label class="form-label">Username</label>
         <input type="text" class="form-control" formControlName="username" placeholder="Inserisci il tuo username" />
-        <div class="text-danger mt-1" *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
-          Username obbligatorio (min 3 caratteri)
-        </div>
+        @if (registerForm.get('username')?.invalid && registerForm.get('username')?.touched) {
+          <div class="text-danger mt-1">
+            Username obbligatorio (min 3 caratteri)
+          </div>
+        }
       </div>
 
       <!-- Password -->
       <div class="mb-3">
         <label class="form-label">Password</label>
         <input type="password" class="form-control" formControlName="password" placeholder="Inserisci la password" />
-        <div class="text-danger mt-1" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-          Password obbligatoria (min 6 caratteri)
-        </div>
+        @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+          <div class="text-danger mt-1">
+            Password obbligatoria (min 6 caratteri)
+          </div>
+        }
       </div>
 
       <!-- Email -->
       <div class="mb-3">
         <label class="form-label">Email</label>
         <input type="email" class="form-control" formControlName="email" placeholder="nome@esempio.com" />
-        <div class="text-danger mt-1" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
-          Email non valida
-        </div>
+        @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+          <div class="text-danger mt-1">
+            Email non valida
+          </div>
+        }
       </div>
 
       <!-- Date of Birth -->
@@ -42,9 +48,11 @@
       </button>
 
       <!-- Error Message -->
-      <div class="alert alert-danger mt-3" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
+      @if (errorMessage) {
+        <div class="alert alert-danger mt-3">
+          {{ errorMessage }}
+        </div>
+      }
     </form>
   </div>
 </div>
