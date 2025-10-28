@@ -4,7 +4,7 @@
     <div class="avatar-wrap">
       <div class="badge">
         <div class="circle"></div>
-        <div class="initial"> {{ utente.nome.charAt(0) }} </div>
+        <div class="initial"> {{ utente.nome?.charAt(0) }} </div>
       </div>
       <div class="profile-name">
         <div class="hi">Ciao</div>
@@ -100,32 +100,16 @@
         </div>
       </div>
 
-      <!-- Seguiti e Seguaci -->
+      <!-- Seguiti (amici) -->
       <div class="right-col">
         <div class="right-container">
           <div class="panel" id="seguiti-panel">
             <div class="header">
-              <div style="font-weight:600">I tuoi Seguiti</div>
+              <div style="font-weight:600">I tuoi Amici</div>
               <div style="color:#E9BA8E;font-style:italic;font-weight:600">{{ seguiti.length }}</div>
             </div>
             <div class="following-list">
               <div class="following" *ngFor="let s of seguiti">
-                <div class="avatar-sm">{{ s.charAt(0) }}</div>
-                <div>
-                  <div style="color:#DB9A5D;font-weight:700">&#64;{{ s }}</div>
-                  <div style="font-weight:700">{{ s }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel" id="seguaci-panel">
-            <div class="header">
-              <div style="font-weight:600">I tuoi Seguaci</div>
-              <div style="color:#E9BA8E;font-style:italic;font-weight:600">{{ seguaci.length }}</div>
-            </div>
-            <div class="followers-list">
-              <div class="follower" *ngFor="let s of seguaci">
                 <div class="avatar-sm">{{ s.charAt(0) }}</div>
                 <div>
                   <div style="color:#DB9A5D;font-weight:700">&#64;{{ s }}</div>

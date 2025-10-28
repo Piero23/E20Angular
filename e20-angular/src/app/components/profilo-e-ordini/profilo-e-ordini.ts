@@ -1,25 +1,28 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RowbarSearch } from '../rowbar-search/rowbar-search';
-import { EventoService } from '../../services/evento.service';
-import { UtenteService } from '../../services/utente.service';
+import { EventoService } from '../../services/evento-service';
+import {UtenteDto, UtenteService} from '../../services/utente-service';
+import { PreferitiService } from '../../services/preferiti-service';
 import { Evento } from '../../models/evento.model';
 import { Utente } from '../../models/utente.model';
 import { AuthService } from '../../services/auth-service';
-import { Subject, EMPTY } from 'rxjs';
+import { Subject, EMPTY, of, catchError } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
+import {OrdiniService} from '../../services/ordine-service';
+import {EventoDto} from '../../services/evento-service';
 
 @Component({
   selector: 'app-profilo-e-ordini',
   standalone: true,
-  imports: [CommonModule, RowbarSearch],
+  imports: [CommonModule],
   templateUrl: './profilo-e-ordini.html',
   styleUrls: ['./profilo-e-ordini.css']
 })
 export class ProfiloEOrdini implements OnInit, OnDestroy {
   ordini: Evento[] = [];
   preferiti: Evento[] = [];
-  utente!: Utente;
+  utente!: UtenteDto;
+  utenteId: string;
   seguiti: string[] = [];
   seguaci: string[] = [];
   isLoading = true;
@@ -29,9 +32,10 @@ export class ProfiloEOrdini implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private eventoService: EventoService,
+    private preferitiService: PreferitiService,
     private utenteService: UtenteService,
-    private authService: AuthService
+    private authService: AuthService,
+    private ordineService: OrdiniService
   ) {}
 
   ngOnInit(): void {
@@ -44,7 +48,7 @@ export class ProfiloEOrdini implements OnInit, OnDestroy {
     this.utenteService.getMe(this.authService.token)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (u) => {
+        next: (u: UtenteDto) => {
           this.utente = u;
           this.seguiti = u.seguiti || [];
           this.seguaci = u.seguaci || [];
@@ -54,36 +58,55 @@ export class ProfiloEOrdini implements OnInit, OnDestroy {
           this.loadOrdini();
           this.loadPreferiti();
         },
-        error: (err) => this.handleError('Errore caricamento utente: ' + err)
+        error: (err: string) => this.handleError('Errore caricamento utente: ' + err)
       });
   }
 
   private loadOrdini(): void {
-    if (!this.utente) return;
+    // se non vuoi eseguire nulla quando utente non presente:
+    if (!this.authService.token) return;
 
-    this.eventoService.getOrdini(this.utente.username)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (ordini) => {
-          this.ordini = ordini;
-          console.log('Ordini utente:', this.ordini);
-        },
-        error: (err) => console.error('Errore caricamento ordini', err)
-      });
+    this.utenteService.getMe(this.authService.token).pipe(
+      takeUntil(this.destroy$),
+      tap((utente: UtenteDto) => {
+        this.utente = utente;                   // salvo l'utente
+        this.utenteId = (utente as any).id?.toString?.() ?? ''; // se UtenteDto non ha id, attenzione
+        console.log('Utente caricato:', this.utente);
+      }),
+      switchMap(() => this.ordineService.getOrdini(this.authService.token, this.utenteId)), // esegui richiesta ordini
+      catchError((err: any) => {
+        console.error('Errore caricamento ordini (pipe)', err);
+        return of([]); // fallback: array vuoto di ordini
+      })
+    ).subscribe({
+      next: (ordini: any) => {
+        this.ordini = ordini;
+        console.log('Ordini utente:', this.ordini);
+      },
+      error: (err: any) => console.error('Errore caricamento ordini (subscribe)', err)
+    });
   }
 
   private loadPreferiti(): void {
     if (!this.utente) return;
 
-    this.eventoService.getPreferiti(this.utente.username)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (eventi) => {
-          this.preferiti = eventi;
-          console.log('Preferiti utente:', this.preferiti);
-        },
-        error: (err) => console.error('Errore caricamento preferiti', err)
-      });
+    this.utenteService.getUsername(this.authService.token).pipe(
+      takeUntil(this.destroy$),
+      switchMap((username: string) => {
+        if (!username) return of([] as EventoDto[]);
+        return this.preferitiService.getFavorites(username, this.authService.token);
+      }),
+      catchError((err: any) => {
+        console.error('Errore durante il caricamento preferiti (pipe)', err);
+        return of([] as EventoDto[]);
+      })
+    ).subscribe({
+      next: (eventi: any) => {
+        this.preferiti = eventi;
+        console.log('Preferiti utente:', this.preferiti);
+      },
+      error: (err: any) => console.error('Errore caricamento preferiti (subscribe)', err)
+    });
   }
 
   ngOnDestroy(): void {
