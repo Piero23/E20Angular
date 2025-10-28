@@ -200,7 +200,7 @@ export class EventCards implements OnInit, OnDestroy {
     this.isLoadingFollowing = true;
     console.log('Load Following Events');
 
-    this.utenteService.getAmici(this.authService.token).subscribe({
+    this.utenteService.getSeguiti(this.authService.token).subscribe({
       next: (utenti) => {
         console.log('Lista utenti:', utenti);
         utenti.forEach(amico =>{

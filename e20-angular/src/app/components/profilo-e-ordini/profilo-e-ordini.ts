@@ -6,7 +6,7 @@ import { PreferitiService } from '../../services/preferiti-service';
 import { Evento } from '../../models/evento.model';
 import { Utente } from '../../models/utente.model';
 import { AuthService } from '../../services/auth-service';
-import { Subject, EMPTY, of, catchError } from 'rxjs';
+import {Subject, EMPTY, of, catchError, tap} from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
 import {OrdiniService} from '../../services/ordine-service';
 import {EventoDto} from '../../services/evento-service';
@@ -22,9 +22,9 @@ export class ProfiloEOrdini implements OnInit, OnDestroy {
   ordini: Evento[] = [];
   preferiti: Evento[] = [];
   utente!: UtenteDto;
-  utenteId: string;
-  seguiti: string[] = [];
-  seguaci: string[] = [];
+  utenteId?: string | null;
+  seguiti: UtenteDto[] = [];
+  seguaci: UtenteDto[] = [];
   isLoading = true;
   hasError = false;
   errorMessage = '';
@@ -50,8 +50,7 @@ export class ProfiloEOrdini implements OnInit, OnDestroy {
       .subscribe({
         next: (u: UtenteDto) => {
           this.utente = u;
-          this.seguiti = u.seguiti || [];
-          this.seguaci = u.seguaci || [];
+          this.utenteId = u.id.toString();
           console.log('Utente caricato:', this.utente);
 
           // Carica ordini e preferiti dopo aver ottenuto username
@@ -60,6 +59,17 @@ export class ProfiloEOrdini implements OnInit, OnDestroy {
         },
         error: (err: string) => this.handleError('Errore caricamento utente: ' + err)
       });
+
+    this.utenteService.getSeguiti(this.authService.token).subscribe(
+      seguiti => {
+        this.seguiti = seguiti;
+      }
+    );
+    this.utenteService.getSeguaci(this.authService.token).subscribe(
+      seguaci => {
+        this.seguaci = seguaci;
+      }
+    );
   }
 
   private loadOrdini(): void {
@@ -70,10 +80,9 @@ export class ProfiloEOrdini implements OnInit, OnDestroy {
       takeUntil(this.destroy$),
       tap((utente: UtenteDto) => {
         this.utente = utente;                   // salvo l'utente
-        this.utenteId = (utente as any).id?.toString?.() ?? ''; // se UtenteDto non ha id, attenzione
         console.log('Utente caricato:', this.utente);
       }),
-      switchMap(() => this.ordineService.getOrdini(this.authService.token, this.utenteId)), // esegui richiesta ordini
+      switchMap(() => this.ordineService.getOrdini(this.authService.token, this.utenteId!!)), // esegui richiesta ordini
       catchError((err: any) => {
         console.error('Errore caricamento ordini (pipe)', err);
         return of([]); // fallback: array vuoto di ordini
@@ -85,6 +94,7 @@ export class ProfiloEOrdini implements OnInit, OnDestroy {
       },
       error: (err: any) => console.error('Errore caricamento ordini (subscribe)', err)
     });
+    console.log(this.ordini);
   }
 
   private loadPreferiti(): void {

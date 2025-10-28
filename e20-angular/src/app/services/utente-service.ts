@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Application, Dto} from './application';
 import {map, Observable, switchMap} from 'rxjs';
 
-export interface UtenteDto extends Dto {
+export interface UtenteDto extends Dto{
   username: string;
   email: string;
   dataNascita: string;
@@ -32,11 +32,24 @@ export class UtenteService extends Application<UtenteDto> {
     );
   }
 
-  getAmici(token: string | null): Observable<UtenteDto[]> {
+  getSeguiti(token: string | null): Observable<UtenteDto[]> {
     return this.getUsername(token).pipe(
       switchMap((username) => {
         console.log('Username:', username);
         return this.http.get<UtenteDto[]>(`${this.API_URL}/${username}/seguiti`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+      })
+    );
+  }
+
+  getSeguaci(token: string | null): Observable<UtenteDto[]> {
+    return this.getUsername(token).pipe(
+      switchMap((username) => {
+        console.log('Username:', username);
+        return this.http.get<UtenteDto[]>(`${this.API_URL}/${username}/seguaci`, {
           headers: {
             Authorization: `Bearer ${token}`
           }

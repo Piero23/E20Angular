@@ -65,7 +65,9 @@
               }
             </div>
             <div class="col notify-and-save-col">
-              <i class="action fa-regular fa-heart"  [style.color]="isFavorite ? 'red' : 'black'"  (click)="toggleFavorite()"></i>
+              @if (evento.organizzatore != userId){
+                <i class="action fa-regular fa-heart"  [style.color]="isFavorite ? 'red' : 'black'"  (click)="toggleFavorite()"></i>
+              }
             </div>
           </div>
           <div class="row available-spots-row">
