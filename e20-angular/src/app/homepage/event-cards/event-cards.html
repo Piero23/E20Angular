@@ -31,14 +31,36 @@
       </div>
     </div>
   </div>
-  <div class="row py-5 following-events-row">
-    <div class="col following-events-col">
-      <h1 class="following-title">Eventi a cui partecipano gli utenti che segui</h1>
-      <div class="row following-cards-row">
-        <div class="col following-cards-col">
-
+    <div class="row py-5 trending-events-row">
+      <div class="trending-events-col">
+        <h1 class="trending-title">Eventi preferiti da amici</h1>
+        <div
+          #carousel
+          (mousedown)="onMouseDownTrending($event, carousel)"
+          (mouseleave)="onMouseLeaveTrending(carousel)"
+          (mousemove)="onMouseMoveTrending($event, carousel)"
+          (mouseup)="onMouseUpTrending(carousel)"
+          (touchend)="onTouchEndTrending(carousel)"
+          (touchmove)="onTouchMoveTrending($event, carousel)"
+          (touchstart)="onTouchStartTrending($event, carousel)"
+          class="trending-cards-row">
+          @if (isLoadingFollowing) {
+            @for (ph of trendingPlaceholders; track $index) {
+              <div class="trending-cards-col">
+                <img class="event-img" [ngSrc]="getImageUrl(null)" width="320" height="200" [alt]="">
+              </div>
+            }
+          } @else {
+            @for (event of followingEvents; track event.nome) {
+              <div class="trending-cards-col">
+                <img class="event-img" [ngSrc]="getImageUrl(event.id)" width="320" height="200" [alt]="event.nome">
+                <div class="hidden">
+                  <p class="event-name" (click)="goToEventDetails(event.id)">{{ event.nome }}</p>
+                </div>
+              </div>
+            }
+          }
         </div>
       </div>
     </div>
-  </div>
 </div>

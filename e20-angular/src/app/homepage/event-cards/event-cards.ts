@@ -3,6 +3,9 @@ import {EventoDto, EventoService} from '../../services/evento-service';
 import {Subject, takeUntil} from 'rxjs';
 import {Router} from '@angular/router';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {UtenteService} from '../../services/utente-service';
+import {AuthService} from '../../services/auth-service';
+import {PreferitiService} from '../../services/preferiti-service';
 
 interface EventCard extends EventoDto {
   imageUrl?: string;
@@ -19,6 +22,7 @@ export class EventCards implements OnInit, OnDestroy {
   followingEvents: EventCard[] = [];
 
   // While loading...
+  isLoadingFollowing = true;
   isLoadingTrending = true;
   trendingPlaceholders = Array.from({ length: 3 });
 
@@ -36,7 +40,10 @@ export class EventCards implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private eventoService: EventoService
+    private eventoService: EventoService,
+    private utenteService: UtenteService,
+    private authService: AuthService,
+    private preferitiService: PreferitiService
   ) {
   }
 
@@ -69,6 +76,9 @@ export class EventCards implements OnInit, OnDestroy {
           this.isLoadingTrending = false;
         }
       });
+  }
+
+  loadFollowing(): void {
   }
 
   // Mouse events
@@ -185,7 +195,31 @@ export class EventCards implements OnInit, OnDestroy {
     return id ? `${this.eventoService.getApiUrl()}/${id}/image` : '/assets/event_placeholder.jpg';
   }
 
+
   private loadFollowingEvents(): void {
-    // TODO
+    this.isLoadingFollowing = true;
+    console.log('Load Following Events');
+
+    this.utenteService.getAmici(this.authService.token).subscribe({
+      next: (utenti) => {
+        console.log('Lista utenti:', utenti);
+        utenti.forEach(amico =>{
+          this.preferitiService.getFavorites(amico.username,this.authService.token).subscribe({
+              next: (preferiti) => {
+                console.log('Lista eventi preferiti da: ' + amico.username , preferiti);
+                preferiti.forEach(evento => {
+                  this.followingEvents.push(evento);
+                })
+              }
+            }
+          )
+        })
+        this.isLoadingFollowing = false;
+      },
+      error: (err) => {
+        console.error('Errore nel caricamento amici:', err);
+        this.isLoadingFollowing = false;
+      }
+    });
   }
 }
