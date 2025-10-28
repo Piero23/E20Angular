@@ -1,0 +1,6 @@
+.btn-primary {
+  background: linear-gradient(to right, #FF9D47, #C74F00);
+  border: none;
+  color: white;
+  font-weight: 600;
+}

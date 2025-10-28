@@ -1,133 +1,246 @@
-<app-rowbar-search></app-rowbar-search>
+<form class="container-fluid crea-page" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="row cont-1-row">
+    <!-- Colonna immagine -->
+    <div class="container-1 col event-image-col">
+      <div class="event-image-box">
+        <div class="circle" (click)="fileInput.click()">
+          <i class="fa-regular fa-image icon"></i>
+        </div>
+        <input type="file" #fileInput accept="image/*" hidden (change)="onFileSelected($event)">
+        @if(previewUrl) {
+          <img [src]="previewUrl" alt="Anteprima" class="event-image-preview">
+        }
+      </div>
+    </div>
 
-<form id="eventForm" class="container-1" method="post" action="/submit-event" novalidate>
-  <div class="evento-box" aria-hidden="true">
-    <div class="circle">
-      <i class="fa-solid fa-image fa-2x icon" aria-hidden="true"></i>
+    <!-- Colonna campi -->
+    <div class="col event-fields-col">
+      <div class="form-right">
+        <!-- Titolo -->
+        <div class="row">
+          <div class="col">
+            <div class="field">
+              <p class="intestazione-campi" id="label-titolo">Titolo</p>
+              <input class="input-evento intestazione-campi-secondari" formControlName="nome" placeholder="Titolo dell'evento" type="text">
+              @if(form.get('nome')?.invalid && form.get('nome')?.touched) {
+                @if(form.get('nome')?.errors?.['required']) {
+                  <span class="text-danger">Il titolo è obbligatorio</span>
+                }
+                @if(form.get('nome')?.errors?.['minlength']) {
+                  <span class="text-danger">Minimo 3 caratteri</span>
+                }
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Data e ora -->
+        <div class="row datetime-row">
+          <div class="col datetime-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-data">Data</p>
+            <input class="input-evento input-date" formControlName="data" type="date">
+            @if(form.get('data')?.invalid && form.get('data')?.touched) {
+              <span class="text-danger">La data è obbligatoria</span>
+            }
+          </div>
+
+          <div class="col datetime-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-ora">Ora</p>
+            <input class="input-evento" formControlName="ora" type="time">
+            @if(form.get('ora')?.invalid && form.get('ora')?.touched) {
+              <span class="text-danger">L'orario è obbligatorio</span>
+            }
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="row">
+          <div class="col">
+            <div class="field">
+              <p class="intestazione-campi intestazione-campi-secondari" id="label-location">Location</p>
+              <div class="sd-container">
+                <input class="input-evento" formControlName="location" placeholder="Dove si svolge" type="text">
+                @if(form.get('location')?.invalid && form.get('location')?.touched) {
+                  <span class="text-danger">La location è obbligatoria</span>
+                }
+                <button aria-label="Apri mappa" class="open-button" type="button" (click)="initPopup()">
+                  <i class="fa-solid fa-map-marker-alt icon"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Posti e prezzo -->
+        <div class="row seats-price-row">
+          <div class="col seats-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-seats">Posti</p>
+            <input class="input-evento" formControlName="posti" type="number" min="0">
+          </div>
+
+          <div class="col price-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-prezzo">Prezzo</p>
+            <input class="input-evento" formControlName="prezzo" type="number" min="0">
+            @if(form.get('prezzo')?.invalid && form.get('prezzo')?.touched) {
+              <span class="text-danger">Prezzo non valido</span>
+            }
+          </div>
+        </div>
+
+        <!-- Switch -->
+        <div class="switch-group row">
+          <div class="field switch-col col">
+            <label class="switch-text" for="vietato-minori">Vietato ai minori</label>
+            <label class="switch">
+              <input id="vietato-minori" type="checkbox" formControlName="age_restricted">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="field switch-col col">
+            <label class="switch-text" for="nominativo">Biglietto nominativo</label>
+            <label class="switch">
+              <input id="nominativo" type="checkbox" formControlName="b_nominativo">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="field switch-col col">
+            <label class="switch-text" for="riutilizzabile">Biglietto riutilizzabile</label>
+            <label class="switch">
+              <input id="riutilizzabile" type="checkbox" formControlName="b_riutilizzabile">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
-  <div class="form-right">
-    <div class="field">
-      <p id="label-titolo" class="intestazione-campi">Titolo</p>
-      <input id="title" name="title" class="input-evento" type="text" placeholder="Titolo evento" required>
+  <!-- Descrizione -->
+  <div class="row container-2">
+    <div class="col field desc">
+      <p>Descrizione</p>
+      <textarea class="description-box" formControlName="descrizione" placeholder="Inserisci una descrizione..."></textarea>
+      @if(form.get('descrizione')?.invalid && form.get('descrizione')?.touched) {
+        @if(form.get('descrizione')?.errors?.['required']) {
+          <span class="text-danger">La descrizione è obbligatoria</span>
+        }
+        @if(form.get('descrizione')?.errors?.['minlength']) {
+          <span class="text-danger">Minimo 10 caratteri</span>
+        }
+        @if(form.get('descrizione')?.errors?.['maxlength']) {
+          <span class="text-danger">Max 500 caratteri</span>
+        }
+      }
     </div>
+  </div>
 
-    <div class="field">
-      <div class="datetime-row">
-        <div class="datetime-item">
-          <p id="label-data" class="intestazione-campi intestazione-campi-secondari">Data</p>
-          <div class="sd-container">
-            <input #dateInput id="date" name="date" class="sd input-evento" type="date" aria-labelledby="label-data" required>
-            <button #openButton class="open-button" type="button" aria-label="Apri calendario">
-              <i class="fa-solid fa-calendar-days icon" aria-hidden="true"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="datetime-item">
-          <p id="label-ora" class="intestazione-campi intestazione-campi-secondari">Ora</p>
-          <div class="sd-container">
-            <div class="input-evento time-input" role="group" aria-label="Orario" aria-labelledby="label-ora">
-              <input
-                #hoursInput
-                id="hoursInput"
-                name="hours"
-                class="time-part"
-                type="number"
-                inputmode="numeric"
-                min="0"
-                max="23"
-                placeholder="hh"
-                aria-label="Ore"
-                (input)="onHoursInput()"
-                (blur)="onHoursBlur()"
-                (keydown)="onHoursKeydown($event)"
-                required
-              >
-              <span class="time-colon" aria-hidden="true">:</span>
-              <input
-                #minutesInput
-                id="minutesInput"
-                name="minutes"
-                class="time-part"
-                type="number"
-                inputmode="numeric"
-                min="0"
-                max="59"
-                placeholder="mm"
-                aria-label="Minuti"
-                (input)="onMinutesInput()"
-                (blur)="onMinutesBlur()"
-                required
-              >
-            </div>
-            <button class="open-button" type="button" aria-label="Apri selettore orario">
-              <i class="fa-solid fa-clock icon" aria-hidden="true"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+  <!-- Pulsanti -->
+  <div class="row save-event-row">
+    <div class="col undo-event-col">
+      <button class="btn undo-event-label" type="button">
+        <i class="fas fa-undo"></i>
+        Annulla
+      </button>
     </div>
-
-    <div class="field">
-      <p id="label-location" class="intestazione-campi intestazione-campi-secondari">Location</p>
-      <div class="sd-container">
-        <input style="padding-right: 9% !important" id="location" name="location" class="input-evento" type="text" placeholder="Dove si svolge" aria-labelledby="label-location" required>
-        <button style="right: 20%" class="open-button" type="button" aria-label="Apri mappa">
-          <i class="fa-solid fa-map-marker-alt icon" aria-hidden="true"></i>
-        </button>
-      </div>
-    </div>
-
-    <div class="field">
-      <div class="seats-price-row">
-        <div class="seats-item">
-          <p id="label-seats" class="intestazione-campi intestazione-campi-secondari">Posti</p>
-          <input id="posti" name="posti" class="input-evento" type="number" min="0" placeholder="Numero posti" aria-labelledby="label-seats">
-        </div>
-        <div class="price-item">
-          <p id="label-prezzo" class="intestazione-campi intestazione-campi-secondari">Prezzo</p>
-          <input id="prezzo" name="prezzo" class="input-evento" type="number" min="0" placeholder="Prezzo" aria-labelledby="label-prezzo">
-        </div>
-      </div>
-    </div>
-
-    <div class="switch-group">
-      <div class="field" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
-        <label for="vietato-minori" class="switch-text">Vietato ai minori</label>
-        <label class="switch" for="vietato-minori">
-          <input type="checkbox" id="vietato-minori" name="vietato-minori">
-          <span class="slider" aria-hidden="true"></span>
-        </label>
-      </div>
-
-      <div class="field" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
-        <label for="nominativo" class="switch-text">Biglietto nominativo</label>
-        <label class="switch" for="nominativo">
-          <input type="checkbox" id="nominativo" name="nominativo">
-          <span class="slider" aria-hidden="true"></span>
-        </label>
-      </div>
-
-      <div class="field" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
-        <label for="riutilizzabile" class="switch-text">Biglietto riutilizzabile</label>
-        <label class="switch" for="riutilizzabile">
-          <input type="checkbox" id="riutilizzabile" name="riutilizzabile">
-          <span class="slider" aria-hidden="true"></span>
-        </label>
-      </div>
+    <div class="col save-event-col">
+      <button class="btn save-event-label" type="submit" [disabled]="isSubmitting">
+        <i class="fas fa-save"></i>
+        Salva
+      </button>
     </div>
   </div>
 </form>
 
-<div class="container-2" style="gap: 0 !important; margin-top: 0 !important; width: 89%">
-  <div class="field">
-    <p style="font-size: 25px">Descrizione</p>
-    <p contenteditable="true" style="font-weight: normal !important; background: linear-gradient(to right, #FF9D47, #C74F00) bottom left / 100% 2px no-repeat, linear-gradient(to bottom, #FF9D47, #C74F00) bottom left / 2px 100% no-repeat, white; padding: 8px 10px;">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec elementum, erat ut aliquam vehicula, dolor nisi elementum nulla, in sagittis odio odio non sem. Curabitur dolor dolor, faucibus eleifend enim ac, blandit condimentum elit. Donec placerat tortor quis orci vehicula rhoncus. Etiam eget ligula lobortis, tempor risus id, scelerisque enim. Cras aliquet sollicitudin est, sed vehicula leo vestibulum facilisis. Praesent turpis massa, ultrices vel orci at, congue gravida arcu.
-    </p>
-  </div>
+<!-- Popup crea location -->
+@if (showLocation) {
+  <form class="container-fluid crea-page popup" [formGroup]="locationForm" (ngSubmit)="saveLocation()">
+    <div class="popup-center">
+      <div class="col d-flex flex-column align-items-center">
 
-  <button class="open-button">Invia</button>
-</div>
+        <p class="intestazione-campi" id="label-crea-location">Nuova Location</p>
+
+        <!-- Row nome e al chiuso -->
+        <div class="row w-100 justify-content-between align-items-start">
+
+          <div class="col-md-8">
+            <p class="intestazione-campi" id="label-titolo">Nome</p>
+
+            <input class="input-evento intestazione-campi-secondari"
+                   formControlName="nomeLocation"
+                   placeholder="Nome della location"
+                   type="text">
+
+            <div class="error-space" style="min-height: 20px;">
+              @if(locationForm.get('nomeLocation')?.invalid && locationForm.get('nomeLocation')?.touched) {
+                @if(locationForm.get('nomeLocation')?.errors?.['required']) {
+                  <span class="text-danger">Il nome è obbligatorio</span>
+                }
+              }
+            </div>
+          </div>
+
+          <div class="col-md-4 field switch-col d-flex flex-column align-items-center justify-content-end">
+            <label class="intestazione-campi" for="al-chiuso">Al chiuso</label>
+            <label class="switch">
+              <input id="al-chiuso" type="checkbox" formControlName="al_chiuso">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+        </div>
+
+        <!-- Mappa location picker -->
+
+        <div class="w-100">
+          <p class="intestazione-campi" id="label-posizione">Posizione</p>
+
+          <!-- Barra di ricerca stile Google -->
+          <div class="search-container">
+          <span class="search-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </span>
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Cerca un indirizzo o luogo..."
+              (keyup.enter)="searchLocation(searchInput)"
+              #searchInput>
+            <button type="button" class="search-button" (click)="searchLocation(searchInput)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Mappa -->
+          <div id="mapPicker" class="map-container"></div>
+
+          <div class="error-space" style="min-height: 20px;">
+            @if(!selectedLat || !selectedLng) {
+              <span class="text-danger">Seleziona una posizione sulla mappa</span>
+            }
+          </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px">
+          <div class="col undo-event-col">
+            <button class="btn undo-event-label" type="button" (click)="closePopup()">
+              Annulla
+            </button>
+          </div>
+          <div class="col save-event-col">
+            <button class="btn save-event-label" type="submit" [disabled]="locationForm.invalid || !selectedLat || !selectedLng">
+              Salva
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+}

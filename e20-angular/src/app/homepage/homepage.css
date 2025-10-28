@@ -1,0 +1,59 @@
+.homepage {
+  position: relative;
+  width: 100vw;
+}
+
+.homepage-interaction {
+  position: absolute;
+  inset: 0;
+  height: 66vh;
+  width: 100vw;
+}
+
+.row-login {
+  padding-top: 1rem;
+}
+
+.col-login {
+  display: flex;
+  justify-content: end;
+}
+
+.col-logo {
+  display: flex;
+  justify-content: center;
+  padding-top: 4rem;
+
+}
+
+.row-search {
+  margin: 1vh 20vw;
+}
+
+
+.btn {
+  background: #222121;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  box-shadow: 0 2px 2px #222121;
+  height: 2.5rem;
+  width: fit-content;
+  margin-left: 1rem;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px #222121;
+  background: #2a2a2a;
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 2px #222121;
+}

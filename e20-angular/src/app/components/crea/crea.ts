@@ -1,146 +1,340 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
-import { RowbarSearch } from '../rowbar-search/rowbar-search';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {AuthService} from '../../services/auth-service';
+import {EventoService} from '../../services/evento-service';
+import {UtenteDto, UtenteService} from '../../services/utente-service';
+import {LocationDto, LocationService} from '../../services/location-service';
+import {Observable, Subject, switchMap} from 'rxjs';
+import {Router} from '@angular/router';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-crea',
   standalone: true,
-  imports: [CommonModule, RowbarSearch, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './crea.html',
   styleUrls: ['./crea.css']
 })
-export class Crea implements AfterViewInit {
-  @ViewChild('hoursInput', { static: true }) hoursRef!: ElementRef<HTMLInputElement>;
-  @ViewChild('minutesInput', { static: true }) minutesRef!: ElementRef<HTMLInputElement>;
-  @ViewChild('dateInput', { static: true }) dateRef!: ElementRef<HTMLInputElement>;
-  @ViewChild('openButton', { static: true }) openBtnRef!: ElementRef<HTMLButtonElement>;
+export class Crea implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  form: FormGroup;
+  previewUrl: string | ArrayBuffer | null = null;
+  selectedFile: File | null = null;
+  isSubmitting = false;
+  user: UtenteDto | null = null;
+  user_id: string = '';
+  imageLoaded = false;
 
-  ngAfterViewInit() {
-    const input = this.dateRef.nativeElement;
-    const btn = this.openBtnRef.nativeElement;
+  locationForm: FormGroup;
+  showLocation = false;
 
-    btn.addEventListener('click', () => {
-      if ('showPicker' in input) {
-        input.showPicker();
-      }
-    });
+  // Variabili per la mappa
+  private map: L.Map | undefined;
+  private marker: L.Marker | undefined;
+  selectedLat: number | null = null;
+  selectedLng: number | null = null;
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private eventService: EventoService,
+    private userService: UtenteService,
+    private locationService: LocationService,
+    private router: Router
+  ) {
+    this.form = this.fb.group({});
+    this.locationForm = this.fb.group({});
   }
 
-  private normalizzaOrario(el: HTMLInputElement, min: number, max: number) {
-    let v = el.value ?? '';
-    v = v.replace(/\D/g, '');
-    if (v === '') { el.value = ''; return; }
-    let n = parseInt(v, 10);
-    if (isNaN(n)) { el.value = ''; return; }
-    if (n < min) n = min;
-    if (n > max) n = max;
-    el.value = String(n);
-  }
+  ngOnInit(): void {
+    // Fix per i marker icons di Leaflet in Angular
+    this.fixLeafletIconPath();
 
-  onHoursInput() {
-    const el = this.hoursRef.nativeElement;
-    el.value = el.value.replace(/[^\d]/g, '');
-    if (el.value.length >= 2) {
-      this.normalizzaOrario(el, 0, 23);
-      this.minutesRef.nativeElement.focus();
-    }
-  }
-
-  onMinutesInput() {
-    const el = this.minutesRef.nativeElement;
-    el.value = el.value.replace(/[^\d]/g, '');
-    if (el.value.length > 2) el.value = el.value.slice(0, 2);
-  }
-
-  onHoursBlur() {
-    this.normalizzaOrario(this.hoursRef.nativeElement, 0, 23);
-    if (this.hoursRef.nativeElement.value !== '') {
-      this.hoursRef.nativeElement.value = this.hoursRef.nativeElement.value.padStart(2, '0');
-    }
-  }
-
-  onMinutesBlur() {
-    this.normalizzaOrario(this.minutesRef.nativeElement, 0, 59);
-    if (this.minutesRef.nativeElement.value !== '') {
-      this.minutesRef.nativeElement.value = this.minutesRef.nativeElement.value.padStart(2, '0');
-    }
-  }
-
-  onHoursKeydown(ev: KeyboardEvent) {
-    if (ev.key === ':') {
-      ev.preventDefault();
-      this.minutesRef.nativeElement.focus();
-    }
-  }
-
-  public getOrario(): string {
-    const hhRaw = this.hoursRef?.nativeElement?.value ?? '';
-    const mmRaw = this.minutesRef?.nativeElement?.value ?? '';
-    const hh = hhRaw === '' ? '' : String(hhRaw).padStart(2, '0');
-    const mm = mmRaw === '' ? '' : String(mmRaw).padStart(2, '0');
-    return (hh === '' && mm === '') ? '' : `${hh}:${mm}`;
-  }
-
-/*
-public invia(): void {
-    const titleEl = document.getElementById('title') as HTMLInputElement | null;
-    const locationEl = document.getElementById('location') as HTMLInputElement | null;
-    const postiEl = document.getElementById('posti') as HTMLInputElement | null;
-    const prezzoEl = document.getElementById('prezzo') as HTMLInputElement | null;
-    const vietatoEl = document.getElementById('vietato-minori') as HTMLInputElement | null;
-    const nominativoEl = document.getElementById('nominativo') as HTMLInputElement | null;
-    const riutilizzabileEl = document.getElementById('riutilizzabile') as HTMLInputElement | null;
-    const descrEl = document.querySelector('.container-2 .field p[contenteditable]') as HTMLElement | null;
-
-    const nome = titleEl?.value?.trim() ?? '';
-    const locationText = locationEl?.value?.trim() ?? '';
-    const posti = postiEl && postiEl.value !== '' ? Number(postiEl.value) : null;
-    const prezzo = prezzoEl && prezzoEl.value !== '' ? Number(prezzoEl.value) : null;
-    const b_vietato = !!(vietatoEl && vietatoEl.checked);
-    const b_nominativo = !!(nominativoEl && nominativoEl.checked);
-    const b_riutilizzabile = !!(riutilizzabileEl && riutilizzabileEl.checked);
-    const descrizione = descrEl ? descrEl.innerText.trim() : '';
-
-    const dateValue = this.dateRef?.nativeElement?.value ?? '';
-    const timeValue = this.getOrario(); // "HH:mm" o ''
-    const dataIso = this.buildISODate(dateValue, timeValue);
-
-    if (!nome) { alert('Inserisci il titolo'); return; }
-    if (!dateValue) { alert('Inserisci la data'); return; }
-    if (!locationText) { alert('Inserisci la location'); return; }
-
-    const locationId = Number(locationText) || null;
-
-    const organizzatore = localStorage.getItem('user_id') || localStorage.getItem('sub') || '';
-
-    const dto: EventoDto = {
-      nome: nome,
-      descrizione: descrizione,
-      organizzatore: organizzatore,
-      locationId: locationId,
-      posti: posti,
-      b_riutilizzabile: b_riutilizzabile,
-      b_nominativo: b_nominativo,
-      data: dataIso
-    };
-    if (prezzo !== null) dto.prezzo = prezzo;
-
-    this.eventoService.creaEvento(dto).subscribe({
-      next: (created) => {
-        console.log('Evento creato:', created);
-        alert('Evento creato con successo!');
-        if (created && (created as any).id) {
-          this.router.navigate(['/evento', (created as any).id]);
-        }
+    // Get the user id
+    this.userService.getMe(this.authService.token).subscribe({
+      next: (data) => {
+        this.user = data;
+        this.user_id = data.id.toString();
       },
       error: (err) => {
-        console.error('Errore creazione evento', err);
-        if (err?.status === 403) alert('Operazione non consentita: organizzatore differente.');
-        else if (err?.status === 400) alert('Dati non validi.');
-        else if (err?.status === 404) alert('Location o risorsa non trovata.');
-        else alert('Errore di rete o server. Controlla la console.');
+        console.error('Failed to load user:', err);
       }
     });
-  } */
+    this.form = this.createForm();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  initPopup(): void {
+    this.showLocation = true;
+    this.locationForm = this.fb.group({
+      nomeLocation: ['', Validators.required],
+      al_chiuso: [false]
+    });
+
+    // Inizializza la mappa dopo che il DOM è stato renderizzato
+    setTimeout(() => {
+      this.initMap();
+    }, 300); // Aumentato il timeout
+  }
+
+  closePopup(): void {
+    this.showLocation = false;
+    if (this.map) {
+      this.map.remove();
+      this.map = undefined;
+    }
+    this.marker = undefined;
+    this.selectedLat = null;
+    this.selectedLng = null;
+  }
+
+  private initMap(): void {
+    // Verifica che l'elemento esista
+    const mapElement = document.getElementById('mapPicker');
+    if (!mapElement) {
+      console.error('Map element not found');
+      return;
+    }
+
+    // Rimuovi eventuali mappe precedenti
+    if (this.map) {
+      this.map.remove();
+    }
+
+    // Inizializza la mappa centrata sull'Italia
+    this.map = L.map('mapPicker', {
+      center: [41.9028, 12.4964], // Roma come centro default
+      zoom: 6
+    });
+
+    // Aggiungi tile layer (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(this.map);
+
+    // Forza il resize della mappa
+    setTimeout(() => {
+      this.map?.invalidateSize();
+    }, 100);
+
+    // Gestisci il click sulla mappa
+    this.map.on('click', (e: L.LeafletMouseEvent) => {
+      this.setMarker(e.latlng.lat, e.latlng.lng);
+    });
+  }
+
+  // Metodo per cercare un luogo tramite la barra di ricerca
+  searchLocation(input: any): void {
+    const query = input.value;
+    if (!query || query.trim() === '') {
+      return;
+    }
+
+    // Usa Nominatim API per la geocodifica
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.length > 0) {
+          const result = data[0];
+          const lat = parseFloat(result.lat);
+          const lng = parseFloat(result.lon);
+
+          this.setMarker(lat, lng);
+        } else {
+          alert('Nessun risultato trovato');
+        }
+      })
+      .catch(error => {
+        console.error('Errore nella ricerca:', error);
+        alert('Errore durante la ricerca');
+      });
+  }
+
+  private setMarker(lat: number, lng: number): void {
+    // Rimuovi il marker precedente se esiste
+    if (this.marker) {
+      this.marker.remove();
+    }
+
+    // Crea un nuovo marker
+    this.marker = L.marker([lat, lng]).addTo(this.map!);
+
+    // Aggiorna le coordinate selezionate
+    this.selectedLat = lat;
+    this.selectedLng = lng;
+
+    // Centra la mappa sul marker
+    this.map?.setView([lat, lng], 13);
+  }
+
+  private fixLeafletIconPath(): void {
+    // Fix per il path delle icone di Leaflet in Angular
+    // Usa le icone direttamente da CDN
+    const iconRetinaUrl = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png';
+    const iconUrl = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png';
+    const shadowUrl = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png';
+    const iconDefault = L.icon({
+      iconRetinaUrl,
+      iconUrl,
+      shadowUrl,
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      tooltipAnchor: [16, -28],
+      shadowSize: [41, 41]
+    });
+    L.Marker.prototype.options.icon = iconDefault;
+  }
+
+  createForm() {
+    return this.fb.group({
+      nome: ['', [Validators.required, Validators.minLength(3)]],
+      descrizione: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
+      location: ['', Validators.required],
+      posti: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
+      prezzo: ['', Validators.min(0)],
+      data: ['', Validators.required],
+      ora: ['', Validators.required],
+      b_riutilizzabile: [false],
+      b_nominativo: [false],
+      age_restricted: [false]
+    });
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (!file) return;
+
+    const MAX_FILE_SIZE = 1024 * 1024; // 1 MB in bytes
+
+    if (file.size > MAX_FILE_SIZE) {
+      alert('L\'immagine è troppo grande. La dimensione massima consentita è di 1 MB.');
+      this.selectedFile = null;
+      this.previewUrl = null;
+      this.imageLoaded = false;
+      event.target.value = ''; // reset file input
+      return;
+    }
+
+    this.selectedFile = file;
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.previewUrl = reader.result;
+      this.imageLoaded = true; // ✅ Image successfully loaded
+    };
+
+    reader.onerror = () => {
+      console.error('Errore nel caricamento dell\'immagine');
+      this.imageLoaded = false;
+      this.selectedFile = null;
+      this.previewUrl = null;
+      alert('Errore durante il caricamento dell\'immagine. Riprova.');
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  buildPayload(locationId: number) {
+    const dateValue = this.form.get('data')?.value;
+    const timeValue = this.form.get('ora')?.value;
+    const combinedDateTime = new Date(`${dateValue}T${timeValue}:00`);
+    return {
+      ...this.form.value,
+      organizzatore: this.user_id,
+      locationId,
+      data: combinedDateTime,
+    };
+  }
+
+  onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    if (this.selectedFile && !this.imageLoaded) {
+      alert('Attendi che l\'immagine sia stata caricata completamente prima di procedere.');
+      return;
+    }
+
+    this.isSubmitting = true;
+    const token = this.authService.token;
+    const locationName = this.form.get('location')?.value;
+
+    this.locationService.getLocationByName(locationName, token).pipe(
+      switchMap((location: LocationDto) => {
+        const payload = this.buildPayload(location.id);
+        return this.eventService.createEvent(payload, token);
+      }),
+      switchMap((createdEvent: any) => {
+        const eventId = createdEvent.id;
+        if (this.selectedFile) {
+          const formData = new FormData();
+          formData.append('immagine', this.selectedFile);
+          return this.eventService.uploadEventImage(createdEvent.id, formData, token).pipe(
+            switchMap(() => new Observable(observer => {
+              observer.next(eventId);
+              observer.complete();
+            }))
+          );
+        } else {
+          return new Observable((observer) => {
+            observer.next(eventId);
+            observer.complete();
+          });
+        }
+      })
+    ).subscribe({
+      next: (eventId: any) => {
+        console.log('Evento creato');
+        this.isSubmitting = false;
+        alert('Evento creato con successo');
+
+        // Redirect to newly created event page
+        this.router.navigate(['/evento', eventId]);
+      },
+      error: (err) => {
+        console.error('Errore nella creazione evento:', err);
+        this.isSubmitting = false;
+      }
+    });
+  }
+
+  buildLocationPayload(){
+    const combinedPosition = this.selectedLat+","+this.selectedLng;
+    return {
+      nome: this.locationForm.get('nomeLocation')?.value,
+      descrizione: "loremipsumdescrizionelocazioneevento",
+      chiuso: this.locationForm.get('al_chiuso')?.value,
+      position: combinedPosition
+    }
+  }
+
+  saveLocation() {
+    const token = this.authService.token;
+    const payload : any = this.buildLocationPayload();
+    this.locationService.createLocation(payload, token).subscribe({
+      next: (response) => {
+        console.log('Location creata con successo:', response);
+        alert('Location salvata!');
+        this.closePopup();
+      },
+      error: (err) => {
+        console.error('Errore nel salvataggio della location:', err);
+        alert('Errore nel salvataggio della location');
+      }
+    });
+    this.closePopup()
+  }
+
+  protected readonly location = location;
 }

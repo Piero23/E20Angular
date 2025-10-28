@@ -1,9 +1,7 @@
-<div class="app-container">
-  <header></header>
-
-  <main class="main-content">
-    <router-outlet></router-outlet>
-  </main>
-
-  <app-footer />
+<div class="app">
+  @if (showTopBar) {
+    <app-top-bar/>
+  }
+  <router-outlet/>
+  <app-footer/>
 </div>

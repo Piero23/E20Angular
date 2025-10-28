@@ -1,0 +1,26 @@
+.logo-and-sub {
+  width: 33vw;
+  height: fit-content;
+}
+
+.sub,
+.logo {
+  width: inherit;
+  height: fit-content;
+}
+
+.logo img {
+  width: inherit;
+}
+
+.logo img:hover {
+  filter: brightness(1.2) drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+  cursor: pointer;
+}
+
+.sub p {
+  font-size: 2.5vw;
+  color: #FEFEFE;
+  text-shadow: 0.2vw 0.2vh 1vh rgba(0, 0, 0, 1);
+  text-align: center;
+}

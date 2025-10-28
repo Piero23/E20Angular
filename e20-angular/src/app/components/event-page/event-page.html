@@ -1,61 +1,278 @@
-<app-rowbar-search />
-<div class="event-page-container">
-  <div class="event-image">
-    <img ngSrc="/assets/flyer5.jpg" alt="Flyer 5" height="693" width="535">
-  </div>
-  <div class="ticket-container">
-    <div class="left-side-ticket-info">
-      <div class="date-time-event">
-        <p>01/01/2025 - 21:00</p>
-      </div>
-      <div class="event-title">
-        <p>Event Title</p>
-      </div>
-    </div>
-    <div class="right-side-ticket-info">
-      <div class="vertical-separator"></div>
-      <div class="ticket-action-icons">
-        <div class="icon favorite-icon" (click)="toggleFavorite()">
-          <i class="fa-regular fa-heart"></i>
-        </div>
-      </div>
-      <div class="available-tickets">
-        <p>2</p>
-        <p>Posti Disponibili</p>
-      </div>
-      <button class="buy-ticket-button">Buy Ticket</button>
+@if (isLoading) {
+  <!-- Loading State -->
+  <div class="container text-center loading-container">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+      <p>Caricamento evento...</p>
     </div>
   </div>
-  <div class="event-content">
-    <div class="event-location">
-      <h2>Location</h2>
-      <div class="event-location-info">
-        <div class="left-side-location-info">
-          <p>Via di tua mamma</p>
-          <p>118</p>
+}
+
+<!-- Error State -->
+@if (hasError) {
+  <div class="container  error-container">
+    <div class="error-icon">
+      <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <h2>Ops! Qualcosa è andato storto</h2>
+    <p class="error-message">{{ errorMessage }}</p>
+    <button (click)="loadEvent()" class="retry-button">
+      <i class="fas fa-redo"></i>
+      Riprova
+    </button>
+  </div>
+}
+
+<div class="container-fluid p-0 event-page">
+
+  <!-- Event Content -->
+  @if (!isLoading && !hasError && evento) {
+    <div class="container-fluid p-0 event-image-container">
+
+      <!-- Event Image Section -->
+      <div class="row event-image-row">
+        <div class="col event-image-col">
+          <img [alt]="evento.nome || 'Event image'" [src]="getImageUrl()" (error)="onImageError($event)"
+               class="event-main-image">
         </div>
-        <div class="right-side-location-info">
-          <p>Napoli (NA)</p>
-          <p>88888</p>
-        </div>
-      </div>
-      <div class="event-map">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3038.1234567890123!2d14.268123456789012!3d40.85123456789012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x133b086c1234567%3A0xabcdef1234567890!2sNapoli%2C%20Metropolitan%20City%20of%20Naples%2C%20Italy!5e0!3m2!1sen!2sus!4v1610000000000!5m2!1sen!2sus" width="300px" height="300px"
-          allowfullscreen="" loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
 
-    <div class="event-description">
-      <h2>Event Description</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec elementum, erat ut aliquam vehicula, dolor nisi
-         elementum nulla, in sagittis odio odio non sem. Curabitur dolor dolor, faucibus eleifend enim ac, blandit
-         condimentum elit. Donec placerat tortor quis orci vehicula rhoncus. Etiam eget ligula lobortis, tempor risus
-         id, scelerisque enim. Cras aliquet sollicitudin est, sed vehicula leo vestibulum facilisis. Praesent turpis
-         massa, ultrices vel orci at, congue gravida arcu.
-      </p>
+    <!-- Ticket Info Section -->
+    <div class="container ticket">
+      <div class="row main-ticket-row">
+        <div class="col left-ticket-zone">
+          <div class="row date-row">
+            <div class="col date-col">
+              <p class="formatted-date">
+                <i class="fas fa-calendar-alt"></i>
+                {{ getFormattedDate() }}
+              </p>
+            </div>
+          </div>
+          <div class="row title-row">
+            <div class="col title-col">
+              <h1 class="event-title fw-bold">{{ evento.nome }}</h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="col right-ticket-zone">
+          <div class="row buttons-row">
+            <div class="col edit-col">
+              @if (evento.organizzatore === userId) {
+                <i class="fa-regular fa-pen-to-square edit-button" (click)="openEditForm()"></i>
+              }
+            </div>
+            <div class="col notify-and-save-col">
+              <i class="action fa-regular fa-heart"  [style.color]="isFavorite ? 'red' : 'black'"  (click)="toggleFavorite()"></i>
+            </div>
+          </div>
+          <div class="row available-spots-row">
+            <div class="col available-spots-num-col">
+              <h1 class="availability">{{ evento.posti || 0 }}</h1>
+              <p class="availability-label">
+                {{ evento.posti === 1 ? 'Posto disponibile' : 'Posti disponibili' }}
+              </p>
+            </div>
+          </div>
+          <div class="row buy-now-row">
+            <div class="col buy-now-col ">
+              <button class="btn buy-now-label" (click)="checkout()">
+                <i class="fas fa-ticket-alt"></i>
+                {{ evento.posti && evento!.posti > 0 ? 'Compra ora' : 'Sold out' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event and location info -->
+    <div class="container event-and-location-info">
+      <div class="row event-and-location-row">
+        <div class="col event-location-col">
+          <div class="row event-location-row">
+            <div class="col text-center event-location-inner-col">
+              <h3>Location</h3>
+              <p>{{ getLocationNome() }}</p>
+              <p>{{ cityNameToShow }}</p>
+              <iframe
+                class="map"
+                allowfullscreen
+                height="230px"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                [src]="mapUrl"
+                width="230px">
+              </iframe>
+            </div>
+          </div>
+        </div>
+        <div class="col event-description-col">
+          <div class="row event-description-row">
+            <div class="col event-desc-inner-col">
+              <h3 class="desc">Descrizione</h3>
+              <p>{{ evento.descrizione }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+@if (showEditForm) {
+  <form class="container-fluid crea-page popup" [formGroup]="editForm" (ngSubmit)="saveEditedform()">
+    <div class="popup-center">
+  <div class="row cont-1-row">
+    <!-- Colonna immagine -->
+    <div class="container-1 col event-image-col">
+      <div class="event-image-box">
+        <div class="circle" (click)="fileInput.click()">
+          <i class="fa-regular fa-image icon"></i>
+        </div>
+        <input type="file" #fileInput accept="image/*" hidden (change)="onFileSelected($event)">
+        <img [src]="previewUrl" alt="Anteprima" class="event-image-preview">
+      </div>
+    </div>
+    <!-- Colonna campi -->
+    <div class="col event-fields-col">
+      <div class="form-right">
+        <!-- Titolo -->
+        <div class="row">
+          <div class="col">
+            <div class="field">
+              <p class="intestazione-campi" id="label-titolo">Titolo</p>
+              <input class="input-evento intestazione-campi-secondari" formControlName="nome" type="text">
+              @if(editForm.get('nome')?.invalid && editForm.get('nome')?.touched) {
+                @if(editForm.get('nome')?.errors?.['required']) {
+                  <span class="text-danger">Il titolo è obbligatorio</span>
+                }
+                @if(editForm.get('nome')?.errors?.['minlength']) {
+                  <span class="text-danger">Minimo 3 caratteri</span>
+                }
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Data e ora -->
+        <div class="row datetime-row">
+          <div class="col datetime-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-data">Data</p>
+            <input class="input-evento input-date" formControlName="data" type="date">
+            @if(editForm.get('data')?.invalid && editForm.get('data')?.touched) {
+              <span class="text-danger">La data è obbligatoria</span>
+            }
+          </div>
+
+          <div class="col datetime-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-ora">Ora</p>
+            <input class="input-evento" formControlName="ora" type="time">
+            @if(editForm.get('ora')?.invalid && editForm.get('ora')?.touched) {
+              <span class="text-danger">L'orario è obbligatorio</span>
+            }
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="row">
+          <div class="col">
+            <div class="field">
+              <p class="intestazione-campi intestazione-campi-secondari" id="label-location">Location</p>
+              <div class="sd-container">
+                <input class="input-evento" formControlName="location" placeholder="Dove si svolge" type="text">
+
+                @if(editForm.get('location')?.invalid && editForm.get('location')?.touched) {
+                  <span class="text-danger">La location è obbligatoria</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Posti e prezzo -->
+        <div class="row seats-price-row">
+          <div class="col seats-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-seats">Posti</p>
+            <input class="input-evento" formControlName="posti" type="number" min="0">
+          </div>
+
+          <div class="col price-item">
+            <p class="intestazione-campi intestazione-campi-secondari" id="label-prezzo">Prezzo</p>
+            <input class="input-evento" formControlName="prezzo" type="number" min="0">
+            @if(editForm.get('prezzo')?.invalid && editForm.get('prezzo')?.touched) {
+              <span class="text-danger">Prezzo non valido</span>
+            }
+          </div>
+        </div>
+
+        <!-- Switch -->
+        <div class="switch-group row">
+          <div class="field switch-col col">
+            <label class="switch-text" for="vietato-minori">Vietato ai minori</label>
+            <label class="switch">
+              <input id="vietato-minori" type="checkbox" formControlName="age_restricted">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="field switch-col col">
+            <label class="switch-text" for="nominativo">Biglietto nominativo</label>
+            <label class="switch">
+              <input id="nominativo" type="checkbox" formControlName="b_nominativo">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="field switch-col col">
+            <label class="switch-text" for="riutilizzabile">Biglietto riutilizzabile</label>
+            <label class="switch">
+              <input id="riutilizzabile" type="checkbox" formControlName="b_riutilizzabile">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Descrizione -->
+  <div class="row container-2">
+    <div class="col field desc">
+      <p>Descrizione</p>
+      <textarea class="description-box" formControlName="descrizione" placeholder="Inserisci una descrizione..."></textarea>
+      @if(editForm.get('descrizione')?.invalid && editForm.get('descrizione')?.touched) {
+        @if(editForm.get('descrizione')?.errors?.['required']) {
+          <span class="text-danger">La descrizione è obbligatoria</span>
+        }
+        @if(editForm.get('descrizione')?.errors?.['minlength']) {
+          <span class="text-danger">Minimo 10 caratteri</span>
+        }
+        @if(editForm.get('descrizione')?.errors?.['maxlength']) {
+          <span class="text-danger">Max 500 caratteri</span>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Pulsanti -->
+  <div class="row save-event-row">
+    <div class="col undo-event-col">
+      <button class="btn undo-event-label" type="button" (click)="closeEditForm()">
+        <i class="fas fa-undo"></i>
+        Chiudi
+      </button>
+    </div>
+    <div class="col save-event-col">
+      <button class="btn save-event-label" type="submit" [disabled]="isSubmitting">
+        <i class="fas fa-save"></i>
+        Salva
+      </button>
     </div>
   </div>
 </div>
+</form>
+}

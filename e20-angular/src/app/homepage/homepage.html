@@ -1,0 +1,36 @@
+<div class="homepage">
+  <app-background-flyers/>
+  <div class="homepage-interaction container-fluid z-1">
+    <div class="row row-login">
+      <div class="col col-login">
+        <div class="login-button">
+          @if (!isLoggedIn()) {
+            <button (click)="register()" class="login-btn btn">
+              Registrati
+            </button>
+            <button (click)="login()" class="login-btn btn">
+              Login
+            </button>
+          } @else {
+            <div class="row user-buttons">
+              <div class="col user-avatar">
+                <app-avatar />
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="row row-logo">
+      <div class="col col-logo">
+        <app-site-logo/>
+      </div>
+    </div>
+    <div class="row row-search">
+      <div class="col col-search">
+        <app-search-bar class="sb"/>
+      </div>
+    </div>
+  </div>
+  <app-event-cards/>
+</div>
