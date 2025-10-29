@@ -31,6 +31,20 @@
         <app-search-bar class="sb"/>
       </div>
     </div>
+    @if (isMangager()) {
+      <div class="row row-create mt-5 text-center">
+        <div class="col col-create">
+          <h3>Crea un evento</h3>
+        </div>
+      </div>
+      <div class="row row-create-btn text-center">
+        <div class="col col-create-btn">
+          <button class="btn create-button" (click)="goToCreaPage()">
+            Crea
+          </button>
+        </div>
+      </div>
+    }
   </div>
   <app-event-cards/>
 </div>

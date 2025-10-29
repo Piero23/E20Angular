@@ -1,6 +1,7 @@
 .homepage {
   position: relative;
   width: 100vw;
+  overflow-y: scroll;
 }
 
 .homepage-interaction {
@@ -56,4 +57,16 @@
 .btn:active {
   transform: translateY(0);
   box-shadow: 0 2px 2px #222121;
+}
+
+h3 {
+  color: #FEFEFE;
+  text-shadow: 0.2vw 0.2vh 1vh rgba(0, 0, 0, 1);
+  text-align: center;
+}
+
+.create-button {
+  background: linear-gradient(to right, #FF9D47, #C74F00);
+  border: none;
+  font-size: 20px;
 }
