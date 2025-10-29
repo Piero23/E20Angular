@@ -64,7 +64,7 @@ export class EventoService extends Application<EventoDto> {
 
   buyTicket(payload: any, token: string | null) {
     this.http.post<{ url: string }>(
-      'https://localhost:8060/api/stripe/checkout',
+      '/api/stripe/checkout',
       payload,
       {
         headers: {

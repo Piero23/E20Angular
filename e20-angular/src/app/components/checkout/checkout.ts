@@ -65,7 +65,7 @@ export class Checkout {
       nome: new FormControl<string | null>(null),
       cognome: new FormControl<string | null>(null),
       email: new FormControl<string | null>(null, [Validators.required, Validators.email]),
-      dataNascita: new FormControl<string | null>(null),
+      data_nascita: new FormControl<string | null>(null),
       idEvento: new FormControl<number>(this.idEvento, [Validators.required]),
       eValido: new FormControl<true>(true, [Validators.required])
     });
@@ -75,7 +75,7 @@ export class Checkout {
     nome: FormControl<string | null>;
     cognome: FormControl<string | null>;
     email: FormControl<string | null>;
-    dataNascita: FormControl<string | null>;
+    data_nascita: FormControl<string | null>;
     idEvento: FormControl<number | null>;
     eValido: FormControl<true | null>
   }>>;
@@ -114,7 +114,7 @@ export class Checkout {
       nome: biglietto.nome === '' ? null : biglietto.nome,
       cognome: biglietto.cognome === '' ? null : biglietto.cognome,
       email: biglietto.email === '' ? null : biglietto.email,
-      dataNascita: biglietto.dataNascita === '' ? null : biglietto.dataNascita
+      data_nascita: biglietto.data_nascita === '' ? null : biglietto.data_nascita
     }));
 
     const body = {
@@ -122,6 +122,7 @@ export class Checkout {
       "valuta": "eur",
       "biglietti": biglietti
     }
+    console.log(body);
     this.eventoService.buyTicket(body, this.authService.token);
   }
 }
