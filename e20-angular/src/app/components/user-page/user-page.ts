@@ -8,10 +8,13 @@ import {Evento} from '../../models/evento.model';
 import {ActivatedRoute} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {Subject, of, switchMap, takeUntil, catchError, tap} from 'rxjs';
+import {AccessDenied} from '../../shared/access-denied/access-denied';
 
 @Component({
   selector: 'app-user-page',
-  imports: [],
+  imports: [
+    AccessDenied
+  ],
   templateUrl: './user-page.html',
   styleUrl: './user-page.css'
 })
@@ -95,5 +98,10 @@ export class UserPage implements OnInit, OnDestroy {
     this.hasError = true;
     this.errorMessage = message;
     this.isLoading = false;
+  }
+
+
+  isLogged(){
+    return this.authService.isLoggedIn
   }
 }

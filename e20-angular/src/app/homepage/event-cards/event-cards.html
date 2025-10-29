@@ -82,14 +82,14 @@
           (touchmove)="onTouchMoveTrending($event, carousel)"
           (touchstart)="onTouchStartTrending($event, carousel)"
           class="trending-cards-row">
-          @if (isLoadingFollowing) {
+          @if (isLoadingYourEvents) {
             @for (ph of trendingPlaceholders; track $index) {
               <div class="trending-cards-col">
                 <img class="event-img" [ngSrc]="getImageUrl(null)" width="320" height="200" [alt]="">
               </div>
             }
           } @else {
-            @for (event of followingEvents; track event.nome) {
+            @for (event of yourEvents; track event.nome) {
               <div class="trending-cards-col">
                 <img class="event-img" [ngSrc]="getImageUrl(event.id)" width="320" height="200" [alt]="event.nome">
                 <div class="hidden">

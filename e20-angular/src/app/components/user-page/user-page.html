@@ -1,3 +1,5 @@
+
+@if (isLogged()) {
 <div class="page w-100 h-100">
   <aside class="sidebar">
     <div class="avatar-wrap">
@@ -122,3 +124,6 @@
     </div>
   </main>
 </div>
+} @else {
+  <app-access-denied></app-access-denied>
+}

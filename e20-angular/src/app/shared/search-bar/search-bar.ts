@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {forkJoin, of, Subject} from 'rxjs';
+import {forkJoin, map, Observable, of, Subject} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil} from 'rxjs/operators';
 import {EventoDto, EventoService} from '../../services/evento-service';
 import {UtenteDto, UtenteService} from '../../services/utente-service';
@@ -44,9 +44,12 @@ export class SearchBar implements OnInit, OnDestroy {
   showUsers = true;
   showEvents = true;
 
+  followers : string[] = [];
+
   private destroy$ = new Subject<void>();
 
   private searchTerms = new Subject<string>();
+  followersLoading: boolean = true;
 
   constructor(
     private eventoService: EventoService,
@@ -58,6 +61,8 @@ export class SearchBar implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+    this.getFollowers()
     // Setup search with debounce
     this.searchTerms.pipe(
       debounceTime(200),
@@ -256,4 +261,30 @@ export class SearchBar implements OnInit, OnDestroy {
     this.router.navigate(['/profilo']);
   }
 
+  getFollowers(){
+    this.followersLoading = true
+
+    this.utenteService.getSeguiti(this.authService.token).subscribe({
+      next: (utenti) => {
+        console.log('Lista utenti:', utenti);
+        utenti.forEach(amico =>{
+          this.followers.push(amico.username);
+        })
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Errore nel caricamento amici:', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  alredyFollowed(username: string): boolean {
+    console.log('Alredy Followed' , this.followers);
+    return this.followers.includes(username);
+  }
+
+  unfllow(result: Dto) {
+
+  }
 }

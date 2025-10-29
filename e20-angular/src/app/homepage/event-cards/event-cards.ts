@@ -52,6 +52,7 @@ export class EventCards implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadTrendingEvents();
     this.loadFollowingEvents();
+    this.MyEvents()
   }
 
   ngOnDestroy(): void {
