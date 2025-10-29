@@ -92,6 +92,13 @@ export class EventoService extends Application<EventoDto> {
     return this.http.put(`${this.API_URL}/${id}`, payload, { headers });
   }
 
+  myEvents(token: string | null): Observable<Array<EventoDto>> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
+    return this.http.get<EventoDto[]>(`${this.API_URL}/myEvents`, { headers });
+  }
+
   override getApiUrl(): string {
     return this.API_URL;
   }

@@ -20,9 +20,11 @@ interface EventCard extends EventoDto {
 export class EventCards implements OnInit, OnDestroy {
   events: EventCard[] = [];
   followingEvents: EventCard[] = [];
+  yourEvents: EventCard[] = [];
 
   // While loading...
   isLoadingFollowing = true;
+  isLoadingYourEvents = true;
   isLoadingTrending = true;
   trendingPlaceholders = Array.from({ length: 3 });
 
@@ -78,9 +80,6 @@ export class EventCards implements OnInit, OnDestroy {
       });
   }
 
-  loadFollowing(): void {
-  }
-
   // Mouse events
   onMouseDownTrending(e: MouseEvent, carousel: HTMLElement): void {
     this.isDraggingTrending = true;
@@ -107,31 +106,6 @@ export class EventCards implements OnInit, OnDestroy {
     carousel.scrollLeft = this.scrollLeftTrending - walk;
   }
 
-  onMouseDownFollowing(e: MouseEvent, carousel: HTMLElement): void {
-    this.isDraggingFollowing = true;
-    carousel.classList.add('dragging');
-    this.startXFollowing = e.pageX - carousel.offsetLeft;
-    this.scrollLeftFollowing = carousel.scrollLeft;
-  }
-
-  onMouseLeaveFollowing(carousel: HTMLElement): void {
-    this.isDraggingFollowing = false;
-    carousel.classList.remove('dragging');
-  }
-
-  onMouseUpFollowing(carousel: HTMLElement): void {
-    this.isDraggingFollowing = false;
-    carousel.classList.remove('dragging');
-  }
-
-  onMouseMoveFollowing(e: MouseEvent, carousel: HTMLElement): void {
-    if (!this.isDraggingFollowing) return;
-    e.preventDefault();
-    const x = e.pageX - carousel.offsetLeft;
-    const walk = (x - this.startXFollowing) * 2;
-    carousel.scrollLeft = this.scrollLeftFollowing - walk;
-  }
-
   // Touch events
   onTouchStartTrending(e: TouchEvent, carousel: HTMLElement): void {
     this.isDraggingTrending = true;
@@ -152,43 +126,11 @@ export class EventCards implements OnInit, OnDestroy {
     carousel.classList.remove('dragging');
   }
 
-  onTouchStartFollowing(e: TouchEvent, carousel: HTMLElement): void {
-    this.isDraggingFollowing = true;
-    carousel.classList.add('dragging');
-    this.startXFollowing = e.touches[0].pageX - carousel.offsetLeft;
-    this.scrollLeftFollowing = carousel.scrollLeft;
-  }
-
-  onTouchMoveFollowing(e: TouchEvent, carousel: HTMLElement): void {
-    if (!this.isDraggingFollowing) return;
-    const x = e.touches[0].pageX - carousel.offsetLeft;
-    const walk = (x - this.startXFollowing) * 2;
-    carousel.scrollLeft = this.scrollLeftFollowing - walk;
-  }
-
-  onTouchEndFollowing(carousel: HTMLElement): void {
-    this.isDraggingFollowing = false;
-    carousel.classList.remove('dragging');
-  }
-
-  // Navigation
-  scrollLeft(carousel: HTMLElement): void {
-    carousel.scrollBy({ left: -400, behavior: 'smooth' });
-  }
-
-  scrollRight(carousel: HTMLElement): void {
-    carousel.scrollBy({ left: 400, behavior: 'smooth' });
-  }
-
   goToEventDetails(eventId: number | undefined): void {
     console.log(eventId)
     if (eventId) {
       this.router.navigate(['/evento', eventId]);
     }
-  }
-
-  onImageError(event: any): void {
-    event.target.src = '/assets/event_placeholder.jpg';
   }
 
   getImageUrl(id: number | null): string {
@@ -221,5 +163,30 @@ export class EventCards implements OnInit, OnDestroy {
         this.isLoadingFollowing = false;
       }
     });
+  }
+
+  private MyEvents(): void {
+    this.isLoadingYourEvents= true;
+    console.log('Load Following Events');
+
+    this.eventoService.myEvents(this.authService.token).subscribe({
+      next: (utenti) => {
+        console.log('Lista utenti:', utenti);
+        utenti.forEach(evento =>{
+          this.yourEvents.push(evento);
+        })
+        this.isLoadingYourEvents = false;
+      },
+      error: (err) => {
+        console.error('Errore nel caricamento amici:', err);
+        this.isLoadingYourEvents = false;
+      }
+    });
+  }
+
+  isManager() {
+    const user = this.authService.getUser();
+    const roles = user?.roles || [];
+    return (roles.includes('ADMIN') || roles.includes('MANAGER'));
   }
 }
