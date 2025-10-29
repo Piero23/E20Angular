@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {forkJoin, map, Observable, of, Subject} from 'rxjs';
+import {forkJoin, of, Subject} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil} from 'rxjs/operators';
 import {EventoDto, EventoService} from '../../services/evento-service';
 import {UtenteDto, UtenteService} from '../../services/utente-service';
@@ -89,9 +89,6 @@ export class SearchBar implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  loadPage(id: string) {
-    this.router.navigate(['/evento', id])
-  }
 
   // Event handlers
   onSearchInputChange(event: Event): void {
@@ -140,10 +137,6 @@ export class SearchBar implements OnInit, OnDestroy {
 
   isUser(item: Dto): boolean {
     return 'username' in item;
-  }
-
-  isEvent(item: Dto): boolean {
-    return !('username' in item);
   }
 
   getElementName(item: Dto): string {
@@ -255,6 +248,7 @@ export class SearchBar implements OnInit, OnDestroy {
         console.error('Errore nel recupero username:', err);
       }
     });
+    this.ngOnInit();
   }
 
   goToProfile() {
@@ -284,7 +278,30 @@ export class SearchBar implements OnInit, OnDestroy {
     return this.followers.includes(username);
   }
 
-  unfllow(result: Dto) {
+  unfollow(result: Dto) {
+    const user = result as UtenteDto;
+    const token = this.authService.token;
 
+    this.utenteService.getUsername(token).subscribe({
+      next: (myUsername) => {
+        if (myUsername === user.username) {
+          alert(`Non puoi farlo su te stesso`);
+          return;
+        }
+        this.utenteService.unfollowUtente(token, myUsername, user.username).subscribe({
+          next: () => {
+            console.log(`Non segui più ${user.username}`);
+            alert(`Non segui più ${user.username}`);
+          },
+          error: (err) => {
+            console.error('Errore durante unfollow:', err);
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Errore nel recupero username:', err);
+      }
+    });
+    this.ngOnInit();
   }
 }

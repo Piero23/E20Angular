@@ -67,6 +67,19 @@ export class UtenteService extends Application<UtenteDto> {
     return this.http.post(`${this.API_URL}/${myUsername}/seguiti`, { username }, { headers });
   }
 
+  unfollowUtente(token: string | null, myUsername: string | null, username: string | null) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+
+    return this.http.delete(`${this.API_URL}/${myUsername}/seguiti`, {
+      headers,
+      body: { username }
+    });
+  }
+
+
   getSeguitiByUsername(token: string | null, username: string): Observable<UtenteDto[]> {
     return this.http.get<UtenteDto[]>(`${this.API_URL}/${username}/seguiti`, {
       headers: {
