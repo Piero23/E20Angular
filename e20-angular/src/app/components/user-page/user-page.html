@@ -1,1 +1,124 @@
-<p>user-page works!</p>
+<div class="page w-100 h-100">
+  <aside class="sidebar">
+    <div class="avatar-wrap">
+      <div class="badge">
+        <div class="circle"></div>
+        <div class="initial"> {{ utente.username.charAt(0).toUpperCase() }} </div>
+      </div>
+      <div class="profile-name">
+        <div class="hi">Ciao</div>
+        <div class="username"> {{ utente.username }} </div>
+      </div>
+    </div>
+
+    <nav>
+      <div class="nav-item">
+        <i class="fa-solid fa-calendar-days fa-orange"></i>
+        <div>{{ utente.dataNascita }}</div>
+      </div>
+
+      <div class="nav-item">
+        <i class="fa-solid fa-envelope fa-orange"></i>
+        <div>{{ utente.email }}</div>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="content">
+
+    <!-- Preferiti -->
+    <div class="panel panel--spaced" id="preferiti-panel">
+      <div class="header">
+        <div style="font-weight:600">I tuoi Preferiti</div>
+        <div style="color:#E9BA8E;font-style:italic;font-weight:600">{{ preferiti.length }}</div>
+      </div>
+      <div class="card-row">
+        @for (ev of preferiti; track ev) {
+          <div class="item">
+            <img src="https://placehold.co/366x251" alt="Evento">
+            <div class="overlay"></div>
+            <div class="title">{{ ev.nome }}</div>
+            <div class="date-badges">
+              <div class="badge-chip"><span>{{ev.data}}</span></div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="content-grid">
+
+      <!-- Ordini -->
+      <div class="left-col">
+        <div class="panel" id="ordini-panel">
+          <div class="header">
+            <div style="font-weight:600">I tuoi Ordini</div>
+            <div style="color:#E9BA8E;font-style:italic;font-weight:600">{{ ordini.length }}</div>
+          </div>
+          <div class="orders-list">
+            @for (ordine of ordini; track ordine) {
+              <div class="order-card">
+                <div class="bg"></div>
+                <div class="shapes">
+                  <div class="shape left1"></div>
+                  <div class="shape left2"></div>
+                  <div class="shape right1"></div>
+                  <div class="shape right2"></div>
+                  <div class="shape right3"></div>
+                  <div class="shape right4"></div>
+                </div>
+                <div class="content">
+                  <div class="title">{{ ordine.nome }}</div>
+                  <div class="order-status-dot" [class.valid]="ordine.e_valido"></div>
+                  <div class="meta">{{ ordine.persone }} persone</div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Seguiti (amici) -->
+      <div class="right-col">
+        <div class="right-container">
+          <div class="panel" id="seguiti-panel">
+            <div class="header">
+              <div style="font-weight:600">I tuoi Seguiti</div>
+              <div style="color:#E9BA8E;font-style:italic;font-weight:600">{{ seguiti.length }}</div>
+            </div>
+            <div class="following-list">
+              @for (s of seguiti; track s) {
+                <div class="following">
+                  <div class="avatar-sm">{{ s.username.charAt(0).toUpperCase() }}</div>
+                  <div>
+                    <div style="font-weight:700">&#64;{{ s.username }}</div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="right-container">
+          <div class="panel" id="seguiti-panel">
+            <div class="header">
+              <div style="font-weight:600">I tuoi Seguaci</div>
+              <div style="color:#E9BA8E;font-style:italic;font-weight:600">{{ seguaci.length }}</div>
+            </div>
+            <div class="following-list">
+              @for (s of seguaci; track s) {
+                <div class="following">
+                  <div class="avatar-sm">{{ s.username.charAt(0).toUpperCase() }}</div>
+                  <div>
+                    <div style="font-weight:700">&#64;{{ s.username }}</div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </main>
+</div>

@@ -57,4 +57,37 @@ export class UtenteService extends Application<UtenteDto> {
       })
     );
   }
+
+  seguiUtente(token: string | null, myUsername: string | null, username: string | null) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+
+    return this.http.post(`${this.API_URL}/${myUsername}/seguiti`, { username }, { headers });
+  }
+
+  getSeguitiByUsername(token: string | null, username: string): Observable<UtenteDto[]> {
+    return this.http.get<UtenteDto[]>(`${this.API_URL}/${username}/seguiti`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
+  getSeguaciByUsername(token: string | null, username: string): Observable<UtenteDto[]> {
+    return this.http.get<UtenteDto[]>(`${this.API_URL}/${username}/seguaci`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
+  getUserByUsername(token: string | null, username: string): Observable<UtenteDto> {
+    return this.http.get<UtenteDto>(`${this.API_URL}/${username}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
 }

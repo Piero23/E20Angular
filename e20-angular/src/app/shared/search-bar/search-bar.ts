@@ -7,6 +7,7 @@ import {EventoDto, EventoService} from '../../services/evento-service';
 import {UtenteDto, UtenteService} from '../../services/utente-service';
 import {Dto, SearchResponse} from '../../services/application';
 import {Router, RouterLink,} from '@angular/router';
+import {AuthService} from '../../services/auth-service';
 
 interface CombinedResults {
   users: Dto[];
@@ -36,6 +37,7 @@ export class SearchBar implements OnInit, OnDestroy {
   userResults: UtenteDto[] = [];
   eventResults: EventoDto[] = [];
   results: Dto[] = [];
+  myName: string = '';
 
   isSearchMode = false;
 
@@ -49,12 +51,13 @@ export class SearchBar implements OnInit, OnDestroy {
   constructor(
     private eventoService: EventoService,
     private utenteService: UtenteService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
+    this.myName = authService.getUser()?.username
   }
 
   ngOnInit(): void {
-
     // Setup search with debounce
     this.searchTerms.pipe(
       debounceTime(200),
@@ -217,4 +220,40 @@ export class SearchBar implements OnInit, OnDestroy {
     this.errorMessage = message;
     this.isLoading = false;
   }
+
+  segui(item: Dto) {
+    if (!this.isUser(item)) {
+      console.warn('Tentativo di seguire un evento o elemento non utente.');
+      return;
+    }
+
+    const user = item as UtenteDto;
+    const token = this.authService.token;
+
+    this.utenteService.getUsername(token).subscribe({
+      next: (myUsername) => {
+        if (myUsername === user.username) {
+           alert(`Non puoi seguire te stesso`);
+           return;
+        }
+        this.utenteService.seguiUtente(token, myUsername, user.username).subscribe({
+          next: () => {
+            console.log(`Ora segui ${user.username}`);
+            alert(`Ora segui ${user.username}`);
+          },
+          error: (err) => {
+            console.error('Errore durante il follow:', err);
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Errore nel recupero username:', err);
+      }
+    });
+  }
+
+  goToProfile() {
+    this.router.navigate(['/profilo']);
+  }
+
 }
