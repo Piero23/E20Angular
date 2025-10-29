@@ -351,19 +351,18 @@ export class EventPage implements OnInit, OnDestroy {
         return this.eventoService.updateEvent(this.evento!.id, payload, token);
       }),
       switchMap((createdEvent: any) => {
-        const eventId = createdEvent.id;
         if (this.selectedFile) {
           const formData = new FormData();
           formData.append('immagine', this.selectedFile);
-          return this.eventoService.uploadEventImage(createdEvent.id, formData, token).pipe(
+          return this.eventoService.uploadEventImage(this.evento!!.id, formData, token).pipe(
             switchMap(() => new Observable(observer => {
-              observer.next(eventId);
+              observer.next(this.evento!!.id);
               observer.complete();
             }))
           );
         } else {
           return new Observable((observer) => {
-            observer.next(eventId);
+            observer.next(this.evento!!.id);
             observer.complete();
           });
         }
