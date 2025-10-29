@@ -39,4 +39,14 @@ export class Homepage {
 
 
   protected readonly Register = Register;
+
+  goToCreaPage() {
+    this.router.navigate(['/crea']);
+  }
+
+  isMangager() {
+    const user = this.auth.getUser();
+    const roles = user?.roles || [];
+    return (roles.includes('ADMIN') || roles.includes('MANAGER'));
+  }
 }
